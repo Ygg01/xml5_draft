@@ -1,0 +1,48 @@
+<h1>XML5</h1>
+<pre class='metadata'>
+Title:XML 5
+Status:ED
+ED: http://www.example.org
+Shortname: xml5
+Level:1
+Editor: Anne van Kesteren, Opera Software ASA, <annevk@annevk.nl>
+Abstract: Something something
+Editor: Daniel Fath, Unaffiliated,  <daniel.fath7@gmail.com>
+Group: whatwg
+</pre>
+<style type="text/css">
+    switch { padding-left: 2em; }
+    switch dt {text-indent: -1.5em; }
+    switch dt:before {content: '\21AA'; padding: 0 0.5em 0 0; display: inline-block;}
+</style>
+
+<h2 class="heading" data-level="1" id="parsing">
+    <span class="content">Parsing XML documents</span>
+</h2>
+
+<p>This section and its subsection define the <dfn>XML parser</dfn>.</p>
+<p>This specification defines the parsing rules for XML documents, whether they are syntactically correct or not. Certain points in the parsing algorithm are said to be parse errors. The handling for parse errors is well-defined: user agents must either act as described below when encountering such problems, or must terminate processing at the first error that they encounter for which they do not wish to apply the rules described below.</p>
+
+<h3 class="heading" data-level="2" id="parsing-overview">
+    <span class="content">Parsing overview</span>
+</h3>
+
+<dl>
+    <dt><dfn>Data state</dfn></dt>
+
+    <dd>
+        <p>Consume the next input character:</p>
+        <dl class="switch">
+            <dt>U+0026 (<code>&amp;</code>)
+
+            <dd class="warning">...</dd>
+        </dl>
+    </dd>
+</dl>
+
+<h2 class="heading" data-level="1" id="writing">
+    <span class="content">Writing XML documents</span>
+</h2>
+
+
+<p class="warning">TODO</p>
