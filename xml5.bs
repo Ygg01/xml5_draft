@@ -57,12 +57,12 @@ Group: whatwg
          <dd>Switch to the <a>End tag state</a>.</dd>
 
          <dt>U+003F (<code>?</code>)</dt>
-         
+
          <dd>Switch to the <span>pi state</span>.</dd>
 
          <dt>U+0021 (<code>!</code>)</dt>
          <dd>Switch to the <span>markup declaration state</span>.</dd>
-         
+
          <dt>U+0009 (<code class="non-print">Tab</code>)</dt>
          <dt>U+000A (<code class="non-print">LF</code>)</dt>
          <dt>U+0020 (<code class="non-print">Space</code>)</dt>
@@ -70,7 +70,7 @@ Group: whatwg
          <dt>U+003C (<code>&lt;</code>)</dt>
          <dt>U+003E (<code>&gt;</code>)</dt>
          <dt>EOF</dt>
-         
+
          <dd><span>Parse error</span>. Emit a U+003C (<code>&lt;</code>) character.
          Reconsume the current input character in the <span>data state</span>.</dd>
 
