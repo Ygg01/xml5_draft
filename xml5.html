@@ -7,6 +7,7 @@
     switch { padding-left: 2em; }
     switch dt {text-indent: -1.5em; }
     switch dt:before {content: '\21AA'; padding: 0 0.5em 0 0; display: inline-block;}
+    .non-print { background-color: #BFBFBF;  border-radius: 0.2em;}
 </style>
 
 <body class=h-entry>
@@ -17,13 +18,13 @@
 </p>
   <h1 class="p-name no-ref" id=title>XML 5</h1>
   <h2 class="no-num no-toc no-ref heading settled" id=subtitle><span class=content>Editor’s Draft,
-    <span class=dt-updated><span class=value-title title=20141211>11 December 2014</span></span></span></h2>
+    <span class=dt-updated><span class=value-title title=20141213>13 December 2014</span></span></span></h2>
   <div data-fill-with=spec-metadata><dl><dt>This version:<dd><a class=u-url href=http://www.example.org>http://www.example.org</a><dt>Editors:<dd><div class="p-author h-card vcard"><a class="p-name fn u-email email" href="mailto:<annevk@annevk.nl>">Anne van Kesteren</a> (<span class="p-org org">Opera Software ASA</span>)</div><dd><div class="p-author h-card vcard"><a class="p-name fn u-email email" href="mailto:<daniel.fath7@gmail.com>">Daniel Fath</a> (<span class="p-org org">Unaffiliated</span>)</div></dl></div>
   <div data-fill-with=warning></div>
   <p class=copyright data-fill-with=copyright><a href=http://creativecommons.org/publicdomain/zero/1.0/ rel=license><img alt=CC0 src=https://i.creativecommons.org/p/zero/1.0/80x15.png></a>
 To the extent possible under law, the editors have waived all copyright
 and related or neighboring rights to this work.
-In addition, as of 11 December 2014,
+In addition, as of 13 December 2014,
 the editors have made this specification available under the
 <a href=http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0 rel=license>Open Web Foundation Agreement Version 1.0</a>,
 which is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.
@@ -39,7 +40,7 @@ Parts of this work may be from another specification document.  If so, those par
 <div data-fill-with=at-risk></div>
 
 <h2 class="no-num no-toc no-ref heading settled" id=contents><span class=content>Table of Contents</span></h2>
-<div data-fill-with=table-of-contents><ul class=toc><li><a href=#parsing><span class=secno>1</span> <span class=content>Parsing XML documents</span></a><ul class=toc><li><a href=#parsing-overview><span class=secno>1.1</span> <span class=content></span></a></ul><li><a href=#writing><span class=secno>2</span> <span class=content>Writing XML documents</span></a><li><a href=#conformance><span class=secno></span> <span class=content>Conformance</span></a><li><a href=#references><span class=secno></span> <span class=content>References</span></a><ul class=toc><li><a href=#normative><span class=secno></span> <span class=content>Normative References</span></a></ul><li><a href=#index><span class=secno></span> <span class=content>Index</span></a><li><a href=#issues-index><span class=secno></span> <span class=content>Issues Index</span></a></ul></div>
+<div data-fill-with=table-of-contents><ul class=toc><li><a href=#parsing><span class=secno>1</span> <span class=content>Parsing XML documents</span></a><ul class=toc><li><a href=#parsing-overview><span class=secno>1.1</span> <span class=content>Parsing overview</span></a></ul><li><a href=#writing><span class=secno>2</span> <span class=content>Writing XML documents</span></a><li><a href=#conformance><span class=secno></span> <span class=content>Conformance</span></a><li><a href=#references><span class=secno></span> <span class=content>References</span></a><ul class=toc><li><a href=#normative><span class=secno></span> <span class=content>Normative References</span></a></ul><li><a href=#index><span class=secno></span> <span class=content>Index</span></a></ul></div>
 
 
 <h2 class="heading settled" data-level=1 id=parsing><span class=secno>1. </span><span class=content>Parsing XML documents</span><a class=self-link href=#parsing></a></h2>
@@ -47,7 +48,7 @@ Parts of this work may be from another specification document.  If so, those par
 <p>This section and its subsection define the <dfn data-dfn-type=dfn data-noexport="" id=xml-parser>XML parser<a class=self-link href=#xml-parser></a></dfn>.</p>
 <p>This specification defines the parsing rules for XML documents, whether they are syntactically correct or not. Certain points in the parsing algorithm are said to be parse errors. The handling for parse errors is well-defined: user agents must either act as described below when encountering such problems, or must terminate processing at the first error that they encounter for which they do not wish to apply the rules described below.</p>
 
-<h3 class="heading settled" data-level=1.1 id=parsing-overview><span class=secno>1.1. </span><span class=content></span><a class=self-link href=#parsing-overview></a></h3>
+<h3 class="heading settled" data-level=1.1 id=parsing-overview><span class=secno>1.1. </span><span class=content>Parsing overview</span><a class=self-link href=#parsing-overview></a></h3>
 
 <dl>
     <dt><dfn data-dfn-type=dfn data-noexport="" id=data-state>Data state<a class=self-link href=#data-state></a></dfn></dt>
@@ -56,16 +57,64 @@ Parts of this work may be from another specification document.  If so, those par
         <p>Consume the next input character:</p>
         <dl class=switch>
             <dt>U+0026 (<code>&amp;</code>)
+            <dd class=warning>TODO</dd>
 
-            <dd class=warning>...</dd>
+            <dt>U+003C (<code>&lt;</code>)</dt>
+            <dd>Switch to the <a data-link-type=dfn href=#tag-state title="Tag state">Tag state</a>.</dd>
+
+            <dt>EOF</dt>
+            <dd>Emit an end-of-file token.</dd>
+
+            <dt>Anything else</dt>
+            <dd>Emit the input character as character. Stay in this state.</dd>
         </dl>
     </dd>
+
+    <dt><dfn data-dfn-type=dfn data-noexport="" id=tag-state>Tag state<a class=self-link href=#tag-state></a></dfn></dt>
+
+    <dd>
+        <p>Consume the next input character:</p>
+        <dl class=switch>
+         <dt>U+002F (<code>/</code>)</dt>
+         <dd>Switch to the <a data-link-type=dfn href=#end-tag-state title="End tag state">End tag state</a>.</dd>
+
+         <dt>U+003F (<code>?</code>)</dt>
+
+         <dd>Switch to the <span>pi state</span>.</dd>
+
+         <dt>U+0021 (<code>!</code>)</dt>
+         <dd>Switch to the <span>markup declaration state</span>.</dd>
+
+         <dt>U+0009 (<code class=non-print>Tab</code>)</dt>
+         <dt>U+000A (<code class=non-print>LF</code>)</dt>
+         <dt>U+0020 (<code class=non-print>Space</code>)</dt>
+         <dt>U+003A (<code>:</code>)</dt>
+         <dt>U+003C (<code>&lt;</code>)</dt>
+         <dt>U+003E (<code>&gt;</code>)</dt>
+         <dt>EOF</dt>
+
+         <dd><span>Parse error</span>. Emit a U+003C (<code>&lt;</code>) character.
+         Reconsume the current input character in the <span>data state</span>.</dd>
+
+         <dt>Anything else</dt>
+
+         <dd>Create a new tag token and set its name to the input character, then
+         switch to the <span>tag name state</span>.</dd>
+        </dl>
+    </dd>
+
+    <dt><dfn data-dfn-type=dfn data-noexport="" id=end-tag-state>End tag state<a class=self-link href=#end-tag-state></a></dfn></dt>
+
+    <dd>
+    <p>Consume the <span>next input character</span>:</p>
+    </dd>
+
 </dl>
 
 <h2 class="heading settled" data-level=2 id=writing><span class=secno>2. </span><span class=content>Writing XML documents</span><a class=self-link href=#writing></a></h2>
 
 
-<p class=issue id=issue-b7b1e314><a class=self-link href=#issue-b7b1e314></a>TODO</p>
+<p class=warning>TODO</p>
 <h2 class="no-num no-ref heading settled" id=conformance><span class=content>Conformance</span><a class=self-link href=#conformance></a></h2>
 
 <p>All diagrams, examples, and notes in this specification are non-normative, as are all sections explicitly marked
@@ -77,4 +126,4 @@ readability, these words do not appear in all uppercase letters in this specific
 
 <p>Conformance requirements phrased as algorithms or specific steps may be implemented in any manner, so long as the end
 result is equivalent.
-<h2 class="no-num heading settled" id=references><span class=content>References</span><a class=self-link href=#references></a></h2><h3 class="no-num heading settled" id=normative><span class=content>Normative References</span><a class=self-link href=#normative></a></h3><dl><dt id=biblio-rfc2119 title=rfc2119><a class=self-link href=#biblio-rfc2119></a>[rfc2119]<dd>S. Bradner. <a href=http://www.ietf.org/rfc/rfc2119.txt>Key words for use in RFCs to Indicate Requirement Levels</a>. March 1997. Best Current Practice. URL: <a href=http://www.ietf.org/rfc/rfc2119.txt>http://www.ietf.org/rfc/rfc2119.txt</a></dl><h2 class="no-num heading settled" id=index><span class=content>Index</span><a class=self-link href=#index></a></h2><ul class=indexlist><li>Data state, <a href=#data-state title="section 1.1">1.1</a><li>XML parser, <a href=#xml-parser title="section 1">1</a></ul><h2 class="no-num heading settled" id=issues-index><span class=content>Issues Index</span><a class=self-link href=#issues-index></a></h2><div style=counter-reset:issue><div class=issue>TODO<a href=#issue-b7b1e314> ↵ </a></div></div>
+<h2 class="no-num heading settled" id=references><span class=content>References</span><a class=self-link href=#references></a></h2><h3 class="no-num heading settled" id=normative><span class=content>Normative References</span><a class=self-link href=#normative></a></h3><dl><dt id=biblio-rfc2119 title=rfc2119><a class=self-link href=#biblio-rfc2119></a>[rfc2119]<dd>S. Bradner. <a href=https://tools.ietf.org/html/rfc2119>Key words for use in RFCs to Indicate Requirement Levels</a>. March 1997. Best Current Practice. URL: <a href=https://tools.ietf.org/html/rfc2119>https://tools.ietf.org/html/rfc2119</a></dl><h2 class="no-num heading settled" id=index><span class=content>Index</span><a class=self-link href=#index></a></h2><ul class=indexlist><li>Data state, <a href=#data-state title="section 1.1">1.1</a><li>End tag state, <a href=#end-tag-state title="section 1.1">1.1</a><li>Tag state, <a href=#tag-state title="section 1.1">1.1</a><li>XML parser, <a href=#xml-parser title="section 1">1</a></ul>

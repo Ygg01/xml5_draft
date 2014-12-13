@@ -14,6 +14,7 @@ Group: whatwg
     switch { padding-left: 2em; }
     switch dt {text-indent: -1.5em; }
     switch dt:before {content: '\21AA'; padding: 0 0.5em 0 0; display: inline-block;}
+    .non-print { background-color: #BFBFBF;  border-radius: 0.2em;}
 </style>
 
 <h2 class="heading" data-level="1" id="parsing">
@@ -23,7 +24,7 @@ Group: whatwg
 <p>This section and its subsection define the <dfn>XML parser</dfn>.</p>
 <p>This specification defines the parsing rules for XML documents, whether they are syntactically correct or not. Certain points in the parsing algorithm are said to be parse errors. The handling for parse errors is well-defined: user agents must either act as described below when encountering such problems, or must terminate processing at the first error that they encounter for which they do not wish to apply the rules described below.</p>
 
-<h3 class="heading" data-level="2" id="parsing-overview">
+<h3 class="heading" data-level="1" id="parsing-overview">
     <span class="content">Parsing overview</span>
 </h3>
 
@@ -34,10 +35,58 @@ Group: whatwg
         <p>Consume the next input character:</p>
         <dl class="switch">
             <dt>U+0026 (<code>&amp;</code>)
+            <dd class="warning">TODO</dd>
 
-            <dd class="warning">...</dd>
+            <dt>U+003C (<code>&lt;</code>)</dt>
+            <dd>Switch to the <a>Tag state</a>.</dd>
+
+            <dt>EOF</dt>
+            <dd>Emit an end-of-file token.</dd>
+
+            <dt>Anything else</dt>
+            <dd>Emit the input character as character. Stay in this state.</dd>
         </dl>
     </dd>
+
+    <dt><dfn>Tag state</dfn></dt>
+
+    <dd>
+        <p>Consume the next input character:</p>
+        <dl class="switch">
+         <dt>U+002F (<code>/</code>)</dt>
+         <dd>Switch to the <a>End tag state</a>.</dd>
+
+         <dt>U+003F (<code>?</code>)</dt>
+         
+         <dd>Switch to the <span>pi state</span>.</dd>
+
+         <dt>U+0021 (<code>!</code>)</dt>
+         <dd>Switch to the <span>markup declaration state</span>.</dd>
+         
+         <dt>U+0009 (<code class="non-print">Tab</code>)</dt>
+         <dt>U+000A (<code class="non-print">LF</code>)</dt>
+         <dt>U+0020 (<code class="non-print">Space</code>)</dt>
+         <dt>U+003A (<code>:</code>)</dt>
+         <dt>U+003C (<code>&lt;</code>)</dt>
+         <dt>U+003E (<code>&gt;</code>)</dt>
+         <dt>EOF</dt>
+         
+         <dd><span>Parse error</span>. Emit a U+003C (<code>&lt;</code>) character.
+         Reconsume the current input character in the <span>data state</span>.</dd>
+
+         <dt>Anything else</dt>
+
+         <dd>Create a new tag token and set its name to the input character, then
+         switch to the <span>tag name state</span>.</dd>
+        </dl>
+    </dd>
+
+    <dt><dfn>End tag state</dfn></dt>
+
+    <dd>
+    <p>Consume the <span>next input character</span>:</p>
+    </dd>
+
 </dl>
 
 <h2 class="heading" data-level="1" id="writing">
