@@ -61,7 +61,7 @@ Group: whatwg
       <dd>Switch to the <a>pi state</a>.</dd>
 
       <dt>U+0021 (<code>!</code>)</dt>
-      <dd>Switch to the <span>markup declaration state</span>.</dd>
+      <dd>Switch to the <a>markup declaration state</a>.</dd>
 
       <dt>U+0009 (<code class="non-print">Tab</code>)</dt>
       <dt>U+000A (<code class="non-print">LF</code>)</dt>
@@ -72,12 +72,12 @@ Group: whatwg
       <dt>EOF</dt>
 
       <dd><span>Parse error</span>. Emit a U+003C (<code>&lt;</code>) character.
-      Reconsume the current input character in the <span>data state</span>.</dd>
+      Reconsume the current input character in the <a>data state</a>.</dd>
 
       <dt>Anything else</dt>
 
       <dd>Create a new tag token and set its name to the input character, then
-         switch to the <span>tag name state</span>.</dd>
+         switch to the <a>tag name state</a>.</dd>
     </dl>
   </dd>
 
@@ -109,7 +109,7 @@ Group: whatwg
     </dl>
     </dd>
 
-    <dt><dfn>End tag name state</dfn></dt>
+  <dt><dfn>End tag name state</dfn></dt>
 
   <dd>
     <p>Consume the <span>next input character</span>:</p>
@@ -140,7 +140,7 @@ Group: whatwg
 
     <dl class="switch">
       <dt>U+003E (<code>&gt;</code>)</dt>
-      <dd>Emit the current token and then switch to the <span>data state</span>.</dd>
+      <dd>Emit the current token and then switch to the <a>data state</a>.</dd>
 
       <dt>U+0009 (<code class="non-print">Tab</code>)</dt>
       <dt>U+000A (<code class="non-print">LF</code>)</dt>
@@ -149,7 +149,7 @@ Group: whatwg
 
       <dt>EOF</dt>
       <dd><span>Parse error</span>. Emit the current token and then reprocess the
-     current input character in the <span>data state</span>.</dd>
+     current input character in the <a>data state</a>.</dd>
 
       <dt>Anything else</dt>
       <dd><span>Parse error</span>. Stay in the current state.</dd>
@@ -175,10 +175,117 @@ Group: whatwg
   </dd>
 
   <dt><dfn>Pi target state</dfn></dt>
+  <dd>
+    <p>Consume the <span>next input character</span>:</p>
+    <dl class="switch">
+      <dt>U+0009 (<code class="non-print">Tab</code>)</dt>
+      <dt>U+000A (<code class="non-print">LF</code>)</dt>
+      <dt>U+0020 (<code class="non-print">Space</code>)</dt>
+      <dd>Switch to the <a>pi target after state</a>.</dd>
+
+      <dt>EOF</dt>
+      <dd><span>Parse error</span>. Emit the current token and then reprocess the
+     current input character in the <a>data state</a>.</dd>
+
+      <dt>U+003F (<code>?</code>)</dt>
+      <dd>Switch to the <a>pi after state</a>.</dd>
+
+      <dt>Anything else</dt>
+      <dd>Append the current input character to the processing instruction target and stay in the
+      current state.</dd>
+    </dl>
+  </dd>
+
+  <dt><dfn>Pi target after state</dfn></dt>
+  <dd>
+    <p>Consume the <span>next input character</span>:</p>
+    <dl class="switch">
+      <dt>U+0009 (<code class="non-print">Tab</code>)</dt>
+      <dt>U+000A (<code class="non-print">LF</code>)</dt>
+      <dt>U+0020 (<code class="non-print">Space</code>)</dt>
+      <dd>Stay in the current state.</dd>
+
+      <dt>Anything else</dt>
+      <dd>Reprocess the current input character in the <a>pi data
+     state</a>.</dd>
+    </dl>
+   </dd>
+
+  <dt><dfn>Pi data state</dfn></dt>
+  <dd>
+    <p>Consume the <span>next input character</span>:</p>
+
+    <dl class="switch">
+      <dt>U+003F (<code>?</code>)</dt>
+      <dd>Switch to the <a>pi after state</a>.</dd>
+
+      <dt>EOF</dt>
+      <dd><span>Parse error</span>. Emit the current token and then reprocess the
+     current input character in the <a>data state</a>.</dd>
+
+      <dt>Anything else</dt>
+      <dd>Append the current input character to the pi's data and stay in the
+     current state.</dd>
+    </dl>
+   </dd>
+
+  <dt><dfn>Pi after state</dfn></dt>
+    <dd>
+    <p>Consume the <span>next input character</span>:</p>
+
+    <dl class="switch">
+      <dt>U+003E (<code>&gt;</code>)</dt>
+      <dd>Emit the current token and then switch to the <span>data state</span>.</dd>
+
+      <dt>U+003F (<code>?</code>)</dt>
+      <dd>Append the current input character to the pi's data and stay in the
+     current state.</dd>
+
+      <dt>Anything else</dt>
+      <dd>Reprocess the current input character in the <a>pi data
+     state</a>.</dd>
+    </dl>
+   </dd>
+
+  <dt><dfn>Markup declaration state</dfn></dt>
+  <dd>
+    <p>If the next two characters are both U+002D (<code>-</code>)
+    characters, consume those two characters, create a comment token whose data
+    is the empty string and then switch to the <a>comment state</a>.</p>
+
+    <p>Otherwise, if the next seven characters are an exact match for
+    "[CDATA[", then consume those characters and switch to the <a>CDATA
+    state</a>.</p>
+
+    <p>Otherwise, if the next seven characters are an exact match for "DOCTYPE",
+    then this is a <span>parse error</span>. Consume those characters and switch
+    to the <a>DOCTYPE state</a>.</p>
+    <!-- XXX make them legal? -->
+
+    <p>Otherwise, this is a <span>parse error</span>. Switch to the <a>bogus
+    comment state</a>.</p>
+  </dd>
+
+  <dt><dfn>Comment state</dfn></dt>
   <p class="warning">TODO</p>
+
+  <dt><dfn>Comment dash state</dfn></dt>
+  <p class="warning">TODO</p>
+
+  <dt><dfn>CDATA state</dfn></dt>
+  <p class="warning">TODO</p>
+
+  <dt><dfn>DOCTYPE state</dfn></dt>
+  <p class="warning">TODO</p>
+
+  <dt><dfn>Comment state</dfn></dt>
+  <p class="warning">TODO</p>
+
   <dt><dfn>Bogus comment state</dfn></dt>
   <p class="warning">TODO</p>
 
+  <dt><dfn>Tag name state</dfn></dt>
+  <p class="warning">TODO</p>
 
 
 </dl>
