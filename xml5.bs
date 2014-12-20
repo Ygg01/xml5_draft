@@ -34,10 +34,10 @@ Group: whatwg
   <dd>
     <p>Consume the next input character:</p>
     <dl class="switch">
-      <dt>U+0026 (<code>&amp;</code>)
+      <dt>U+0026 AMPERSAND (<code>&amp;</code>)
       <dd class="warning">TODO</dd>
 
-      <dt>U+003C (<code>&lt;</code>)</dt>
+      <dt>U+003C LESSER-THAN SIGN (<code>&lt;</code>)</dt>
       <dd>Switch to the <a>Tag state</a>.</dd>
 
       <dt>EOF</dt>
@@ -53,25 +53,25 @@ Group: whatwg
   <dd>
     <p>Consume the next input character:</p>
     <dl class="switch">
-      <dt>U+002F (<code>/</code>)</dt>
+      <dt>U+002F SOLIDUS (<code>/</code>)</dt>
       <dd>Switch to the <a>End tag state</a>.</dd>
 
-      <dt>U+003F (<code>?</code>)</dt>
+      <dt>U+003F QUESTION MARK(<code>?</code>)</dt>
 
       <dd>Switch to the <a>pi state</a>.</dd>
 
       <dt>U+0021 (<code>!</code>)</dt>
       <dd>Switch to the <a>markup declaration state</a>.</dd>
 
-      <dt>U+0009 (<code class="non-print">Tab</code>)</dt>
-      <dt>U+000A (<code class="non-print">LF</code>)</dt>
-      <dt>U+0020 (<code class="non-print">Space</code>)</dt>
+      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
       <dt>U+003A (<code>:</code>)</dt>
-      <dt>U+003C (<code>&lt;</code>)</dt>
-      <dt>U+003E (<code>&gt;</code>)</dt>
+      <dt>U+003C LESSER-THAN SIGN (<code>&lt;</code>)</dt>
+      <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
       <dt>EOF</dt>
 
-      <dd><span>Parse error</span>. Emit a U+003C (<code>&lt;</code>) character.
+      <dd><span>Parse error</span>. Emit a U+003C LESSER-THAN SIGN (<code>&lt;</code>) character.
       Reconsume the current input character in the <a>data state</a>.</dd>
 
       <dt>Anything else</dt>
@@ -87,19 +87,19 @@ Group: whatwg
     <p>Consume the <span>next input character</span>:</p>
 
     <dl class="switch">
-    <dt>U+003E (<code>&gt;</code>)</dt>
+    <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
 
     <dd>Emit a short end tag token and then switch to the <a>data
     state</a>.</dd>
-    <dt>U+0009 (<code class="non-print">Tab</code>)</dt>
-    <dt>U+000A (<code class="non-print">LF</code>)</dt>
-    <dt>U+0020 (<code class="non-print">Space</code>)</dt>
-    <dt>U+003C (<code>&lt;</code>)</dt>
+    <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+    <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+    <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+    <dt>U+003C LESSER-THAN SIGN (<code>&lt;</code>)</dt>
     <dt>U+003A (<code>:</code>)</dt>
     <dt>EOF</dt>
 
-    <dd><span>Parse error</span>. Emit a U+003C (<code>&lt;</code>) character
-     token and a U+002F (<code>/</code>) character token. Reconsume the current
+    <dd><span>Parse error</span>. Emit a U+003C LESSER-THAN SIGN (<code>&lt;</code>) character
+     token and a U+002F SOLIDUS (<code>/</code>) character token. Reconsume the current
      input character in the <a>data state</a>.</dd>
 
     <dt>Anything else</dt>
@@ -115,16 +115,16 @@ Group: whatwg
     <p>Consume the <span>next input character</span>:</p>
 
     <dl class="switch">
-      <dt>U+0009 (<code class="non-print">Tab</code>)</dt>
-      <dt>U+000A (<code class="non-print">LF</code>)</dt>
-      <dt>U+0020 (<code class="non-print">Space</code>)</dt>
+      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
       <dd>Switch to the <a>end tag name after state</a>.</dd>
 
       <dt>EOF</dt>
       <dd><span>Parse error</span>. Emit the current token and then eprocess the
        current input character in the <a>data state</a>.</dd>
 
-      <dt>U+003E (<code>&gt;</code>)</dt>
+      <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
       <dd>Emit the current token and then switch to the <a>data
       state</a>.</dd>
       <dt>Anything else</dt>
@@ -139,12 +139,12 @@ Group: whatwg
     <p>Consume the <span>next input character</span>:</p>
 
     <dl class="switch">
-      <dt>U+003E (<code>&gt;</code>)</dt>
+      <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
       <dd>Emit the current token and then switch to the <a>data state</a>.</dd>
 
-      <dt>U+0009 (<code class="non-print">Tab</code>)</dt>
-      <dt>U+000A (<code class="non-print">LF</code>)</dt>
-      <dt>U+0020 (<code class="non-print">Space</code>)</dt>
+      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
       <dd>Stay in the current state.</dd>
 
       <dt>EOF</dt>
@@ -160,9 +160,9 @@ Group: whatwg
   <dd>
     <p>Consume the <span>next input character</span>:</p>
     <dl class="switch">
-      <dt>U+0009 (<code class="non-print">Tab</code>)</dt>
-      <dt>U+000A (<code class="non-print">LF</code>)</dt>
-      <dt>U+0020 (<code class="non-print">Space</code>)</dt>
+      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
       <dt>EOF</dt>
       <dd><span>Parse error</span>. Reprocess the current input character in the
       <a>bogus comment state</a>.</dd>
@@ -178,16 +178,16 @@ Group: whatwg
   <dd>
     <p>Consume the <span>next input character</span>:</p>
     <dl class="switch">
-      <dt>U+0009 (<code class="non-print">Tab</code>)</dt>
-      <dt>U+000A (<code class="non-print">LF</code>)</dt>
-      <dt>U+0020 (<code class="non-print">Space</code>)</dt>
+      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
       <dd>Switch to the <a>pi target after state</a>.</dd>
 
       <dt>EOF</dt>
       <dd><span>Parse error</span>. Emit the current token and then reprocess the
      current input character in the <a>data state</a>.</dd>
 
-      <dt>U+003F (<code>?</code>)</dt>
+      <dt>U+003F QUESTION MARK(<code>?</code>)</dt>
       <dd>Switch to the <a>pi after state</a>.</dd>
 
       <dt>Anything else</dt>
@@ -200,9 +200,9 @@ Group: whatwg
   <dd>
     <p>Consume the <span>next input character</span>:</p>
     <dl class="switch">
-      <dt>U+0009 (<code class="non-print">Tab</code>)</dt>
-      <dt>U+000A (<code class="non-print">LF</code>)</dt>
-      <dt>U+0020 (<code class="non-print">Space</code>)</dt>
+      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
       <dd>Stay in the current state.</dd>
 
       <dt>Anything else</dt>
@@ -216,7 +216,7 @@ Group: whatwg
     <p>Consume the <span>next input character</span>:</p>
 
     <dl class="switch">
-      <dt>U+003F (<code>?</code>)</dt>
+      <dt>U+003F QUESTION MARK(<code>?</code>)</dt>
       <dd>Switch to the <a>pi after state</a>.</dd>
 
       <dt>EOF</dt>
@@ -234,10 +234,10 @@ Group: whatwg
     <p>Consume the <span>next input character</span>:</p>
 
     <dl class="switch">
-      <dt>U+003E (<code>&gt;</code>)</dt>
+      <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
       <dd>Emit the current token and then switch to the <span>data state</span>.</dd>
 
-      <dt>U+003F (<code>?</code>)</dt>
+      <dt>U+003F QUESTION MARK(<code>?</code>)</dt>
       <dd>Append the current input character to the pi's data and stay in the
      current state.</dd>
 
@@ -271,7 +271,7 @@ Group: whatwg
     <p>Consume the <span>next input character</span>:</p>
 
     <dl class="switch">
-      <dt>U+002D (<code>-</code>)</dt>
+      <dt>U+002D HYPHEN-MINUS, (<code>-</code>)</dt>
       <dd>Switch to the <a>comment dash state</a>.</dd>
 
       <dt>EOF</dt>
@@ -288,7 +288,7 @@ Group: whatwg
     <p>Consume the <span>next input character</span>:</p>
 
     <dl class="switch">
-      <dt>U+002D (<code>-</code>)</dt>
+      <dt>U+002D HYPHEN-MINUS, (<code>-</code>)</dt>
       <dd>Switch to the <a>comment end state</a>.</dd>
 
       <dt>EOF</dt>
@@ -306,10 +306,10 @@ Group: whatwg
     <p>Consume the <span>next input character</span>:</p>
 
     <dl class="switch">
-      <dt>U+003E (<code>&gt;</code>)</dt>
+      <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
       <dd>Emit the comment token. Switch to the <a>data state</a>.</dd>
 
-      <dt>U+002D (<code>-</code>)</dt>
+      <dt>U+002D HYPHEN-MINUS, (<code>-</code>)</dt>
       <dd>Append the current input character to the comment token's data. Stay in
      the current state.</dd>
 
@@ -329,7 +329,7 @@ Group: whatwg
     <p>Consume the <span>next input character</span>:</p>
 
     <dl class="switch">
-      <dt>U+005D (<code>]</code>)</dt>
+      <dt>U+005D RIGHT SQUARE BRACKET (<code>]</code>)</dt>
       <dd>Switch to the <a>CDATA bracket state</a>.</dd>
 
       <dt>EOF</dt>
@@ -347,7 +347,7 @@ Group: whatwg
     <p>Consume the <span>next input character</span>:</p>
 
     <dl class="switch">
-      <dt>U+005D (<code>]</code>)</dt>
+      <dt>U+005D RIGHT SQUARE BRACKET (<code>]</code>)</dt>
       <dd>Switch to the <a>CDATA end state</a>.</dd>
 
       <dt>EOF</dt>
@@ -355,7 +355,7 @@ Group: whatwg
       <a>data state</a>.</dd>
 
       <dt>Anything else</dt>
-      <dd>Emit a U+005D (<code>]</code>) character as character token and also
+      <dd>Emit a U+005D RIGHT SQUARE BRACKET (<code>]</code>) character as character token and also
      emit the current input character as character token. Stay in the current
      state.</dd>
     </dl>
@@ -366,10 +366,10 @@ Group: whatwg
     <p>Consume the <span>next input character</span>:</p>
 
     <dl class="switch">
-      <dt>U+003E (<code>&gt;</code>)</dt>
+      <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
       <dd>Switch to the <a>data state</a>.</dd>
 
-      <dt>U+005D (<code>]</code>)</dt>
+      <dt>U+005D RIGHT SQUARE BRACKET (<code>]</code>)</dt>
       <dd>Emit the current input character as character token. Stay in the
      current state.</dd>
 
@@ -378,12 +378,56 @@ Group: whatwg
       <a>data state</a>.</dd>
 
       <dt>Anything else</dt>
-      <dd>Emit two U+005D (<code>]</code>) characters as character tokens and
+      <dd>Emit two U+005D RIGHT SQUARE BRACKET (<code>]</code>) characters as character tokens and
      also emit the current input character as character token. Switch to the
       <a>CDATA state</a>.</dd>
     </dl>
   </dd>
 
+  <dt><dfn>Tag name state</dfn></dt>
+  <dd>
+    <p>Consume the <span>next input character</span>:</p>
+    <dl class="switch">
+      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+      <dd>Switch to the <a>tag attribute name before state</a>.</dd>
+
+      <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
+      <dd>Emit the current token and then switch to the <a>data state</a>.</dd>
+
+      <dt>EOF</dt>
+      <dd><span>Parse error</span>. Emit the current token and then reprocess the
+     current input character in the <a>data state</a>.</dd>
+
+      <dt>U+002F SOLIDUS (<code>/</code>)</dt>
+      <dd>Switch to the <a>empty tag state</a>.</dd>
+
+      <dt>Anything else</dt>
+      <dd>Append  the current input character to the tag name and stay in the
+     current state.</dd>
+    </dl>
+  </dd>
+
+  <dt><dfn>Empty tag state</dfn></dt>
+
+  <dd>
+    <p>Consume the <span>next input character</span>:</p>
+
+    <dl class="switch">
+      <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
+      <dd>Emit the current tag token as empty tag token and then switch to the
+      <a>data state</a>.</dd>
+
+      <dt>Anything else</dt>
+      <dd><span>Parse error</span>. Reprocess the current input character in the
+      <a>tag attribute name before state</a>.</dd>
+    </dl>
+   </dd>
+
+
+  <dt><dfn>Tag attribute name before state</dfn></dt>
+  <p class="warning">TODO</p>
 
   <dt><dfn>DOCTYPE state</dfn></dt>
   <p class="warning">TODO</p>
@@ -392,8 +436,6 @@ Group: whatwg
   <dt><dfn>Bogus comment state</dfn></dt>
   <p class="warning">TODO</p>
 
-  <dt><dfn>Tag name state</dfn></dt>
-  <p class="warning">TODO</p>
 
 
 </dl>
