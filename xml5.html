@@ -18,13 +18,13 @@
 </p>
   <h1 class="p-name no-ref" id=title>XML 5</h1>
   <h2 class="no-num no-toc no-ref heading settled" id=subtitle><span class=content>Editor’s Draft,
-    <span class=dt-updated><span class=value-title title=20141220>20 December 2014</span></span></span></h2>
+    <span class=dt-updated><span class=value-title title=20141221>21 December 2014</span></span></span></h2>
   <div data-fill-with=spec-metadata><dl><dt>This version:<dd><a class=u-url href=http://www.example.org>http://www.example.org</a><dt>Editors:<dd><div class="p-author h-card vcard"><a class="p-name fn u-email email" href="mailto:<annevk@annevk.nl>">Anne van Kesteren</a> (<span class="p-org org">Opera Software ASA</span>)</div><dd><div class="p-author h-card vcard"><a class="p-name fn u-email email" href="mailto:<daniel.fath7@gmail.com>">Daniel Fath</a> (<span class="p-org org">Unaffiliated</span>)</div></dl></div>
   <div data-fill-with=warning></div>
   <p class=copyright data-fill-with=copyright><a href=http://creativecommons.org/publicdomain/zero/1.0/ rel=license><img alt=CC0 src=https://i.creativecommons.org/p/zero/1.0/80x15.png></a>
 To the extent possible under law, the editors have waived all copyright
 and related or neighboring rights to this work.
-In addition, as of 20 December 2014,
+In addition, as of 21 December 2014,
 the editors have made this specification available under the
 <a href=http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0 rel=license>Open Web Foundation Agreement Version 1.0</a>,
 which is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.
@@ -40,7 +40,7 @@ Parts of this work may be from another specification document.  If so, those par
 <div data-fill-with=at-risk></div>
 
 <h2 class="no-num no-toc no-ref heading settled" id=contents><span class=content>Table of Contents</span></h2>
-<div data-fill-with=table-of-contents><ul class=toc><li><a href=#parsing><span class=secno>1</span> <span class=content>Parsing XML documents</span></a><ul class=toc><li><a href=#parsing-overview><span class=secno>1.1</span> <span class=content>Parsing overview</span></a></ul><li><a href=#writing><span class=secno>2</span> <span class=content>Writing XML documents</span></a><li><a href=#conformance><span class=secno></span> <span class=content>Conformance</span></a><li><a href=#references><span class=secno></span> <span class=content>References</span></a><ul class=toc><li><a href=#normative><span class=secno></span> <span class=content>Normative References</span></a></ul><li><a href=#index><span class=secno></span> <span class=content>Index</span></a></ul></div>
+<div data-fill-with=table-of-contents><ul class=toc><li><a href=#parsing><span class=secno>1</span> <span class=content>Parsing XML documents</span></a><ul class=toc><li><a href=#parsing-overview><span class=secno>1.1</span> <span class=content>Parsing overview</span></a></ul><li><a href=#writing><span class=secno>2</span> <span class=content>Writing XML documents</span></a><li><a href=#conformance><span class=secno></span> <span class=content>Conformance</span></a><li><a href=#references><span class=secno></span> <span class=content>References</span></a><ul class=toc><li><a href=#normative><span class=secno></span> <span class=content>Normative References</span></a></ul><li><a href=#index><span class=secno></span> <span class=content>Index</span></a><li><a href=#issues-index><span class=secno></span> <span class=content>Issues Index</span></a></ul></div>
 
 
 <h2 class="heading settled" data-level=1 id=parsing><span class=secno>1. </span><span class=content>Parsing XML documents</span><a class=self-link href=#parsing></a></h2>
@@ -449,15 +449,216 @@ Parts of this work may be from another specification document.  If so, those par
 
 
   <dt><dfn data-dfn-type=dfn data-noexport="" id=tag-attribute-name-before-state>Tag attribute name before state<a class=self-link href=#tag-attribute-name-before-state></a></dfn></dt>
-  <p class=warning>TODO</p>
 
-  <dt><dfn data-dfn-type=dfn data-noexport="" id=doctype-state>DOCTYPE state<a class=self-link href=#doctype-state></a></dfn></dt>
-  <p class=warning>TODO</p>
+  <dd>
+    <p>Consume the <span>next input character</span>:</p>
+    <dl class=switch>
+      <dt>U+0009 CHARACTER TABULATION (<code class=non-print>Tab</code>)</dt>
+      <dt>U+000A LINE FEED (<code class=non-print>LF</code>)</dt>
+      <dt>U+0020 SPACE (<code class=non-print>Space</code>)</dt>
+
+      <dd>Stay in the current state.</dd>
+
+      <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
+      <dd>Emit the current token and then switch to the <span>data state</span>.</dd>
+
+      <dt>U+002F SOLIDUS (<code>/</code>)</dt>
+      <dd>Switch to the <a data-link-type=dfn href=#empty-tag-state title="Empty tag state">Empty tag state</a>.</dd>
+
+      <dt>U+003A COLON (<code>:</code>)</dt>
+      <dd><span>Parse error</span>. Stay in the current state.</dd>
+
+      <dt>EOF</dt>
+      <dd><span>Parse error</span>. Emit the current token and then reprocess the
+     current input character in the <a data-link-type=dfn href=#data-state title="data state">data state</a>.</dd>
+
+      <dt>Anything else</dt>
+      <dd>Start a new attribute in the current tag token. Set that attribute’s
+     name to the current input character and its value to the empty string and
+     then switch to the <a data-link-type=dfn href=#tag-attribute-name-state title="tag attribute name state">tag attribute name state</a>.</dd>
+    </dl>
+  </dd>
+
+  <dt><dfn data-dfn-type=dfn data-noexport="" id=tag-attribute-name-state>Tag attribute name state<a class=self-link href=#tag-attribute-name-state></a></dfn></dt>
+  <dd>
+    <p>Consume the <span>next input character</span>:</p>
+    <dl class=switch>
+      <dt>U+003D EQUALS SIGN (<code>=</code>)</dt>
+      <dd>Switch to the <a data-link-type=dfn href=#tag-attribute-value-before-state title="tag attribute value before state">tag attribute value before state</a>.</dd>
+
+      <dt>U+003E GREATER-THEN SIGN (<code>&gt;</code>)</dt>
+      <dd>Emit the current token as start tag token. Switch to the <a data-link-type=dfn href=#data-state title="data state">data
+     state</a>.</dd>
+
+      <dt>U+0009 CHARACTER TABULATION (<code class=non-print>Tab</code>)</dt>
+      <dt>U+000A LINE FEED (<code class=non-print>LF</code>)</dt>
+      <dt>U+0020 SPACE (<code class=non-print>Space</code>)</dt>
+      <dd>Switch to the <a data-link-type=dfn href=#tag-attribute-name-after-state title="tag attribute name after state">tag attribute name after state</a>.</dd>
+
+      <dt>U+002F SOLIDUS (<code>/</code>)</dt>
+      <dd>Switch to the <a data-link-type=dfn href=#empty-tag-state title="Empty tag state">Empty tag state</a>.</dd>
+
+      <dt>EOF</dt>
+      <dd><span>Parse error</span>. Emit the current token as start tag token and
+     then reprocess the current input character in the <span>data
+     state</span>.</dd>
+
+      <dt>Anything else</dt>
+      <dd>Append the current input character to the current attribute’s name.
+     Stay in the current state.</dd>
+    </dl>
+
+    <p>When the user agent leaves this state (and before emitting the tag token,
+    if appropriate), the complete attribute’s name <em class=ct>must</em> be
+    compared to the other attributes on the same token; if there is already an
+    attribute on the token with the exact same name, then this is a parse error
+    and the new attribute <em class=ct>must</em> be dropped, along with the
+    value that gets associated with it (if any).</p>
+  </dd>
+
+  <dt><dfn data-dfn-type=dfn data-noexport="" id=tag-attribute-name-after-state>Tag attribute name after state<a class=self-link href=#tag-attribute-name-after-state></a></dfn></dt>
+  <dd>
+    <p>Consume the <span>next input character</span>:</p>
+    <dl class=switch>
+      <dt>U+0009 CHARACTER TABULATION (<code class=non-print>Tab</code>)</dt>
+      <dt>U+000A LINE FEED (<code class=non-print>LF</code>)</dt>
+      <dt>U+0020 SPACE (<code class=non-print>Space</code>)</dt>
+      <dd>Stay in the current state.</dd>
+
+      <dt>U+003D EQUALS SIGN(<code>=</code>)</dt>
+      <dd>Switch to the <a data-link-type=dfn href=#tag-attribute-value-before-state title="tag attribute value before state">tag attribute value before state</a>.</dd>
+
+      <dt>U+003E GREATER-THEN SIGN(<code>&gt;</code>)</dt>
+      <dd>Emit the current token and then switch to the <a data-link-type=dfn href=#data-state title="data state">data state</a>.</dd>
+
+      <dt>U+002F SOLIDUS (<code>/</code>)</dt>
+      <dd>Switch to the <a data-link-type=dfn href=#empty-tag-state title="empty tag state">empty tag state</a>.</dd>
+
+      <dt>EOF</dt>
+      <dd><span>Parse error</span>. Emit the current token and then reprocess the
+     current input character in the <a data-link-type=dfn href=#data-state title="data state">data state</a>.</dd>
+
+      <dt>Anything else</dt>
+      <dd>Start a new attribute in the current tag token. Set that attribute’s
+     name to the current input character and its value to the empty string and
+     then switch to the <a data-link-type=dfn href=#tag-attribute-name-state title="tag attribute name state">tag attribute name state</a>.</dd>
+    </dl>
+  </dd>
+
+
+  <dt><dfn data-dfn-type=dfn data-noexport="" id=tag-attribute-value-before-state>Tag attribute value before state<a class=self-link href=#tag-attribute-value-before-state></a></dfn></dt>
+  <dd>
+    <p>Consume the <span>next input character</span>:</p>
+    <dl class=switch>
+      <dt>U+0009 CHARACTER TABULATION (<code class=non-print>Tab</code>)</dt>
+      <dt>U+000A LINE FEED (<code class=non-print>LF</code>)</dt>
+      <dt>U+0020 SPACE (<code class=non-print>Space</code>)</dt>
+      <dd>Stay in the current state.</dd>
+
+      <dt>U+0022 QUOTATION MARK (<code>"</code>)</dt>
+      <dd>Switch to the <a data-link-type=dfn href=#tag-attribute-value-double-quoted-state title="tag attribute value double quoted state">tag attribute value double quoted state</a>.</dd>
+
+      <dt>U+0027 APOSTROPHE (<code>'</code>)</dt>
+      <dd>Switch to the <a data-link-type=dfn href=#tag-attribute-value-single-quoted-state title="tag attribute value single quoted state">tag attribute value single quoted state</a>.</dd>
+
+      <dt>U+0026 AMPERSAND (<code>&amp;</code>):
+      <dd>Reprocess the input character in the <a data-link-type=dfn href=#tag-attribute-value-unquoted-state title="tag attribute value unquoted state">tag attribute value unquoted
+     state</a>.</dd>
+
+      <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
+      <dd>Emit the current token and then switch to the <a data-link-type=dfn href=#data-state title="data state">data state</a>.</dd>
+
+      <dt>EOF</dt>
+      <dd><span>Parse error</span>. Emit the current token and then reprocess the
+     current input character in the <a data-link-type=dfn href=#data-state title="data state">data state</a>.</dd>
+
+      <dt>Anything else</dt>
+      <dd>Append the current input character to the current attribute’s value and
+     then switch to the <a data-link-type=dfn href=#tag-attribute-value-unquoted-state title="tag attribute value unquoted state">tag attribute value unquoted state</a>.</dd>
+    </dl>
+  </dd>
+
+  <dt><dfn data-dfn-type=dfn data-noexport="" id=tag-attribute-value-double-quoted-state>Tag attribute value double quoted state<a class=self-link href=#tag-attribute-value-double-quoted-state></a></dfn></dt>
+  <dd>
+    <p>Consume the <span>next input character</span>:</p>
+
+    <dl class=switch>
+      <dt>U+0022 QUOTATION MARK (<code>"</code>)</dt>
+      <dd>Switch to the <a data-link-type=dfn href=#tag-attribute-name-before-state title="tag attribute name before state">tag attribute name before state</a>.</dd>
+
+      <dt>U+0026 AMPERSAND (<code>&amp;</code>)</dt>
+      <dd class=issue id=issue-2f43b42f><a class=self-link href=#issue-2f43b42f></a>...</dd>
+
+      <dt>EOF</dt>
+      <dd><span>Parse error</span>. Emit the current token and then reprocess the
+     current input character in the <a data-link-type=dfn href=#data-state title="data state">data state</a>.</dd>
+
+      <dt>Anything else</dt>
+      <dd>Append the input character to the current attribute’s value. Stay in
+     the current state.</dd>
+    </dl>
+  </dd>
+
+
+  <dt><dfn data-dfn-type=dfn data-noexport="" id=tag-attribute-value-single-quoted-state>Tag attribute value single quoted state<a class=self-link href=#tag-attribute-value-single-quoted-state></a></dfn></dt>
+  <dd>
+    <p>Consume the <span>next input character</span>:</p>
+
+    <dl class=switch>
+      <dt>U+0022 APOSTROPHE (<code>'</code>)</dt>
+      <dd>Switch to the <a data-link-type=dfn href=#tag-attribute-name-before-state title="tag attribute name before state">tag attribute name before state</a>.</dd>
+
+      <dt>U+0026 AMPERSAND (<code>&amp;</code>)</dt>
+      <dd class=issue id=issue-2f43b42f><a class=self-link href=#issue-2f43b42f></a>...</dd>
+
+      <dt>EOF</dt>
+      <dd><span>Parse error</span>. Emit the current token and then reprocess the
+     current input character in the <a data-link-type=dfn href=#data-state title="data state">data state</a>.</dd>
+
+      <dt>Anything else</dt>
+      <dd>Append the input character to the current attribute’s value. Stay in
+     the current state.</dd>
+    </dl>
+  </dd>
+
+  <dt><dfn data-dfn-type=dfn data-noexport="" id=tag-attribute-value-unquoted-state>Tag attribute value unquoted state<a class=self-link href=#tag-attribute-value-unquoted-state></a></dfn></dt>
+  <dd>
+    <p>Consume the <span>next input character</span>:</p>
+      <dl class=switch>
+      <dt>U+0009 CHARACTER TABULATION (<code class=non-print>Tab</code>)</dt>
+      <dt>U+000A LINE FEED (<code class=non-print>LF</code>)</dt>
+      <dt>U+0020 SPACE (<code class=non-print>Space</code>)</dt>
+      <dd>Switch to the <span>tag attribute name before state</span>.</dd>
+
+      <dt>U+0026 AMPERSAND (<code>&amp;</code>):
+      <dd class=issue id=issue-2f43b42f><a class=self-link href=#issue-2f43b42f></a>...</dd>
+
+      <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
+      <dd>Emit the current token as start tag token and then switch to the
+      <span>data state</span>.</dd>
+
+      <dt>EOF</dt>
+      <dd><span>Parse error</span>. Emit the current token as start tag token and
+     then reprocess the current input character in the
+      <span>data state</span>.</dd>
+
+      <dt>Anything else</dt>
+      <dd>Append the input character to the current attribute’s value. Stay in
+     the current state.</dd>
+    </dl>
+   </dd>
 
 
   <dt><dfn data-dfn-type=dfn data-noexport="" id=bogus-comment-state>Bogus comment state<a class=self-link href=#bogus-comment-state></a></dfn></dt>
-  <p class=warning>TODO</p>
+  <dd><p>Consume every character up to the first U+003E GREATER-THAN SIGN (<code>&gt;</code>) or
+   EOF, whichever comes first. Emit a comment token whose data is the
+   concatenation of all those consumed characters. Then consume the next input
+   character and switch to the <a data-link-type=dfn href=#data-state title="data state">data state</a> reprocessing the EOF
+   character if that was the character consumed.</dd>
 
+
+  <dt><dfn data-dfn-type=dfn data-noexport="" id=doctype-state>DOCTYPE state<a class=self-link href=#doctype-state></a></dfn></dt>
+  <p class=warning>TODO</p>
 
 
 </dl>
@@ -477,4 +678,4 @@ readability, these words do not appear in all uppercase letters in this specific
 
 <p>Conformance requirements phrased as algorithms or specific steps may be implemented in any manner, so long as the end
 result is equivalent.
-<h2 class="no-num heading settled" id=references><span class=content>References</span><a class=self-link href=#references></a></h2><h3 class="no-num heading settled" id=normative><span class=content>Normative References</span><a class=self-link href=#normative></a></h3><dl><dt id=biblio-rfc2119 title=rfc2119><a class=self-link href=#biblio-rfc2119></a>[rfc2119]<dd>S. Bradner. <a href=https://tools.ietf.org/html/rfc2119>Key words for use in RFCs to Indicate Requirement Levels</a>. March 1997. Best Current Practice. URL: <a href=https://tools.ietf.org/html/rfc2119>https://tools.ietf.org/html/rfc2119</a></dl><h2 class="no-num heading settled" id=index><span class=content>Index</span><a class=self-link href=#index></a></h2><ul class=indexlist><li>Bogus comment state, <a href=#bogus-comment-state title="section 1.1">1.1</a><li>CDATA bracket state, <a href=#cdata-bracket-state title="section 1.1">1.1</a><li>CDATA end state, <a href=#cdata-end-state title="section 1.1">1.1</a><li>CDATA state, <a href=#cdata-state title="section 1.1">1.1</a><li>Comment dash state, <a href=#comment-dash-state title="section 1.1">1.1</a><li>Comment end state, <a href=#comment-end-state title="section 1.1">1.1</a><li>Comment state, <a href=#comment-state title="section 1.1">1.1</a><li>Data state, <a href=#data-state title="section 1.1">1.1</a><li>DOCTYPE state, <a href=#doctype-state title="section 1.1">1.1</a><li>Empty tag state, <a href=#empty-tag-state title="section 1.1">1.1</a><li>End tag name after state, <a href=#end-tag-name-after-state title="section 1.1">1.1</a><li>End tag name state, <a href=#end-tag-name-state title="section 1.1">1.1</a><li>End tag state, <a href=#end-tag-state title="section 1.1">1.1</a><li>Markup declaration state, <a href=#markup-declaration-state title="section 1.1">1.1</a><li>Pi after state, <a href=#pi-after-state title="section 1.1">1.1</a><li>Pi data state, <a href=#pi-data-state title="section 1.1">1.1</a><li>Pi state, <a href=#pi-state title="section 1.1">1.1</a><li>Pi target after state, <a href=#pi-target-after-state title="section 1.1">1.1</a><li>Pi target state, <a href=#pi-target-state title="section 1.1">1.1</a><li>Tag attribute name before state, <a href=#tag-attribute-name-before-state title="section 1.1">1.1</a><li>Tag name state, <a href=#tag-name-state title="section 1.1">1.1</a><li>Tag state, <a href=#tag-state title="section 1.1">1.1</a><li>XML parser, <a href=#xml-parser title="section 1">1</a></ul>
+<h2 class="no-num heading settled" id=references><span class=content>References</span><a class=self-link href=#references></a></h2><h3 class="no-num heading settled" id=normative><span class=content>Normative References</span><a class=self-link href=#normative></a></h3><dl><dt id=biblio-rfc2119 title=rfc2119><a class=self-link href=#biblio-rfc2119></a>[rfc2119]<dd>S. Bradner. <a href=https://tools.ietf.org/html/rfc2119>Key words for use in RFCs to Indicate Requirement Levels</a>. March 1997. Best Current Practice. URL: <a href=https://tools.ietf.org/html/rfc2119>https://tools.ietf.org/html/rfc2119</a></dl><h2 class="no-num heading settled" id=index><span class=content>Index</span><a class=self-link href=#index></a></h2><ul class=indexlist><li>Bogus comment state, <a href=#bogus-comment-state title="section 1.1">1.1</a><li>CDATA bracket state, <a href=#cdata-bracket-state title="section 1.1">1.1</a><li>CDATA end state, <a href=#cdata-end-state title="section 1.1">1.1</a><li>CDATA state, <a href=#cdata-state title="section 1.1">1.1</a><li>Comment dash state, <a href=#comment-dash-state title="section 1.1">1.1</a><li>Comment end state, <a href=#comment-end-state title="section 1.1">1.1</a><li>Comment state, <a href=#comment-state title="section 1.1">1.1</a><li>Data state, <a href=#data-state title="section 1.1">1.1</a><li>DOCTYPE state, <a href=#doctype-state title="section 1.1">1.1</a><li>Empty tag state, <a href=#empty-tag-state title="section 1.1">1.1</a><li>End tag name after state, <a href=#end-tag-name-after-state title="section 1.1">1.1</a><li>End tag name state, <a href=#end-tag-name-state title="section 1.1">1.1</a><li>End tag state, <a href=#end-tag-state title="section 1.1">1.1</a><li>Markup declaration state, <a href=#markup-declaration-state title="section 1.1">1.1</a><li>Pi after state, <a href=#pi-after-state title="section 1.1">1.1</a><li>Pi data state, <a href=#pi-data-state title="section 1.1">1.1</a><li>Pi state, <a href=#pi-state title="section 1.1">1.1</a><li>Pi target after state, <a href=#pi-target-after-state title="section 1.1">1.1</a><li>Pi target state, <a href=#pi-target-state title="section 1.1">1.1</a><li>Tag attribute name after state, <a href=#tag-attribute-name-after-state title="section 1.1">1.1</a><li>Tag attribute name before state, <a href=#tag-attribute-name-before-state title="section 1.1">1.1</a><li>Tag attribute name state, <a href=#tag-attribute-name-state title="section 1.1">1.1</a><li>Tag attribute value before state, <a href=#tag-attribute-value-before-state title="section 1.1">1.1</a><li>Tag attribute value double quoted state, <a href=#tag-attribute-value-double-quoted-state title="section 1.1">1.1</a><li>Tag attribute value single quoted state, <a href=#tag-attribute-value-single-quoted-state title="section 1.1">1.1</a><li>Tag attribute value unquoted state, <a href=#tag-attribute-value-unquoted-state title="section 1.1">1.1</a><li>Tag name state, <a href=#tag-name-state title="section 1.1">1.1</a><li>Tag state, <a href=#tag-state title="section 1.1">1.1</a><li>XML parser, <a href=#xml-parser title="section 1">1</a></ul><h2 class="no-num heading settled" id=issues-index><span class=content>Issues Index</span><a class=self-link href=#issues-index></a></h2><div style=counter-reset:issue><div class=issue>...<a href=#issue-2f43b42f> ↵ </a></div><div class=issue>...<a href=#issue-2f43b42f> ↵ </a></div><div class=issue>...<a href=#issue-2f43b42f> ↵ </a></div></div>
