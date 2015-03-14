@@ -18,13 +18,13 @@
 </p>
   <h1 class="p-name no-ref" id=title>XML 5</h1>
   <h2 class="no-num no-toc no-ref heading settled" id=subtitle><span class=content>Editor’s Draft,
-    <span class=dt-updated><span class=value-title title=20141221>21 December 2014</span></span></span></h2>
+    <span class=dt-updated><span class=value-title title=20150315>15 March 2015</span></span></span></h2>
   <div data-fill-with=spec-metadata><dl><dt>This version:<dd><a class=u-url href=http://www.example.org>http://www.example.org</a><dt>Editors:<dd><div class="p-author h-card vcard"><a class="p-name fn u-email email" href="mailto:<annevk@annevk.nl>">Anne van Kesteren</a> (<span class="p-org org">Opera Software ASA</span>)</div><dd><div class="p-author h-card vcard"><a class="p-name fn u-email email" href="mailto:<daniel.fath7@gmail.com>">Daniel Fath</a> (<span class="p-org org">Unaffiliated</span>)</div></dl></div>
   <div data-fill-with=warning></div>
   <p class=copyright data-fill-with=copyright><a href=http://creativecommons.org/publicdomain/zero/1.0/ rel=license><img alt=CC0 src=https://i.creativecommons.org/p/zero/1.0/80x15.png></a>
 To the extent possible under law, the editors have waived all copyright
 and related or neighboring rights to this work.
-In addition, as of 21 December 2014,
+In addition, as of 15 March 2015,
 the editors have made this specification available under the
 <a href=http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0 rel=license>Open Web Foundation Agreement Version 1.0</a>,
 which is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.
@@ -40,7 +40,7 @@ Parts of this work may be from another specification document.  If so, those par
 <div data-fill-with=at-risk></div>
 
 <h2 class="no-num no-toc no-ref heading settled" id=contents><span class=content>Table of Contents</span></h2>
-<div data-fill-with=table-of-contents><ul class=toc><li><a href=#parsing><span class=secno>1</span> <span class=content>Parsing XML documents</span></a><ul class=toc><li><a href=#parsing-overview><span class=secno>1.1</span> <span class=content>Parsing overview</span></a></ul><li><a href=#writing><span class=secno>2</span> <span class=content>Writing XML documents</span></a><li><a href=#conformance><span class=secno></span> <span class=content>Conformance</span></a><li><a href=#references><span class=secno></span> <span class=content>References</span></a><ul class=toc><li><a href=#normative><span class=secno></span> <span class=content>Normative References</span></a></ul><li><a href=#index><span class=secno></span> <span class=content>Index</span></a><li><a href=#issues-index><span class=secno></span> <span class=content>Issues Index</span></a></ul></div>
+<div data-fill-with=table-of-contents><ul class=toc><li><a href=#parsing><span class=secno>1</span> <span class=content>Parsing XML documents</span></a><ul class=toc><li><a href=#parsing-overview><span class=secno>1.1</span> <span class=content>Overview</span></a><li><a href=#input-stream><span class=secno>1.2</span> <span class=content>Input stream</span></a><li><a href=#tokenization-overview><span class=secno>1.3</span> <span class=content><span data-dfn-type=dfn data-noexport="">Tokenization</span></span></a><li><a href=#tree-construction><span class=secno>1.4</span> <span class=content>Tree construction</span></a></ul><li><a href=#writing><span class=secno>2</span> <span class=content>Writing XML documents</span></a><li><a href=#conformance><span class=secno></span> <span class=content>Conformance</span></a><li><a href=#references><span class=secno></span> <span class=content>References</span></a><ul class=toc><li><a href=#normative><span class=secno></span> <span class=content>Normative References</span></a></ul><li><a href=#index><span class=secno></span> <span class=content>Index</span></a></ul></div>
 
 
 <h2 class="heading settled" data-level=1 id=parsing><span class=secno>1. </span><span class=content>Parsing XML documents</span><a class=self-link href=#parsing></a></h2>
@@ -48,7 +48,17 @@ Parts of this work may be from another specification document.  If so, those par
 <p>This section and its subsection define the <dfn data-dfn-type=dfn data-noexport="" id=xml-parser>XML parser<a class=self-link href=#xml-parser></a></dfn>.</p>
 <p>This specification defines the parsing rules for XML documents, whether they are syntactically correct or not. Certain points in the parsing algorithm are said to be parse errors. The handling for parse errors is well-defined: user agents must either act as described below when encountering such problems, or must terminate processing at the first error that they encounter for which they do not wish to apply the rules described below.</p>
 
-<h3 class="heading settled" data-level=1.1 id=parsing-overview><span class=secno>1.1. </span><span class=content>Parsing overview</span><a class=self-link href=#parsing-overview></a></h3>
+<h3 class="heading settled" data-level=1.1 id=parsing-overview><span class=secno>1.1. </span><span class=content>Overview</span><a class=self-link href=#parsing-overview></a></h3>
+
+<p>The input to the XML parsing process consists of a stream of octets which is converted to a stream of code points, which in turn are tokenized, and finally those tokens are used to construct a tree. </p>
+
+<h3 class="heading settled" data-level=1.2 id=input-stream><span class=secno>1.2. </span><span class=content>Input stream</span><a class=self-link href=#input-stream></a></h3>
+
+<p>The stream of Unicode characters that consists the input to the tokenization stage will be initially seen by the user agent as a stream of octets (typically coming over the network or from the local file system). The octets encode Unicode code points according to a particular encoding, which the user agent must use to decode the octets into code points.</p>
+
+<p class=warning>Define how to find the encoding</p>
+
+<h3 class="heading settled" data-level=1.3 id=tokenization-overview><span class=secno>1.3. </span><span class=content><dfn data-dfn-type=dfn data-noexport="" id=tokenization>Tokenization<a class=self-link href=#tokenization></a></dfn></span><a class=self-link href=#tokenization-overview></a></h3>
 
 <dl>
   <dt><dfn data-dfn-type=dfn data-noexport="" id=data-state>Data state<a class=self-link href=#data-state></a></dfn></dt>
@@ -93,7 +103,7 @@ Parts of this work may be from another specification document.  If so, those par
       <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
       <dt>EOF</dt>
 
-      <dd><span>Parse error</span>. Emit a U+003C LESSER-THAN SIGN (<code>&lt;</code>) character.
+      <dd><a href="parse errors">Parse error</a>. Emit a U+003C LESSER-THAN SIGN (<code>&lt;</code>) character.
       Reconsume the current input character in the <a data-link-type=dfn href=#data-state title="data state">data state</a>.</dd>
 
       <dt>Anything else</dt>
@@ -106,7 +116,7 @@ Parts of this work may be from another specification document.  If so, those par
   <dt><dfn data-dfn-type=dfn data-noexport="" id=end-tag-state>End tag state<a class=self-link href=#end-tag-state></a></dfn></dt>
 
     <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
 
     <dl class=switch>
     <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
@@ -120,7 +130,7 @@ Parts of this work may be from another specification document.  If so, those par
     <dt>U+003A (<code>:</code>)</dt>
     <dt>EOF</dt>
 
-    <dd><span>Parse error</span>. Emit a U+003C LESSER-THAN SIGN (<code>&lt;</code>) character
+    <dd><a href="parse errors">Parse error</a>. Emit a U+003C LESSER-THAN SIGN (<code>&lt;</code>) character
      token and a U+002F SOLIDUS (<code>/</code>) character token. Reconsume the current
      input character in the <a data-link-type=dfn href=#data-state title="data state">data state</a>.</dd>
 
@@ -134,7 +144,7 @@ Parts of this work may be from another specification document.  If so, those par
   <dt><dfn data-dfn-type=dfn data-noexport="" id=end-tag-name-state>End tag name state<a class=self-link href=#end-tag-name-state></a></dfn></dt>
 
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
 
     <dl class=switch>
       <dt>U+0009 CHARACTER TABULATION (<code class=non-print>Tab</code>)</dt>
@@ -143,7 +153,7 @@ Parts of this work may be from another specification document.  If so, those par
       <dd>Switch to the <a data-link-type=dfn href=#end-tag-name-after-state title="end tag name after state">end tag name after state</a>.</dd>
 
       <dt>EOF</dt>
-      <dd><span>Parse error</span>. Emit the current token and then eprocess the
+      <dd><a href="parse errors">Parse error</a>. Emit the current token and then eprocess the
        current input character in the <a data-link-type=dfn href=#data-state title="data state">data state</a>.</dd>
 
       <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
@@ -158,7 +168,7 @@ Parts of this work may be from another specification document.  If so, those par
   <dt><dfn data-dfn-type=dfn data-noexport="" id=end-tag-name-after-state>End tag name after state<a class=self-link href=#end-tag-name-after-state></a></dfn></dt>
 
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
 
     <dl class=switch>
       <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
@@ -170,23 +180,23 @@ Parts of this work may be from another specification document.  If so, those par
       <dd>Stay in the current state.</dd>
 
       <dt>EOF</dt>
-      <dd><span>Parse error</span>. Emit the current token and then reprocess the
+      <dd><a href="parse errors">Parse error</a>. Emit the current token and then reprocess the
      current input character in the <a data-link-type=dfn href=#data-state title="data state">data state</a>.</dd>
 
       <dt>Anything else</dt>
-      <dd><span>Parse error</span>. Stay in the current state.</dd>
+      <dd><a href="parse errors">Parse error</a>. Stay in the current state.</dd>
     </dl>
   </dd>
 
   <dt><dfn data-dfn-type=dfn data-noexport="" id=pi-state>Pi state<a class=self-link href=#pi-state></a></dfn></dt>
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
     <dl class=switch>
       <dt>U+0009 CHARACTER TABULATION (<code class=non-print>Tab</code>)</dt>
       <dt>U+000A LINE FEED (<code class=non-print>LF</code>)</dt>
       <dt>U+0020 SPACE (<code class=non-print>Space</code>)</dt>
       <dt>EOF</dt>
-      <dd><span>Parse error</span>. Reprocess the current input character in the
+      <dd><a href="parse errors">Parse error</a>. Reprocess the current input character in the
       <a data-link-type=dfn href=#bogus-comment-state title="bogus comment state">bogus comment state</a>.</dd>
 
       <dt>Anything else</dt>
@@ -198,7 +208,7 @@ Parts of this work may be from another specification document.  If so, those par
 
   <dt><dfn data-dfn-type=dfn data-noexport="" id=pi-target-state>Pi target state<a class=self-link href=#pi-target-state></a></dfn></dt>
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
     <dl class=switch>
       <dt>U+0009 CHARACTER TABULATION (<code class=non-print>Tab</code>)</dt>
       <dt>U+000A LINE FEED (<code class=non-print>LF</code>)</dt>
@@ -206,7 +216,7 @@ Parts of this work may be from another specification document.  If so, those par
       <dd>Switch to the <a data-link-type=dfn href=#pi-target-after-state title="pi target after state">pi target after state</a>.</dd>
 
       <dt>EOF</dt>
-      <dd><span>Parse error</span>. Emit the current token and then reprocess the
+      <dd><a href="parse errors">Parse error</a>. Emit the current token and then reprocess the
      current input character in the <a data-link-type=dfn href=#data-state title="data state">data state</a>.</dd>
 
       <dt>U+003F QUESTION MARK(<code>?</code>)</dt>
@@ -220,7 +230,7 @@ Parts of this work may be from another specification document.  If so, those par
 
   <dt><dfn data-dfn-type=dfn data-noexport="" id=pi-target-after-state>Pi target after state<a class=self-link href=#pi-target-after-state></a></dfn></dt>
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
     <dl class=switch>
       <dt>U+0009 CHARACTER TABULATION (<code class=non-print>Tab</code>)</dt>
       <dt>U+000A LINE FEED (<code class=non-print>LF</code>)</dt>
@@ -235,14 +245,14 @@ Parts of this work may be from another specification document.  If so, those par
 
   <dt><dfn data-dfn-type=dfn data-noexport="" id=pi-data-state>Pi data state<a class=self-link href=#pi-data-state></a></dfn></dt>
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
 
     <dl class=switch>
       <dt>U+003F QUESTION MARK(<code>?</code>)</dt>
       <dd>Switch to the <a data-link-type=dfn href=#pi-after-state title="pi after state">pi after state</a>.</dd>
 
       <dt>EOF</dt>
-      <dd><span>Parse error</span>. Emit the current token and then reprocess the
+      <dd><a href="parse errors">Parse error</a>. Emit the current token and then reprocess the
      current input character in the <a data-link-type=dfn href=#data-state title="data state">data state</a>.</dd>
 
       <dt>Anything else</dt>
@@ -253,11 +263,11 @@ Parts of this work may be from another specification document.  If so, those par
 
   <dt><dfn data-dfn-type=dfn data-noexport="" id=pi-after-state>Pi after state<a class=self-link href=#pi-after-state></a></dfn></dt>
     <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
 
     <dl class=switch>
       <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
-      <dd>Emit the current token and then switch to the <span>data state</span>.</dd>
+      <dd>Emit the current token and then switch to the <a data-link-type=dfn href=#data-state title="data state">data state</a>.</dd>
 
       <dt>U+003F QUESTION MARK(<code>?</code>)</dt>
       <dd>Append the current input character to the pi’s data and stay in the
@@ -280,24 +290,24 @@ Parts of this work may be from another specification document.  If so, those par
     state</a>.</p>
 
     <p>Otherwise, if the next seven characters are an exact match for "DOCTYPE",
-    then this is a <span>parse error</span>. Consume those characters and switch
+    then this is a <a href="parse errors">parse error</a>. Consume those characters and switch
     to the <a data-link-type=dfn href=#doctype-state title="DOCTYPE state">DOCTYPE state</a>.</p>
     
 
-    <p>Otherwise, this is a <span>parse error</span>. Switch to the <a data-link-type=dfn href=#bogus-comment-state title="bogus comment state">bogus
+    <p>Otherwise, this is a <a href="parse errors">parse error</a>. Switch to the <a data-link-type=dfn href=#bogus-comment-state title="bogus comment state">bogus
     comment state</a>.</p>
   </dd>
 
   <dt><dfn data-dfn-type=dfn data-noexport="" id=comment-state>Comment state<a class=self-link href=#comment-state></a></dfn></dt>
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
 
     <dl class=switch>
       <dt>U+002D HYPHEN-MINUS, (<code>-</code>)</dt>
       <dd>Switch to the <a data-link-type=dfn href=#comment-dash-state title="comment dash state">comment dash state</a>.</dd>
 
       <dt>EOF</dt>
-      <dd><span>Parse error</span>. Emit the comment token and then reprocess the
+      <dd><a href="parse errors">Parse error</a>. Emit the comment token and then reprocess the
      current input character in the <a data-link-type=dfn href=#data-state title="data state">data state</a>.</dd>
 
       <dt>Anything else</dt>
@@ -307,14 +317,14 @@ Parts of this work may be from another specification document.  If so, those par
 
   <dt><dfn data-dfn-type=dfn data-noexport="" id=comment-dash-state>Comment dash state<a class=self-link href=#comment-dash-state></a></dfn></dt>
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
 
     <dl class=switch>
       <dt>U+002D HYPHEN-MINUS, (<code>-</code>)</dt>
       <dd>Switch to the <a data-link-type=dfn href=#comment-end-state title="comment end state">comment end state</a>.</dd>
 
       <dt>EOF</dt>
-      <dd><span>Parse error</span>. Emit the comment token and then reprocess the
+      <dd><a href="parse errors">Parse error</a>. Emit the comment token and then reprocess the
      current input character in the <a data-link-type=dfn href=#data-state title="data state">data state</a>.</dd>
 
       <dt>Anything else</dt>
@@ -325,7 +335,7 @@ Parts of this work may be from another specification document.  If so, those par
 
   <dt><dfn data-dfn-type=dfn data-noexport="" id=comment-end-state>Comment end state<a class=self-link href=#comment-end-state></a></dfn></dt>
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
 
     <dl class=switch>
       <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
@@ -336,7 +346,7 @@ Parts of this work may be from another specification document.  If so, those par
      the current state.</dd>
 
       <dt>EOF</dt>
-      <dd><span>Parse error</span>. Emit the comment token and then reprocess the
+      <dd><a href="parse errors">Parse error</a>. Emit the comment token and then reprocess the
      current input character in the <a data-link-type=dfn href=#data-state title="data state">data state</a>.</dd>
 
       <dt>Anything else</dt>
@@ -348,14 +358,14 @@ Parts of this work may be from another specification document.  If so, those par
 
   <dt><dfn data-dfn-type=dfn data-noexport="" id=cdata-state>CDATA state<a class=self-link href=#cdata-state></a></dfn></dt>
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
 
     <dl class=switch>
       <dt>U+005D RIGHT SQUARE BRACKET (<code>]</code>)</dt>
       <dd>Switch to the <a data-link-type=dfn href=#cdata-bracket-state title="CDATA bracket state">CDATA bracket state</a>.</dd>
 
       <dt>EOF</dt>
-      <dd><span>Parse error</span>. Reprocess the current input character in the
+      <dd><a href="parse errors">Parse error</a>. Reprocess the current input character in the
       <a data-link-type=dfn href=#data-state title="data state">data state</a>.</dd>
 
       <dt>Anything else</dt>
@@ -366,14 +376,14 @@ Parts of this work may be from another specification document.  If so, those par
 
   <dt><dfn data-dfn-type=dfn data-noexport="" id=cdata-bracket-state>CDATA bracket state<a class=self-link href=#cdata-bracket-state></a></dfn></dt>
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
 
     <dl class=switch>
       <dt>U+005D RIGHT SQUARE BRACKET (<code>]</code>)</dt>
       <dd>Switch to the <a data-link-type=dfn href=#cdata-end-state title="CDATA end state">CDATA end state</a>.</dd>
 
       <dt>EOF</dt>
-      <dd><span>Parse error</span>. Reprocess the current input character in the
+      <dd><a href="parse errors">Parse error</a>. Reprocess the current input character in the
       <a data-link-type=dfn href=#data-state title="data state">data state</a>.</dd>
 
       <dt>Anything else</dt>
@@ -385,7 +395,7 @@ Parts of this work may be from another specification document.  If so, those par
 
   <dt><dfn data-dfn-type=dfn data-noexport="" id=cdata-end-state>CDATA end state<a class=self-link href=#cdata-end-state></a></dfn></dt>
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
 
     <dl class=switch>
       <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
@@ -396,7 +406,7 @@ Parts of this work may be from another specification document.  If so, those par
      current state.</dd>
 
       <dt>EOF</dt>
-      <dd><span>Parse error</span>. Reconsume the current input character in the
+      <dd><a href="parse errors">Parse error</a>. Reconsume the current input character in the
       <a data-link-type=dfn href=#data-state title="data state">data state</a>.</dd>
 
       <dt>Anything else</dt>
@@ -408,7 +418,7 @@ Parts of this work may be from another specification document.  If so, those par
 
   <dt><dfn data-dfn-type=dfn data-noexport="" id=tag-name-state>Tag name state<a class=self-link href=#tag-name-state></a></dfn></dt>
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
     <dl class=switch>
       <dt>U+0009 CHARACTER TABULATION (<code class=non-print>Tab</code>)</dt>
       <dt>U+000A LINE FEED (<code class=non-print>LF</code>)</dt>
@@ -419,7 +429,7 @@ Parts of this work may be from another specification document.  If so, those par
       <dd>Emit the current token and then switch to the <a data-link-type=dfn href=#data-state title="data state">data state</a>.</dd>
 
       <dt>EOF</dt>
-      <dd><span>Parse error</span>. Emit the current token and then reprocess the
+      <dd><a href="parse errors">Parse error</a>. Emit the current token and then reprocess the
      current input character in the <a data-link-type=dfn href=#data-state title="data state">data state</a>.</dd>
 
       <dt>U+002F SOLIDUS (<code>/</code>)</dt>
@@ -434,7 +444,7 @@ Parts of this work may be from another specification document.  If so, those par
   <dt><dfn data-dfn-type=dfn data-noexport="" id=empty-tag-state>Empty tag state<a class=self-link href=#empty-tag-state></a></dfn></dt>
 
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
 
     <dl class=switch>
       <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
@@ -442,7 +452,7 @@ Parts of this work may be from another specification document.  If so, those par
       <a data-link-type=dfn href=#data-state title="data state">data state</a>.</dd>
 
       <dt>Anything else</dt>
-      <dd><span>Parse error</span>. Reprocess the current input character in the
+      <dd><a href="parse errors">Parse error</a>. Reprocess the current input character in the
       <a data-link-type=dfn href=#tag-attribute-name-before-state title="tag attribute name before state">tag attribute name before state</a>.</dd>
     </dl>
    </dd>
@@ -451,7 +461,7 @@ Parts of this work may be from another specification document.  If so, those par
   <dt><dfn data-dfn-type=dfn data-noexport="" id=tag-attribute-name-before-state>Tag attribute name before state<a class=self-link href=#tag-attribute-name-before-state></a></dfn></dt>
 
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
     <dl class=switch>
       <dt>U+0009 CHARACTER TABULATION (<code class=non-print>Tab</code>)</dt>
       <dt>U+000A LINE FEED (<code class=non-print>LF</code>)</dt>
@@ -460,16 +470,16 @@ Parts of this work may be from another specification document.  If so, those par
       <dd>Stay in the current state.</dd>
 
       <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
-      <dd>Emit the current token and then switch to the <span>data state</span>.</dd>
+      <dd>Emit the current token and then switch to the <a data-link-type=dfn href=#data-state title="data state">data state</a>.</dd>
 
       <dt>U+002F SOLIDUS (<code>/</code>)</dt>
       <dd>Switch to the <a data-link-type=dfn href=#empty-tag-state title="Empty tag state">Empty tag state</a>.</dd>
 
       <dt>U+003A COLON (<code>:</code>)</dt>
-      <dd><span>Parse error</span>. Stay in the current state.</dd>
+      <dd><a href="parse errors">Parse error</a>. Stay in the current state.</dd>
 
       <dt>EOF</dt>
-      <dd><span>Parse error</span>. Emit the current token and then reprocess the
+      <dd><a href="parse errors">Parse error</a>. Emit the current token and then reprocess the
      current input character in the <a data-link-type=dfn href=#data-state title="data state">data state</a>.</dd>
 
       <dt>Anything else</dt>
@@ -481,7 +491,7 @@ Parts of this work may be from another specification document.  If so, those par
 
   <dt><dfn data-dfn-type=dfn data-noexport="" id=tag-attribute-name-state>Tag attribute name state<a class=self-link href=#tag-attribute-name-state></a></dfn></dt>
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
     <dl class=switch>
       <dt>U+003D EQUALS SIGN (<code>=</code>)</dt>
       <dd>Switch to the <a data-link-type=dfn href=#tag-attribute-value-before-state title="tag attribute value before state">tag attribute value before state</a>.</dd>
@@ -499,9 +509,9 @@ Parts of this work may be from another specification document.  If so, those par
       <dd>Switch to the <a data-link-type=dfn href=#empty-tag-state title="Empty tag state">Empty tag state</a>.</dd>
 
       <dt>EOF</dt>
-      <dd><span>Parse error</span>. Emit the current token as start tag token and
-     then reprocess the current input character in the <span>data
-     state</span>.</dd>
+      <dd><a href="parse errors">Parse error</a>. Emit the current token as start tag token and
+     then reprocess the current input character in the <a data-link-type=dfn href=#data-state title="data state">data
+     state</a>.</dd>
 
       <dt>Anything else</dt>
       <dd>Append the current input character to the current attribute’s name.
@@ -518,7 +528,7 @@ Parts of this work may be from another specification document.  If so, those par
 
   <dt><dfn data-dfn-type=dfn data-noexport="" id=tag-attribute-name-after-state>Tag attribute name after state<a class=self-link href=#tag-attribute-name-after-state></a></dfn></dt>
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
     <dl class=switch>
       <dt>U+0009 CHARACTER TABULATION (<code class=non-print>Tab</code>)</dt>
       <dt>U+000A LINE FEED (<code class=non-print>LF</code>)</dt>
@@ -535,7 +545,7 @@ Parts of this work may be from another specification document.  If so, those par
       <dd>Switch to the <a data-link-type=dfn href=#empty-tag-state title="empty tag state">empty tag state</a>.</dd>
 
       <dt>EOF</dt>
-      <dd><span>Parse error</span>. Emit the current token and then reprocess the
+      <dd><a href="parse errors">Parse error</a>. Emit the current token and then reprocess the
      current input character in the <a data-link-type=dfn href=#data-state title="data state">data state</a>.</dd>
 
       <dt>Anything else</dt>
@@ -548,7 +558,7 @@ Parts of this work may be from another specification document.  If so, those par
 
   <dt><dfn data-dfn-type=dfn data-noexport="" id=tag-attribute-value-before-state>Tag attribute value before state<a class=self-link href=#tag-attribute-value-before-state></a></dfn></dt>
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
     <dl class=switch>
       <dt>U+0009 CHARACTER TABULATION (<code class=non-print>Tab</code>)</dt>
       <dt>U+000A LINE FEED (<code class=non-print>LF</code>)</dt>
@@ -569,7 +579,7 @@ Parts of this work may be from another specification document.  If so, those par
       <dd>Emit the current token and then switch to the <a data-link-type=dfn href=#data-state title="data state">data state</a>.</dd>
 
       <dt>EOF</dt>
-      <dd><span>Parse error</span>. Emit the current token and then reprocess the
+      <dd><a href="parse errors">Parse error</a>. Emit the current token and then reprocess the
      current input character in the <a data-link-type=dfn href=#data-state title="data state">data state</a>.</dd>
 
       <dt>Anything else</dt>
@@ -580,17 +590,17 @@ Parts of this work may be from another specification document.  If so, those par
 
   <dt><dfn data-dfn-type=dfn data-noexport="" id=tag-attribute-value-double-quoted-state>Tag attribute value double quoted state<a class=self-link href=#tag-attribute-value-double-quoted-state></a></dfn></dt>
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
 
     <dl class=switch>
       <dt>U+0022 QUOTATION MARK (<code>"</code>)</dt>
       <dd>Switch to the <a data-link-type=dfn href=#tag-attribute-name-before-state title="tag attribute name before state">tag attribute name before state</a>.</dd>
 
       <dt>U+0026 AMPERSAND (<code>&amp;</code>)</dt>
-      <dd class=issue id=issue-2f43b42f><a class=self-link href=#issue-2f43b42f></a>...</dd>
+      <dd class=warning>...</dd>
 
       <dt>EOF</dt>
-      <dd><span>Parse error</span>. Emit the current token and then reprocess the
+      <dd><a href="parse errors">Parse error</a>. Emit the current token and then reprocess the
      current input character in the <a data-link-type=dfn href=#data-state title="data state">data state</a>.</dd>
 
       <dt>Anything else</dt>
@@ -602,17 +612,17 @@ Parts of this work may be from another specification document.  If so, those par
 
   <dt><dfn data-dfn-type=dfn data-noexport="" id=tag-attribute-value-single-quoted-state>Tag attribute value single quoted state<a class=self-link href=#tag-attribute-value-single-quoted-state></a></dfn></dt>
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
 
     <dl class=switch>
       <dt>U+0022 APOSTROPHE (<code>'</code>)</dt>
       <dd>Switch to the <a data-link-type=dfn href=#tag-attribute-name-before-state title="tag attribute name before state">tag attribute name before state</a>.</dd>
 
       <dt>U+0026 AMPERSAND (<code>&amp;</code>)</dt>
-      <dd class=issue id=issue-2f43b42f><a class=self-link href=#issue-2f43b42f></a>...</dd>
+      <dd class=warning>...</dd>
 
       <dt>EOF</dt>
-      <dd><span>Parse error</span>. Emit the current token and then reprocess the
+      <dd><a href="parse errors">Parse error</a>. Emit the current token and then reprocess the
      current input character in the <a data-link-type=dfn href=#data-state title="data state">data state</a>.</dd>
 
       <dt>Anything else</dt>
@@ -623,24 +633,24 @@ Parts of this work may be from another specification document.  If so, those par
 
   <dt><dfn data-dfn-type=dfn data-noexport="" id=tag-attribute-value-unquoted-state>Tag attribute value unquoted state<a class=self-link href=#tag-attribute-value-unquoted-state></a></dfn></dt>
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
       <dl class=switch>
       <dt>U+0009 CHARACTER TABULATION (<code class=non-print>Tab</code>)</dt>
       <dt>U+000A LINE FEED (<code class=non-print>LF</code>)</dt>
       <dt>U+0020 SPACE (<code class=non-print>Space</code>)</dt>
-      <dd>Switch to the <span>tag attribute name before state</span>.</dd>
+      <dd>Switch to the <a data-link-type=dfn href=#tag-attribute-name-before-state title="tag attribute name before state">tag attribute name before state</a>.</dd>
 
       <dt>U+0026 AMPERSAND (<code>&amp;</code>):
-      <dd class=issue id=issue-2f43b42f><a class=self-link href=#issue-2f43b42f></a>...</dd>
+      <dd class=warning>...</dd>
 
       <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
       <dd>Emit the current token as start tag token and then switch to the
-      <span>data state</span>.</dd>
+      <a data-link-type=dfn href=#data-state title="data state">data state</a>.</dd>
 
       <dt>EOF</dt>
-      <dd><span>Parse error</span>. Emit the current token as start tag token and
+      <dd><a href="parse errors">Parse error</a>. Emit the current token as start tag token and
      then reprocess the current input character in the
-      <span>data state</span>.</dd>
+      <a data-link-type=dfn href=#data-state title="data state">data state</a>.</dd>
 
       <dt>Anything else</dt>
       <dd>Append the input character to the current attribute’s value. Stay in
@@ -663,10 +673,164 @@ Parts of this work may be from another specification document.  If so, those par
 
 </dl>
 
-<h2 class="heading settled" data-level=2 id=writing><span class=secno>2. </span><span class=content>Writing XML documents</span><a class=self-link href=#writing></a></h2>
+<h3 class="heading settled" data-level=1.4 id=tree-construction><span class=secno>1.4. </span><span class=content>Tree construction</span><a class=self-link href=#tree-construction></a></h3>
 
+<p>The input to the tree construction stage is a sequence of tokens from the
+  <a data-link-type=dfn href=#tokenization title=tokenization>tokenization</a> stage. The output of this stage is a tree model
+  represented by a <code>Document</code> object.</p>
+
+  <p>The tree construction stage passes through several phases. The initial
+  phase is the <a data-link-type=dfn href=#start-phase title="start phase">start phase</a>.</p>
+
+  <p>The <dfn data-dfn-type=dfn data-noexport="" id=stack-of-open-elements>stack of open elements<a class=self-link href=#stack-of-open-elements></a></dfn> contains all elements of which the
+  closing tag has not yet been encountered. Once the first start tag token in
+  the <a data-link-type=dfn href=#start-phase title="start phase">start phase</a> is encountered it will contain one open element.
+  The rest of the elements are added during the <a data-link-type=dfn href=#main-phase title="main phase">main phase</a>.</p>
+
+  <p>The <dfn data-dfn-type=dfn data-noexport="" id=current-element>current element<a class=self-link href=#current-element></a></dfn> is the bottommost node in this stack.</p>
+
+  <p>The <a data-link-type=dfn href=#stack-of-open-elements title="stack of open elements">stack of open elements</a> is said to have an <dfn data-dfn-type=dfn data-noexport="" id=element-in-scope>element in
+  scope<a class=self-link href=#element-in-scope></a></dfn> if the target element is in the stack of open elements.</p>
+
+  <p> When the steps below require the user agent to <dfn data-dfn-type=dfn data-noexport="" id=append-a-character>append a
+  character<a class=self-link href=#append-a-character></a></dfn> to a node, the user agent <em class=ct>must</em> collect it
+  and all subsequent consecutive characters that would be appended to that node
+  and insert one <code>Text</code> node whose data is the concatenation of all
+  those characters.</p>
+
+  <p class=warning>Need to define <dfn data-dfn-type=dfn data-noexport="" id=create-an-element-for-the-token>create an element for the token<a class=self-link href=#create-an-element-for-the-token></a></dfn>...</p>
+
+  <p>When the steps below require the user agent to <dfn data-dfn-type=dfn data-noexport="" id=insert-an-element>insert an element<a class=self-link href=#insert-an-element></a></dfn>
+  for a token the user agent <em class=ct>must</em> <a data-link-type=dfn href=#create-an-element-for-the-token title="create an element for the token">create an element
+  for the token</a> and then append it to the <a data-link-type=dfn href=#current-element title="current element">current element</a>
+  and push it into the <a data-link-type=dfn href=#stack-of-open-elements title="stack of open elements">stack of open elements</a> so
+  that it becomes the new <a data-link-type=dfn href=#current-element title="current element">current element</a>.</p>
+
+
+<dt><dfn data-dfn-type=dfn data-noexport="" id=start-phase>Start phase<a class=self-link href=#start-phase></a></dfn></dt>
+
+<p>Each token emitted from the tokenization stage <em class=ct>must</em> be
+processed as follows until the algorithm below switches to a different
+phase:</p>
+
+<dl class=switch>
+  <dt>A start tag token</dt>
+  <dd><p><a data-link-type=dfn href=#create-an-element-for-the-token title="Create an element for the token">Create an element for the token</a> and then append it to the
+    <code>Document</code> node and push it into the <a data-link-type=dfn href=#stack-of-open-elements title="stack of open elements">stack of open elements</a>.
+    This element is the root element and the first <a data-link-type=dfn href=#current-element title="current element">current
+    element</a>. Then switch to the <a data-link-type=dfn href=#main-phase title="main phase">main phase</a>.</p>
+  </dd>
+
+  <dt>An empty tag token</dt>
+  <dd><p><a data-link-type=dfn href=#create-an-element-for-the-token title="Create an element for the token">Create an element for the token</a> and append it to the
+    <code>Document</code> node. Then switch to the <a data-link-type=dfn href=#end-phase title="end phase">end phase</a>.</p>
+  </dd>
+
+  <dt>A comment token</dt>
+  <dd><p>Append a <code>Comment</code> node to the <code>Document</code> node
+    with the <code>data</code> attribute set to the data given in the
+    token.</p>
+  </dd>
+
+  <dt>A processing instruction token</dt>
+  <dd><p>Append a <code>ProcessingInstruction</code> node to the
+    <code>Document</code> node with the <code>target</code> and <code>data</code>
+    atributes set to the target and data given in the token.</p>
+  </dd>
+
+  <dt>An end-of-file token</dt>
+  <dd><p><a href="parse errors">Parse error</a>. Reprocess the token in the <a data-link-type=dfn href=#end-phase title="end phase">end
+    phase</a>.</p>
+  </dd>
+
+  <dt>Anything else</dt>
+  <dd><p><a href="parse errors">Parse error</a>. Ignore the token.</dd>
+</dl>
+
+<dt><dfn data-dfn-type=dfn data-noexport="" id=main-phase>Main phase<a class=self-link href=#main-phase></a></dfn></dt>
+
+
+<p>Once a start tag token has been encountered (as detailed in the previous
+phase) each token <em class=ct>must</em> be process using the following
+steps until further notice:</p>
+
+<dl class=switch>
+  <dt>A character token</dt>
+  <dd><p><a data-link-type=dfn href=#append-a-character title="Append a character">Append a character</a> to the <a data-link-type=dfn href=#current-element title="current element">current
+    element</a>.</p>
+  </dd>
+
+  <dt>A start tag token</dt>
+  <dd><p><a data-link-type=dfn href=#insert-an-element title="Insert an element">Insert an element</a> for the token.</dd>
+
+  <dt>An empty tag token</dt>
+  <dd><p><a data-link-type=dfn href=#create-an-element-for-the-token title="Create an element for the token">Create an element for the token</a> and append it to the
+    <a data-link-type=dfn href=#current-element title="current element">current element</a>.</dd>
+
+  <dt>An end tag token</dt>
+  <dd>
+    <p>If the tag name of the <a href="current element">current node</a> does not match the tag
+    name of the end tag token this is a <a href="parse errors">parse error</a>.</p>
+    <p>If there is an <a data-link-type=dfn href=#element-in-scope title="element in scope">element in scope</a> with the same tag name as
+    that of the token pop nodes from the <a data-link-type=dfn href=#stack-of-open-elements title="stack of open elements">stack of open elements</a>
+    until the first such element has been popped from the stack.</p>
+    <p>If there are no more elements on the stack of open elements at this point
+    switch to the <a data-link-type=dfn href=#end-phase title="end phase">end phase</a>.</p>
+  </dd>
+
+  <dt>A short end tag token</dt>
+  <dd><p>Pop an element from the <a data-link-type=dfn href=#stack-of-open-elements title="stack of open elements">stack of open elements</a>. If there
+    are no more elements on the stack of open elements switch to the <a data-link-type=dfn href=#end-phase title="end phase">end
+    phase</a>.</p>
+  </dd>
+
+  <dt>A comment token</dt>
+  <dd><p>Append a <code>Comment</code> node to the <a data-link-type=dfn href=#current-element title="current element">current element</a>
+    with the <code>data</code> attribute set to the data given in the
+    token.</p>
+  </dd>
+
+  <dt>A processing instruction token</dt>
+  <dd><p>Append a <code>ProcessingInstruction</code> node to the <a data-link-type=dfn href=#current-element title="current element">current
+    element</a> with the <code>target</code> and <code>data</code> atributes
+    set to the target and data given in the token.</p>
+  </dd>
+
+  <dt>An end-of-file token</dt>
+  <dd><p><a href="parse errors">Parse error</a>. Reprocess the token in the <a data-link-type=dfn href=#end-phase title="end phase">end phase</a>.</p>
+  </dd>
+</dl>
+
+<dt><dfn data-dfn-type=dfn data-noexport="" id=end-phase>End phase<a class=self-link href=#end-phase></a></dfn></dt>
+
+<p>Tokens in end phase <em class=ct>must</em> be handled as follows:</p>
+
+<dl class=switch>
+  <dt>A comment token</dt>
+  <dd><p>Append a <code>Comment</code> node to the <code>Document</code> node
+    with the <code>data</code> attribute set to the data given in the
+    token.</p>
+  </dd>
+
+  <dt>A processing instruction token</dt>
+  <dd><p>Append a <code>ProcessingInstruction</code> node to the
+    <code>Document</code> node with the <code>target</code> and <code>data</code>
+    atributes set to the target and data given in the token.</p>
+  </dd>
+
+  <dt>An end-of-file token</dt>
+  <dd><p><a data-link-type=dfn href=#stop-parsing title="Stop parsing">Stop parsing</a>.</dd>
+
+  <dt>Anything else</dt>
+  <dd><p><a href="parse errors">Parse error</a>. Ignore the token.</dd>
+</dl>
+
+<p>Once the user agent <dfn data-dfn-type=dfn data-noexport="" id=stop-parsing title="stop parsing">stops parsing<a class=self-link href=#stop-parsing></a></dfn> the
+document, it <em class=ct>must</em> follow these steps:</p>
 
 <p class=warning>TODO</p>
+
+<h2 class="heading settled" data-level=2 id=writing><span class=secno>2. </span><span class=content>Writing XML documents</span><a class=self-link href=#writing></a></h2>
 <h2 class="no-num no-ref heading settled" id=conformance><span class=content>Conformance</span><a class=self-link href=#conformance></a></h2>
 
 <p>All diagrams, examples, and notes in this specification are non-normative, as are all sections explicitly marked
@@ -678,4 +842,6 @@ readability, these words do not appear in all uppercase letters in this specific
 
 <p>Conformance requirements phrased as algorithms or specific steps may be implemented in any manner, so long as the end
 result is equivalent.
-<h2 class="no-num heading settled" id=references><span class=content>References</span><a class=self-link href=#references></a></h2><h3 class="no-num heading settled" id=normative><span class=content>Normative References</span><a class=self-link href=#normative></a></h3><dl><dt id=biblio-rfc2119 title=rfc2119><a class=self-link href=#biblio-rfc2119></a>[rfc2119]<dd>S. Bradner. <a href=https://tools.ietf.org/html/rfc2119>Key words for use in RFCs to Indicate Requirement Levels</a>. March 1997. Best Current Practice. URL: <a href=https://tools.ietf.org/html/rfc2119>https://tools.ietf.org/html/rfc2119</a></dl><h2 class="no-num heading settled" id=index><span class=content>Index</span><a class=self-link href=#index></a></h2><ul class=indexlist><li>Bogus comment state, <a href=#bogus-comment-state title="section 1.1">1.1</a><li>CDATA bracket state, <a href=#cdata-bracket-state title="section 1.1">1.1</a><li>CDATA end state, <a href=#cdata-end-state title="section 1.1">1.1</a><li>CDATA state, <a href=#cdata-state title="section 1.1">1.1</a><li>Comment dash state, <a href=#comment-dash-state title="section 1.1">1.1</a><li>Comment end state, <a href=#comment-end-state title="section 1.1">1.1</a><li>Comment state, <a href=#comment-state title="section 1.1">1.1</a><li>Data state, <a href=#data-state title="section 1.1">1.1</a><li>DOCTYPE state, <a href=#doctype-state title="section 1.1">1.1</a><li>Empty tag state, <a href=#empty-tag-state title="section 1.1">1.1</a><li>End tag name after state, <a href=#end-tag-name-after-state title="section 1.1">1.1</a><li>End tag name state, <a href=#end-tag-name-state title="section 1.1">1.1</a><li>End tag state, <a href=#end-tag-state title="section 1.1">1.1</a><li>Markup declaration state, <a href=#markup-declaration-state title="section 1.1">1.1</a><li>Pi after state, <a href=#pi-after-state title="section 1.1">1.1</a><li>Pi data state, <a href=#pi-data-state title="section 1.1">1.1</a><li>Pi state, <a href=#pi-state title="section 1.1">1.1</a><li>Pi target after state, <a href=#pi-target-after-state title="section 1.1">1.1</a><li>Pi target state, <a href=#pi-target-state title="section 1.1">1.1</a><li>Tag attribute name after state, <a href=#tag-attribute-name-after-state title="section 1.1">1.1</a><li>Tag attribute name before state, <a href=#tag-attribute-name-before-state title="section 1.1">1.1</a><li>Tag attribute name state, <a href=#tag-attribute-name-state title="section 1.1">1.1</a><li>Tag attribute value before state, <a href=#tag-attribute-value-before-state title="section 1.1">1.1</a><li>Tag attribute value double quoted state, <a href=#tag-attribute-value-double-quoted-state title="section 1.1">1.1</a><li>Tag attribute value single quoted state, <a href=#tag-attribute-value-single-quoted-state title="section 1.1">1.1</a><li>Tag attribute value unquoted state, <a href=#tag-attribute-value-unquoted-state title="section 1.1">1.1</a><li>Tag name state, <a href=#tag-name-state title="section 1.1">1.1</a><li>Tag state, <a href=#tag-state title="section 1.1">1.1</a><li>XML parser, <a href=#xml-parser title="section 1">1</a></ul><h2 class="no-num heading settled" id=issues-index><span class=content>Issues Index</span><a class=self-link href=#issues-index></a></h2><div style=counter-reset:issue><div class=issue>...<a href=#issue-2f43b42f> ↵ </a></div><div class=issue>...<a href=#issue-2f43b42f> ↵ </a></div><div class=issue>...<a href=#issue-2f43b42f> ↵ </a></div></div>
+<h2 class="no-num heading settled" id=references><span class=content>References</span><a class=self-link href=#references></a></h2><h3 class="no-num heading settled" id=normative><span class=content>Normative References</span><a class=self-link href=#normative></a></h3><dl><dt id=biblio-rfc2119 title=rfc2119><a class=self-link href=#biblio-rfc2119></a>[rfc2119]<dd>S. Bradner. <a href=https://tools.ietf.org/html/rfc2119>Key words for use in RFCs to Indicate Requirement Levels</a>. March 1997. Best Current Practice. URL: <a href=https://tools.ietf.org/html/rfc2119>https://tools.ietf.org/html/rfc2119</a></dl><h2 class="no-num heading settled" id=index><span class=content>Index</span><a class=self-link href=#index></a></h2><ul class=indexlist><li>append a
+  character, <a href=#append-a-character title="section 1.4">1.4</a><li>Bogus comment state, <a href=#bogus-comment-state title="section 1.3">1.3</a><li>CDATA bracket state, <a href=#cdata-bracket-state title="section 1.3">1.3</a><li>CDATA end state, <a href=#cdata-end-state title="section 1.3">1.3</a><li>CDATA state, <a href=#cdata-state title="section 1.3">1.3</a><li>Comment dash state, <a href=#comment-dash-state title="section 1.3">1.3</a><li>Comment end state, <a href=#comment-end-state title="section 1.3">1.3</a><li>Comment state, <a href=#comment-state title="section 1.3">1.3</a><li>create an element for the token, <a href=#create-an-element-for-the-token title="section 1.4">1.4</a><li>current element, <a href=#current-element title="section 1.4">1.4</a><li>Data state, <a href=#data-state title="section 1.3">1.3</a><li>DOCTYPE state, <a href=#doctype-state title="section 1.3">1.3</a><li>element in
+  scope, <a href=#element-in-scope title="section 1.4">1.4</a><li>Empty tag state, <a href=#empty-tag-state title="section 1.3">1.3</a><li>End phase, <a href=#end-phase title="section 1.4">1.4</a><li>End tag name after state, <a href=#end-tag-name-after-state title="section 1.3">1.3</a><li>End tag name state, <a href=#end-tag-name-state title="section 1.3">1.3</a><li>End tag state, <a href=#end-tag-state title="section 1.3">1.3</a><li>insert an element, <a href=#insert-an-element title="section 1.4">1.4</a><li>Main phase, <a href=#main-phase title="section 1.4">1.4</a><li>Markup declaration state, <a href=#markup-declaration-state title="section 1.3">1.3</a><li>Pi after state, <a href=#pi-after-state title="section 1.3">1.3</a><li>Pi data state, <a href=#pi-data-state title="section 1.3">1.3</a><li>Pi state, <a href=#pi-state title="section 1.3">1.3</a><li>Pi target after state, <a href=#pi-target-after-state title="section 1.3">1.3</a><li>Pi target state, <a href=#pi-target-state title="section 1.3">1.3</a><li>stack of open elements, <a href=#stack-of-open-elements title="section 1.4">1.4</a><li>Start phase, <a href=#start-phase title="section 1.4">1.4</a><li>stop parsing, <a href=#stop-parsing title="section 1.4">1.4</a><li>Tag attribute name after state, <a href=#tag-attribute-name-after-state title="section 1.3">1.3</a><li>Tag attribute name before state, <a href=#tag-attribute-name-before-state title="section 1.3">1.3</a><li>Tag attribute name state, <a href=#tag-attribute-name-state title="section 1.3">1.3</a><li>Tag attribute value before state, <a href=#tag-attribute-value-before-state title="section 1.3">1.3</a><li>Tag attribute value double quoted state, <a href=#tag-attribute-value-double-quoted-state title="section 1.3">1.3</a><li>Tag attribute value single quoted state, <a href=#tag-attribute-value-single-quoted-state title="section 1.3">1.3</a><li>Tag attribute value unquoted state, <a href=#tag-attribute-value-unquoted-state title="section 1.3">1.3</a><li>Tag name state, <a href=#tag-name-state title="section 1.3">1.3</a><li>Tag state, <a href=#tag-state title="section 1.3">1.3</a><li>Tokenization, <a href=#tokenization title="section 1.3">1.3</a><li>XML parser, <a href=#xml-parser title="section 1">1</a></ul>
