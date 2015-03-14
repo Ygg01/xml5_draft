@@ -25,7 +25,21 @@ Group: whatwg
 <p>This specification defines the parsing rules for XML documents, whether they are syntactically correct or not. Certain points in the parsing algorithm are said to be parse errors. The handling for parse errors is well-defined: user agents must either act as described below when encountering such problems, or must terminate processing at the first error that they encounter for which they do not wish to apply the rules described below.</p>
 
 <h3 class="heading" data-level="1" id="parsing-overview">
-  <span class="content">Parsing overview</span>
+  <span class="content">Overview</span>
+</h3>
+
+<p>The input to the XML parsing process consists of a stream of octets which is converted to a stream of code points, which in turn are tokenized, and finally those tokens are used to construct a tree. </p>
+
+<h3 class="heading" data-level="1" id="input-stream">
+  <span class="content">Input stream</span>
+</h3>
+
+<p>The stream of Unicode characters that consists the input to the tokenization stage will be initially seen by the user agent as a stream of octets (typically coming over the network or from the local file system). The octets encode Unicode code points according to a particular encoding, which the user agent must use to decode the octets into code points.</p>
+
+<p class="warning">Define how to find the encoding</p>
+
+<h3 class="heading" data-level="1" id="tokenization-overview">
+  <span class="content"><dfn>Tokenization</dfn></span>
 </h3>
 
 <dl>
@@ -71,7 +85,7 @@ Group: whatwg
       <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
       <dt>EOF</dt>
 
-      <dd><span>Parse error</span>. Emit a U+003C LESSER-THAN SIGN (<code>&lt;</code>) character.
+      <dd><a href="parse errors">Parse error</a>. Emit a U+003C LESSER-THAN SIGN (<code>&lt;</code>) character.
       Reconsume the current input character in the <a>data state</a>.</dd>
 
       <dt>Anything else</dt>
@@ -84,7 +98,7 @@ Group: whatwg
   <dt><dfn>End tag state</dfn></dt>
 
     <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
 
     <dl class="switch">
     <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
@@ -98,7 +112,7 @@ Group: whatwg
     <dt>U+003A (<code>:</code>)</dt>
     <dt>EOF</dt>
 
-    <dd><span>Parse error</span>. Emit a U+003C LESSER-THAN SIGN (<code>&lt;</code>) character
+    <dd><a href="parse errors">Parse error</a>. Emit a U+003C LESSER-THAN SIGN (<code>&lt;</code>) character
      token and a U+002F SOLIDUS (<code>/</code>) character token. Reconsume the current
      input character in the <a>data state</a>.</dd>
 
@@ -112,7 +126,7 @@ Group: whatwg
   <dt><dfn>End tag name state</dfn></dt>
 
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
 
     <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
@@ -121,7 +135,7 @@ Group: whatwg
       <dd>Switch to the <a>end tag name after state</a>.</dd>
 
       <dt>EOF</dt>
-      <dd><span>Parse error</span>. Emit the current token and then eprocess the
+      <dd><a href="parse errors">Parse error</a>. Emit the current token and then eprocess the
        current input character in the <a>data state</a>.</dd>
 
       <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
@@ -136,7 +150,7 @@ Group: whatwg
   <dt><dfn>End tag name after state</dfn></dt>
 
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
 
     <dl class="switch">
       <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
@@ -148,23 +162,23 @@ Group: whatwg
       <dd>Stay in the current state.</dd>
 
       <dt>EOF</dt>
-      <dd><span>Parse error</span>. Emit the current token and then reprocess the
+      <dd><a href="parse errors">Parse error</a>. Emit the current token and then reprocess the
      current input character in the <a>data state</a>.</dd>
 
       <dt>Anything else</dt>
-      <dd><span>Parse error</span>. Stay in the current state.</dd>
+      <dd><a href="parse errors">Parse error</a>. Stay in the current state.</dd>
     </dl>
   </dd>
 
   <dt><dfn>Pi state</dfn></dt>
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
     <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
       <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
       <dt>EOF</dt>
-      <dd><span>Parse error</span>. Reprocess the current input character in the
+      <dd><a href="parse errors">Parse error</a>. Reprocess the current input character in the
       <a>bogus comment state</a>.</dd>
 
       <dt>Anything else</dt>
@@ -176,7 +190,7 @@ Group: whatwg
 
   <dt><dfn>Pi target state</dfn></dt>
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
     <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
@@ -184,7 +198,7 @@ Group: whatwg
       <dd>Switch to the <a>pi target after state</a>.</dd>
 
       <dt>EOF</dt>
-      <dd><span>Parse error</span>. Emit the current token and then reprocess the
+      <dd><a href="parse errors">Parse error</a>. Emit the current token and then reprocess the
      current input character in the <a>data state</a>.</dd>
 
       <dt>U+003F QUESTION MARK(<code>?</code>)</dt>
@@ -198,7 +212,7 @@ Group: whatwg
 
   <dt><dfn>Pi target after state</dfn></dt>
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
     <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
@@ -213,14 +227,14 @@ Group: whatwg
 
   <dt><dfn>Pi data state</dfn></dt>
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
 
     <dl class="switch">
       <dt>U+003F QUESTION MARK(<code>?</code>)</dt>
       <dd>Switch to the <a>pi after state</a>.</dd>
 
       <dt>EOF</dt>
-      <dd><span>Parse error</span>. Emit the current token and then reprocess the
+      <dd><a href="parse errors">Parse error</a>. Emit the current token and then reprocess the
      current input character in the <a>data state</a>.</dd>
 
       <dt>Anything else</dt>
@@ -231,11 +245,11 @@ Group: whatwg
 
   <dt><dfn>Pi after state</dfn></dt>
     <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
 
     <dl class="switch">
       <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
-      <dd>Emit the current token and then switch to the <span>data state</span>.</dd>
+      <dd>Emit the current token and then switch to the <a>data state</a>.</dd>
 
       <dt>U+003F QUESTION MARK(<code>?</code>)</dt>
       <dd>Append the current input character to the pi's data and stay in the
@@ -258,24 +272,24 @@ Group: whatwg
     state</a>.</p>
 
     <p>Otherwise, if the next seven characters are an exact match for "DOCTYPE",
-    then this is a <span>parse error</span>. Consume those characters and switch
+    then this is a <a href="parse errors">parse error</a>. Consume those characters and switch
     to the <a>DOCTYPE state</a>.</p>
     <!-- XXX make them legal? -->
 
-    <p>Otherwise, this is a <span>parse error</span>. Switch to the <a>bogus
+    <p>Otherwise, this is a <a href="parse errors">parse error</a>. Switch to the <a>bogus
     comment state</a>.</p>
   </dd>
 
   <dt><dfn>Comment state</dfn></dt>
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
 
     <dl class="switch">
       <dt>U+002D HYPHEN-MINUS, (<code>-</code>)</dt>
       <dd>Switch to the <a>comment dash state</a>.</dd>
 
       <dt>EOF</dt>
-      <dd><span>Parse error</span>. Emit the comment token and then reprocess the
+      <dd><a href="parse errors">Parse error</a>. Emit the comment token and then reprocess the
      current input character in the <a>data state</a>.</dd>
 
       <dt>Anything else</dt>
@@ -285,14 +299,14 @@ Group: whatwg
 
   <dt><dfn>Comment dash state</dfn></dt>
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
 
     <dl class="switch">
       <dt>U+002D HYPHEN-MINUS, (<code>-</code>)</dt>
       <dd>Switch to the <a>comment end state</a>.</dd>
 
       <dt>EOF</dt>
-      <dd><span>Parse error</span>. Emit the comment token and then reprocess the
+      <dd><a href="parse errors">Parse error</a>. Emit the comment token and then reprocess the
      current input character in the <a>data state</a>.</dd>
 
       <dt>Anything else</dt>
@@ -303,7 +317,7 @@ Group: whatwg
 
   <dt><dfn>Comment end state</dfn></dt>
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
 
     <dl class="switch">
       <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
@@ -314,7 +328,7 @@ Group: whatwg
      the current state.</dd>
 
       <dt>EOF</dt>
-      <dd><span>Parse error</span>. Emit the comment token and then reprocess the
+      <dd><a href="parse errors">Parse error</a>. Emit the comment token and then reprocess the
      current input character in the <a>data state</a>.</dd>
 
       <dt>Anything else</dt>
@@ -326,14 +340,14 @@ Group: whatwg
 
   <dt><dfn>CDATA state</dfn></dt>
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
 
     <dl class="switch">
       <dt>U+005D RIGHT SQUARE BRACKET (<code>]</code>)</dt>
       <dd>Switch to the <a>CDATA bracket state</a>.</dd>
 
       <dt>EOF</dt>
-      <dd><span>Parse error</span>. Reprocess the current input character in the
+      <dd><a href="parse errors">Parse error</a>. Reprocess the current input character in the
       <a>data state</a>.</dd>
 
       <dt>Anything else</dt>
@@ -344,14 +358,14 @@ Group: whatwg
 
   <dt><dfn>CDATA bracket state</dfn></dt>
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
 
     <dl class="switch">
       <dt>U+005D RIGHT SQUARE BRACKET (<code>]</code>)</dt>
       <dd>Switch to the <a>CDATA end state</a>.</dd>
 
       <dt>EOF</dt>
-      <dd><span>Parse error</span>. Reprocess the current input character in the
+      <dd><a href="parse errors">Parse error</a>. Reprocess the current input character in the
       <a>data state</a>.</dd>
 
       <dt>Anything else</dt>
@@ -363,7 +377,7 @@ Group: whatwg
 
   <dt><dfn>CDATA end state</dfn></dt>
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
 
     <dl class="switch">
       <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
@@ -374,7 +388,7 @@ Group: whatwg
      current state.</dd>
 
       <dt>EOF</dt>
-      <dd><span>Parse error</span>. Reconsume the current input character in the
+      <dd><a href="parse errors">Parse error</a>. Reconsume the current input character in the
       <a>data state</a>.</dd>
 
       <dt>Anything else</dt>
@@ -386,7 +400,7 @@ Group: whatwg
 
   <dt><dfn>Tag name state</dfn></dt>
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
     <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
@@ -397,7 +411,7 @@ Group: whatwg
       <dd>Emit the current token and then switch to the <a>data state</a>.</dd>
 
       <dt>EOF</dt>
-      <dd><span>Parse error</span>. Emit the current token and then reprocess the
+      <dd><a href="parse errors">Parse error</a>. Emit the current token and then reprocess the
      current input character in the <a>data state</a>.</dd>
 
       <dt>U+002F SOLIDUS (<code>/</code>)</dt>
@@ -412,7 +426,7 @@ Group: whatwg
   <dt><dfn>Empty tag state</dfn></dt>
 
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
 
     <dl class="switch">
       <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
@@ -420,7 +434,7 @@ Group: whatwg
       <a>data state</a>.</dd>
 
       <dt>Anything else</dt>
-      <dd><span>Parse error</span>. Reprocess the current input character in the
+      <dd><a href="parse errors">Parse error</a>. Reprocess the current input character in the
       <a>tag attribute name before state</a>.</dd>
     </dl>
    </dd>
@@ -429,7 +443,7 @@ Group: whatwg
   <dt><dfn>Tag attribute name before state</dfn></dt>
 
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
     <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
@@ -438,16 +452,16 @@ Group: whatwg
       <dd>Stay in the current state.</dd>
 
       <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
-      <dd>Emit the current token and then switch to the <span>data state</span>.</dd>
+      <dd>Emit the current token and then switch to the <a>data state</a>.</dd>
 
       <dt>U+002F SOLIDUS (<code>/</code>)</dt>
       <dd>Switch to the <a>Empty tag state</a>.</dd>
 
       <dt>U+003A COLON (<code>:</code>)</dt>
-      <dd><span>Parse error</span>. Stay in the current state.</dd>
+      <dd><a href="parse errors">Parse error</a>. Stay in the current state.</dd>
 
       <dt>EOF</dt>
-      <dd><span>Parse error</span>. Emit the current token and then reprocess the
+      <dd><a href="parse errors">Parse error</a>. Emit the current token and then reprocess the
      current input character in the <a>data state</a>.</dd>
 
       <dt>Anything else</dt>
@@ -459,7 +473,7 @@ Group: whatwg
 
   <dt><dfn>Tag attribute name state</dfn></dt>
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
     <dl class="switch">
       <dt>U+003D EQUALS SIGN (<code>=</code>)</dt>
       <dd>Switch to the <a>tag attribute value before state</a>.</dd>
@@ -477,9 +491,9 @@ Group: whatwg
       <dd>Switch to the <a>Empty tag state</a>.</dd>
 
       <dt>EOF</dt>
-      <dd><span>Parse error</span>. Emit the current token as start tag token and
-     then reprocess the current input character in the <span>data
-     state</span>.</dd>
+      <dd><a href="parse errors">Parse error</a>. Emit the current token as start tag token and
+     then reprocess the current input character in the <a>data
+     state</a>.</dd>
 
       <dt>Anything else</dt>
       <dd>Append the current input character to the current attribute's name.
@@ -496,7 +510,7 @@ Group: whatwg
 
   <dt><dfn>Tag attribute name after state</dfn></dt>
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
     <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
@@ -513,7 +527,7 @@ Group: whatwg
       <dd>Switch to the <a>empty tag state</a>.</dd>
 
       <dt>EOF</dt>
-      <dd><span>Parse error</span>. Emit the current token and then reprocess the
+      <dd><a href="parse errors">Parse error</a>. Emit the current token and then reprocess the
      current input character in the <a>data state</a>.</dd>
 
       <dt>Anything else</dt>
@@ -526,7 +540,7 @@ Group: whatwg
 
   <dt><dfn>Tag attribute value before state</dfn></dt>
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
     <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
@@ -547,7 +561,7 @@ Group: whatwg
       <dd>Emit the current token and then switch to the <a>data state</a>.</dd>
 
       <dt>EOF</dt>
-      <dd><span>Parse error</span>. Emit the current token and then reprocess the
+      <dd><a href="parse errors">Parse error</a>. Emit the current token and then reprocess the
      current input character in the <a>data state</a>.</dd>
 
       <dt>Anything else</dt>
@@ -558,17 +572,17 @@ Group: whatwg
 
   <dt><dfn>Tag attribute value double quoted state</dfn></dt>
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
 
     <dl class="switch">
       <dt>U+0022 QUOTATION MARK (<code>"</code>)</dt>
       <dd>Switch to the <a>tag attribute name before state</a>.</dd>
 
       <dt>U+0026 AMPERSAND (<code>&amp;</code>)</dt>
-      <dd class="issue">...</dd>
+      <dd class="warning">...</dd>
 
       <dt>EOF</dt>
-      <dd><span>Parse error</span>. Emit the current token and then reprocess the
+      <dd><a href="parse errors">Parse error</a>. Emit the current token and then reprocess the
      current input character in the <a>data state</a>.</dd>
 
       <dt>Anything else</dt>
@@ -580,17 +594,17 @@ Group: whatwg
 
   <dt><dfn>Tag attribute value single quoted state</dfn></dt>
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
 
     <dl class="switch">
       <dt>U+0022 APOSTROPHE (<code>'</code>)</dt>
       <dd>Switch to the <a>tag attribute name before state</a>.</dd>
 
       <dt>U+0026 AMPERSAND (<code>&amp;</code>)</dt>
-      <dd class="issue">...</dd>
+      <dd class="warning">...</dd>
 
       <dt>EOF</dt>
-      <dd><span>Parse error</span>. Emit the current token and then reprocess the
+      <dd><a href="parse errors">Parse error</a>. Emit the current token and then reprocess the
      current input character in the <a>data state</a>.</dd>
 
       <dt>Anything else</dt>
@@ -601,24 +615,24 @@ Group: whatwg
 
   <dt><dfn>Tag attribute value unquoted state</dfn></dt>
   <dd>
-    <p>Consume the <span>next input character</span>:</p>
+    <p>Consume the next input character:</p>
       <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
       <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-      <dd>Switch to the <span>tag attribute name before state</span>.</dd>
+      <dd>Switch to the <a>tag attribute name before state</a>.</dd>
 
       <dt>U+0026 AMPERSAND (<code>&amp;</code>):
-      <dd class="issue">...</dd>
+      <dd class="warning">...</dd>
 
       <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
       <dd>Emit the current token as start tag token and then switch to the
-      <span>data state</span>.</dd>
+      <a>data state</a>.</dd>
 
       <dt>EOF</dt>
-      <dd><span>Parse error</span>. Emit the current token as start tag token and
+      <dd><a href="parse errors">Parse error</a>. Emit the current token as start tag token and
      then reprocess the current input character in the
-      <span>data state</span>.</dd>
+      <a>data state</a>.</dd>
 
       <dt>Anything else</dt>
       <dd>Append the input character to the current attribute's value. Stay in
@@ -641,9 +655,165 @@ Group: whatwg
 
 </dl>
 
+<h3 class="heading" data-level="1" id="tree-construction">
+  <span class="content">Tree construction</span>
+</h3>
+
+<p>The input to the tree construction stage is a sequence of tokens from the
+  <a>tokenization</a> stage. The output of this stage is a tree model
+  represented by a <code>Document</code> object.</p>
+
+  <p>The tree construction stage passes through several phases. The initial
+  phase is the <a>start phase</a>.</p>
+
+  <p>The <dfn>stack of open elements</dfn> contains all elements of which the
+  closing tag has not yet been encountered. Once the first start tag token in
+  the <a>start phase</a> is encountered it will contain one open element.
+  The rest of the elements are added during the <a>main phase</a>.</p>
+
+  <p>The <dfn>current element</dfn> is the bottommost node in this stack.</p>
+
+  <p>The <a>stack of open elements</a> is said to have an <dfn>element in
+  scope</dfn> if the target element is in the stack of open elements.</p>
+
+  <p> When the steps below require the user agent to <dfn>append a
+  character</dfn> to a node, the user agent <em class="ct">must</em> collect it
+  and all subsequent consecutive characters that would be appended to that node
+  and insert one <code>Text</code> node whose data is the concatenation of all
+  those characters.</p>
+
+  <p class="warning">Need to define <dfn>create an element for the token</dfn>...</p>
+
+  <p>When the steps below require the user agent to <dfn>insert an element</dfn>
+  for a token the user agent <em class="ct">must</em> <a>create an element
+  for the token</a> and then append it to the <a>current element</a>
+  and push it into the <a>stack of open elements</a> so
+  that it becomes the new <a>current element</a>.</p>
+
+
+<dt><dfn>Start phase</dfn></dt>
+
+<p>Each token emitted from the tokenization stage <em class="ct">must</em> be
+processed as follows until the algorithm below switches to a different
+phase:</p>
+
+<dl class="switch">
+  <dt>A start tag token</dt>
+  <dd><p><a>Create an element for the token</a> and then append it to the
+    <code>Document</code> node and push it into the <a>stack of open elements</a>.
+    This element is the root element and the first <a>current
+    element</a>. Then switch to the <a>main phase</a>.</p>
+  </dd>
+
+  <dt>An empty tag token</dt>
+  <dd><p><a>Create an element for the token</a> and append it to the
+    <code>Document</code> node. Then switch to the <a>end phase</a>.</p>
+  </dd>
+
+  <dt>A comment token</dt>
+  <dd><p>Append a <code>Comment</code> node to the <code>Document</code> node
+    with the <code>data</code> attribute set to the data given in the
+    token.</p>
+  </dd>
+
+  <dt>A processing instruction token</dt>
+  <dd><p>Append a <code>ProcessingInstruction</code> node to the
+    <code>Document</code> node with the <code>target</code> and <code>data</code>
+    atributes set to the target and data given in the token.</p>
+  </dd>
+
+  <dt>An end-of-file token</dt>
+  <dd><p><a href="parse errors">Parse error</a>. Reprocess the token in the <a>end
+    phase</a>.</p>
+  </dd>
+
+  <dt>Anything else</dt>
+  <dd><p><a href="parse errors">Parse error</a>. Ignore the token.</p></dd>
+</dl>
+
+<dt><dfn>Main phase</dfn></dt>
+
+
+<p>Once a start tag token has been encountered (as detailed in the previous
+phase) each token <em class="ct">must</em> be process using the following
+steps until further notice:</p>
+
+<dl class="switch">
+  <dt>A character token</dt>
+  <dd><p><a>Append a character</a> to the <a>current
+    element</a>.</p>
+  </dd>
+
+  <dt>A start tag token</dt>
+  <dd><p><a>Insert an element</a> for the token.</p></dd>
+
+  <dt>An empty tag token</dt>
+  <dd><p><a>Create an element for the token</a> and append it to the
+    <a>current element</a>.</p></dd>
+
+  <dt>An end tag token</dt>
+  <dd>
+    <p>If the tag name of the <a href="current element">current node</a> does not match the tag
+    name of the end tag token this is a <a href="parse errors">parse error</a>.</p>
+    <p>If there is an <a>element in scope</a> with the same tag name as
+    that of the token pop nodes from the <a>stack of open elements</a>
+    until the first such element has been popped from the stack.</p>
+    <p>If there are no more elements on the stack of open elements at this point
+    switch to the <a>end phase</a>.</p>
+  </dd>
+
+  <dt>A short end tag token</dt>
+  <dd><p>Pop an element from the <a>stack of open elements</a>. If there
+    are no more elements on the stack of open elements switch to the <a>end
+    phase</a>.</p>
+  </dd>
+
+  <dt>A comment token</dt>
+  <dd><p>Append a <code>Comment</code> node to the <a>current element</a>
+    with the <code>data</code> attribute set to the data given in the
+    token.</p>
+  </dd>
+
+  <dt>A processing instruction token</dt>
+  <dd><p>Append a <code>ProcessingInstruction</code> node to the <a>current
+    element</a> with the <code>target</code> and <code>data</code> atributes
+    set to the target and data given in the token.</p>
+  </dd>
+
+  <dt>An end-of-file token</dt>
+  <dd><p><a href="parse errors">Parse error</a>. Reprocess the token in the <a>end phase</a>.</p>
+  </dd>
+</dl>
+
+<dt><dfn>End phase</dfn></dt>
+
+<p>Tokens in end phase <em class="ct">must</em> be handled as follows:</p>
+
+<dl class="switch">
+  <dt>A comment token</dt>
+  <dd><p>Append a <code>Comment</code> node to the <code>Document</code> node
+    with the <code>data</code> attribute set to the data given in the
+    token.</p>
+  </dd>
+
+  <dt>A processing instruction token</dt>
+  <dd><p>Append a <code>ProcessingInstruction</code> node to the
+    <code>Document</code> node with the <code>target</code> and <code>data</code>
+    atributes set to the target and data given in the token.</p>
+  </dd>
+
+  <dt>An end-of-file token</dt>
+  <dd><p><a>Stop parsing</a>.</p></dd>
+
+  <dt>Anything else</dt>
+  <dd><p><a href="parse errors">Parse error</a>. Ignore the token.</p></dd>
+</dl>
+
+<p>Once the user agent <dfn title="stop parsing">stops parsing</dfn> the
+document, it <em class="ct">must</em> follow these steps:</p>
+
+<p class="warning">TODO</p>
+
 <h2 class="heading" data-level="1" id="writing">
     <span class="content">Writing XML documents</span>
 </h2>
-
-
-<p class="warning">TODO</p>
