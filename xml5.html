@@ -18,13 +18,13 @@
 </p>
   <h1 class="p-name no-ref" id=title>XML 5</h1>
   <h2 class="no-num no-toc no-ref heading settled" id=subtitle><span class=content>Editor’s Draft,
-    <span class=dt-updated><span class=value-title title=20150315>15 March 2015</span></span></span></h2>
+    <span class=dt-updated><span class=value-title title=20150321>21 March 2015</span></span></span></h2>
   <div data-fill-with=spec-metadata><dl><dt>This version:<dd><a class=u-url href=http://www.example.org>http://www.example.org</a><dt>Editors:<dd><div class="p-author h-card vcard"><a class="p-name fn u-email email" href="mailto:<annevk@annevk.nl>">Anne van Kesteren</a> (<span class="p-org org">Opera Software ASA</span>)</div><dd><div class="p-author h-card vcard"><a class="p-name fn u-email email" href="mailto:<daniel.fath7@gmail.com>">Daniel Fath</a> (<span class="p-org org">Unaffiliated</span>)</div></dl></div>
   <div data-fill-with=warning></div>
   <p class=copyright data-fill-with=copyright><a href=http://creativecommons.org/publicdomain/zero/1.0/ rel=license><img alt=CC0 src=https://i.creativecommons.org/p/zero/1.0/80x15.png></a>
 To the extent possible under law, the editors have waived all copyright
 and related or neighboring rights to this work.
-In addition, as of 15 March 2015,
+In addition, as of 21 March 2015,
 the editors have made this specification available under the
 <a href=http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0 rel=license>Open Web Foundation Agreement Version 1.0</a>,
 which is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.
@@ -40,7 +40,7 @@ Parts of this work may be from another specification document.  If so, those par
 <div data-fill-with=at-risk></div>
 
 <h2 class="no-num no-toc no-ref heading settled" id=contents><span class=content>Table of Contents</span></h2>
-<div data-fill-with=table-of-contents><ul class=toc><li><a href=#parsing><span class=secno>1</span> <span class=content>Parsing XML documents</span></a><ul class=toc><li><a href=#parsing-overview><span class=secno>1.1</span> <span class=content>Overview</span></a><li><a href=#input-stream><span class=secno>1.2</span> <span class=content>Input stream</span></a><li><a href=#tokenization-overview><span class=secno>1.3</span> <span class=content><span data-dfn-type=dfn data-noexport="">Tokenization</span></span></a><li><a href=#tree-construction><span class=secno>1.4</span> <span class=content>Tree construction</span></a></ul><li><a href=#writing><span class=secno>2</span> <span class=content>Writing XML documents</span></a><li><a href=#conformance><span class=secno></span> <span class=content>Conformance</span></a><li><a href=#references><span class=secno></span> <span class=content>References</span></a><ul class=toc><li><a href=#normative><span class=secno></span> <span class=content>Normative References</span></a></ul><li><a href=#index><span class=secno></span> <span class=content>Index</span></a></ul></div>
+<div data-fill-with=table-of-contents><ul class=toc><li><a href=#parsing><span class=secno>1</span> <span class=content>Parsing XML documents</span></a><ul class=toc><li><a href=#parsing-overview><span class=secno>1.1</span> <span class=content>Overview</span></a><li><a href=#input-stream><span class=secno>1.2</span> <span class=content>Input stream</span></a><li><a href=#tokenization-overview><span class=secno>1.3</span> <span class=content><span data-dfn-type=dfn data-noexport="">Tokenization</span></span></a><ul class=toc><li><a href=#data-head><span class=secno>1.3.1</span> <span class=content><span data-dfn-type=dfn data-noexport="">Data state</span></span></a><li><a href=#charref-data-head><span class=secno>1.3.2</span> <span class=content><span data-dfn-type=dfn data-noexport="">Character reference in data state</span></span></a><li><a href=#tag-head><span class=secno>1.3.3</span> <span class=content><span data-dfn-type=dfn data-noexport="">Tag state</span></span></a><li><a href=#end-tag-head><span class=secno>1.3.4</span> <span class=content><span data-dfn-type=dfn data-noexport="">End tag state</span></span></a><li><a href=#end-tag-name-head><span class=secno>1.3.5</span> <span class=content><span data-dfn-type=dfn data-noexport="">End tag name state</span></span></a><li><a href=#end-tag-after-head><span class=secno>1.3.6</span> <span class=content><span data-dfn-type=dfn data-noexport="">End tag name after state</span></span></a><li><a href=#pi-head><span class=secno>1.3.7</span> <span class=content><span data-dfn-type=dfn data-noexport="">Pi state</span></span></a><li><a href=#pi-target-head><span class=secno>1.3.8</span> <span class=content><span data-dfn-type=dfn data-noexport="">Pi target state</span></span></a><li><a href=#pi-target-after-head><span class=secno>1.3.9</span> <span class=content><span data-dfn-type=dfn data-noexport="">Pi target after state</span></span></a><li><a href=#pi-data-head><span class=secno>1.3.10</span> <span class=content><span data-dfn-type=dfn data-noexport="">Pi data state</span></span></a><li><a href=#pi-after-head><span class=secno>1.3.11</span> <span class=content><span data-dfn-type=dfn data-noexport="">Pi after state</span></span></a><li><a href=#comment-head><span class=secno>1.3.12</span> <span class=content><span data-dfn-type=dfn data-noexport="">Comment state</span></span></a><li><a href=#comment-dash-head><span class=secno>1.3.13</span> <span class=content><span data-dfn-type=dfn data-noexport="">Comment dash state</span></span></a><li><a href=#comment-end-head><span class=secno>1.3.14</span> <span class=content><span data-dfn-type=dfn data-noexport="">Comment end state</span></span></a><li><a href=#cdata-head><span class=secno>1.3.15</span> <span class=content><span data-dfn-type=dfn data-noexport="">CDATA state</span></span></a><li><a href=#cdata-bracket-head><span class=secno>1.3.16</span> <span class=content><span data-dfn-type=dfn data-noexport="">CDATA bracket state</span></span></a><li><a href=#cdata-end-head><span class=secno>1.3.17</span> <span class=content><span data-dfn-type=dfn data-noexport="">CDATA end state</span></span></a><li><a href=#tag-name-head><span class=secno>1.3.18</span> <span class=content><span data-dfn-type=dfn data-noexport="">Tag name state</span></span></a><li><a href=#empty-tag-head><span class=secno>1.3.19</span> <span class=content><span data-dfn-type=dfn data-noexport="">Empty tag state</span></span></a><li><a href=#tag-attr-name-before-head><span class=secno>1.3.20</span> <span class=content><span data-dfn-type=dfn data-noexport="">Tag attribute name before state</span></span></a><li><a href=#tag-attr-name-head><span class=secno>1.3.21</span> <span class=content><span data-dfn-type=dfn data-noexport="">Tag attribute name state</span></span></a><li><a href=#tag-attr-name-after-head><span class=secno>1.3.22</span> <span class=content><span data-dfn-type=dfn data-noexport="">Tag attribute name after state</span></span></a><li><a href=#tag-attr-value-before-head><span class=secno>1.3.23</span> <span class=content><span data-dfn-type=dfn data-noexport="">Tag attribute value before state</span></span></a><li><a href=#tag-attr-value-dquote-head><span class=secno>1.3.24</span> <span class=content><span data-dfn-type=dfn data-noexport="">Tag attribute value double quoted state</span></span></a><li><a href=#tag-attr-value-squote-head><span class=secno>1.3.25</span> <span class=content><span data-dfn-type=dfn data-noexport="">Tag attribute value single quoted state</span></span></a><li><a href=#tag-attr-value-unquote-head><span class=secno>1.3.26</span> <span class=content><span data-dfn-type=dfn data-noexport="">Tag attribute value unquoted state</span></span></a><li><a href=#charref-attr-head><span class=secno>1.3.27</span> <span class=content><span data-dfn-type=dfn data-noexport="">Character reference in attribute value state</span></span></a><li><a href=#bogus-comment-head><span class=secno>1.3.28</span> <span class=content><span data-dfn-type=dfn data-noexport="">Bogus comment state</span></span></a><li><a href=#charref-tokenizer-head><span class=secno>1.3.29</span> <span class=content><span data-dfn-type=dfn data-noexport="">Tokenizing character references</span></span></a><li><a href=#doctype-head><span class=secno>1.3.30</span> <span class=content><span data-dfn-type=dfn data-noexport="">DOCTYPE state</span></span></a></ul><li><a href=#tree-construction><span class=secno>1.4</span> <span class=content>Tree construction</span></a></ul><li><a href=#writing><span class=secno>2</span> <span class=content>Writing XML documents</span></a><li><a href=#conformance><span class=secno></span> <span class=content>Conformance</span></a><li><a href=#references><span class=secno></span> <span class=content>References</span></a><ul class=toc><li><a href=#normative><span class=secno></span> <span class=content>Normative References</span></a></ul><li><a href=#index><span class=secno></span> <span class=content>Index</span></a></ul></div>
 
 
 <h2 class="heading settled" data-level=1 id=parsing><span class=secno>1. </span><span class=content>Parsing XML documents</span><a class=self-link href=#parsing></a></h2>
@@ -61,13 +61,13 @@ Parts of this work may be from another specification document.  If so, those par
 <h3 class="heading settled" data-level=1.3 id=tokenization-overview><span class=secno>1.3. </span><span class=content><dfn data-dfn-type=dfn data-noexport="" id=tokenization>Tokenization<a class=self-link href=#tokenization></a></dfn></span><a class=self-link href=#tokenization-overview></a></h3>
 
 <dl>
-  <dt><dfn data-dfn-type=dfn data-noexport="" id=data-state>Data state<a class=self-link href=#data-state></a></dfn></dt>
+  <h4 class="heading settled" data-level=1.3.1 id=data-head><span class=secno>1.3.1. </span><span class=content><dfn data-dfn-type=dfn data-noexport="" id=data-state>Data state<a class=self-link href=#data-state></a></dfn></span><a class=self-link href=#data-head></a></h4>
 
   <dd>
     <p>Consume the next input character:</p>
     <dl class=switch>
       <dt>U+0026 AMPERSAND (<code>&amp;</code>)
-      <dd class=warning>TODO</dd>
+      <dd>Switch to <a data-link-type=dfn href=#character-reference-in-data-state title="character reference in data state">character reference in data state</a>.</dd>
 
       <dt>U+003C LESSER-THAN SIGN (<code>&lt;</code>)</dt>
       <dd>Switch to the <a data-link-type=dfn href=#tag-state title="Tag state">Tag state</a>.</dd>
@@ -80,7 +80,16 @@ Parts of this work may be from another specification document.  If so, those par
     </dl>
   </dd>
 
-  <dt><dfn data-dfn-type=dfn data-noexport="" id=tag-state>Tag state<a class=self-link href=#tag-state></a></dfn></dt>
+  <h4 class="heading settled" data-level=1.3.2 id=charref-data-head><span class=secno>1.3.2. </span><span class=content><dfn data-dfn-type=dfn data-noexport="" id=character-reference-in-data-state>Character reference in data state<a class=self-link href=#character-reference-in-data-state></a></dfn></span><a class=self-link href=#charref-data-head></a></h4>
+
+  <dd>
+    <p>Switch to the <a data-link-type=dfn href=#data-state title="data state">data state</a>.</p>
+    <p>Attempt to <a data-link-type=dfn href=#consume-a-character-reference title="consume a character reference">consume a character reference</a>.</p>
+    <p>If nothing is returned emit a U+0026 AMPERSAND character (&amp;) token.</p>
+    <p>Otherwise, emit character tokens that were returned.</p>
+  </dd>
+
+  <h4 class="heading settled" data-level=1.3.3 id=tag-head><span class=secno>1.3.3. </span><span class=content><dfn data-dfn-type=dfn data-noexport="" id=tag-state>Tag state<a class=self-link href=#tag-state></a></dfn></span><a class=self-link href=#tag-head></a></h4>
 
   <dd>
     <p>Consume the next input character:</p>
@@ -113,35 +122,35 @@ Parts of this work may be from another specification document.  If so, those par
     </dl>
   </dd>
 
-  <dt><dfn data-dfn-type=dfn data-noexport="" id=end-tag-state>End tag state<a class=self-link href=#end-tag-state></a></dfn></dt>
+  <h4 class="heading settled" data-level=1.3.4 id=end-tag-head><span class=secno>1.3.4. </span><span class=content><dfn data-dfn-type=dfn data-noexport="" id=end-tag-state>End tag state<a class=self-link href=#end-tag-state></a></dfn></span><a class=self-link href=#end-tag-head></a></h4>
 
-    <dd>
-    <p>Consume the next input character:</p>
+  <dd>
+  <p>Consume the next input character:</p>
 
-    <dl class=switch>
-    <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
+  <dl class=switch>
+  <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
 
-    <dd>Emit a short end tag token and then switch to the <a data-link-type=dfn href=#data-state title="data state">data
-    state</a>.</dd>
-    <dt>U+0009 CHARACTER TABULATION (<code class=non-print>Tab</code>)</dt>
-    <dt>U+000A LINE FEED (<code class=non-print>LF</code>)</dt>
-    <dt>U+0020 SPACE (<code class=non-print>Space</code>)</dt>
-    <dt>U+003C LESSER-THAN SIGN (<code>&lt;</code>)</dt>
-    <dt>U+003A (<code>:</code>)</dt>
-    <dt>EOF</dt>
+  <dd>Emit a short end tag token and then switch to the <a data-link-type=dfn href=#data-state title="data state">data
+  state</a>.</dd>
+  <dt>U+0009 CHARACTER TABULATION (<code class=non-print>Tab</code>)</dt>
+  <dt>U+000A LINE FEED (<code class=non-print>LF</code>)</dt>
+  <dt>U+0020 SPACE (<code class=non-print>Space</code>)</dt>
+  <dt>U+003C LESSER-THAN SIGN (<code>&lt;</code>)</dt>
+  <dt>U+003A (<code>:</code>)</dt>
+  <dt>EOF</dt>
 
-    <dd><a href="parse errors">Parse error</a>. Emit a U+003C LESSER-THAN SIGN (<code>&lt;</code>) character
-     token and a U+002F SOLIDUS (<code>/</code>) character token. Reconsume the current
-     input character in the <a data-link-type=dfn href=#data-state title="data state">data state</a>.</dd>
+  <dd><a href="parse errors">Parse error</a>. Emit a U+003C LESSER-THAN SIGN (<code>&lt;</code>) character
+   token and a U+002F SOLIDUS (<code>/</code>) character token. Reconsume the current
+   input character in the <a data-link-type=dfn href=#data-state title="data state">data state</a>.</dd>
 
-    <dt>Anything else</dt>
+  <dt>Anything else</dt>
 
-    <dd>Create an end tag token and set its name to the input character, then
-     switch to the <a data-link-type=dfn href=#end-tag-name-state title="end tag name state">end tag name state</a>.</dd>
-    </dl>
-    </dd>
+  <dd>Create an end tag token and set its name to the input character, then
+   switch to the <a data-link-type=dfn href=#end-tag-name-state title="end tag name state">end tag name state</a>.</dd>
+  </dl>
+  </dd>
 
-  <dt><dfn data-dfn-type=dfn data-noexport="" id=end-tag-name-state>End tag name state<a class=self-link href=#end-tag-name-state></a></dfn></dt>
+  <h4 class="heading settled" data-level=1.3.5 id=end-tag-name-head><span class=secno>1.3.5. </span><span class=content><dfn data-dfn-type=dfn data-noexport="" id=end-tag-name-state>End tag name state<a class=self-link href=#end-tag-name-state></a></dfn></span><a class=self-link href=#end-tag-name-head></a></h4>
 
   <dd>
     <p>Consume the next input character:</p>
@@ -165,7 +174,7 @@ Parts of this work may be from another specification document.  If so, those par
     </dl>
   </dd>
 
-  <dt><dfn data-dfn-type=dfn data-noexport="" id=end-tag-name-after-state>End tag name after state<a class=self-link href=#end-tag-name-after-state></a></dfn></dt>
+  <h4 class="heading settled" data-level=1.3.6 id=end-tag-after-head><span class=secno>1.3.6. </span><span class=content><dfn data-dfn-type=dfn data-noexport="" id=end-tag-name-after-state>End tag name after state<a class=self-link href=#end-tag-name-after-state></a></dfn></span><a class=self-link href=#end-tag-after-head></a></h4>
 
   <dd>
     <p>Consume the next input character:</p>
@@ -188,7 +197,8 @@ Parts of this work may be from another specification document.  If so, those par
     </dl>
   </dd>
 
-  <dt><dfn data-dfn-type=dfn data-noexport="" id=pi-state>Pi state<a class=self-link href=#pi-state></a></dfn></dt>
+  <h4 class="heading settled" data-level=1.3.7 id=pi-head><span class=secno>1.3.7. </span><span class=content><dfn data-dfn-type=dfn data-noexport="" id=pi-state>Pi state<a class=self-link href=#pi-state></a></dfn></span><a class=self-link href=#pi-head></a></h4>
+
   <dd>
     <p>Consume the next input character:</p>
     <dl class=switch>
@@ -206,7 +216,8 @@ Parts of this work may be from another specification document.  If so, those par
     </dl>
   </dd>
 
-  <dt><dfn data-dfn-type=dfn data-noexport="" id=pi-target-state>Pi target state<a class=self-link href=#pi-target-state></a></dfn></dt>
+  <h4 class="heading settled" data-level=1.3.8 id=pi-target-head><span class=secno>1.3.8. </span><span class=content><dfn data-dfn-type=dfn data-noexport="" id=pi-target-state>Pi target state<a class=self-link href=#pi-target-state></a></dfn></span><a class=self-link href=#pi-target-head></a></h4>
+
   <dd>
     <p>Consume the next input character:</p>
     <dl class=switch>
@@ -228,7 +239,8 @@ Parts of this work may be from another specification document.  If so, those par
     </dl>
   </dd>
 
-  <dt><dfn data-dfn-type=dfn data-noexport="" id=pi-target-after-state>Pi target after state<a class=self-link href=#pi-target-after-state></a></dfn></dt>
+  <h4 class="heading settled" data-level=1.3.9 id=pi-target-after-head><span class=secno>1.3.9. </span><span class=content><dfn data-dfn-type=dfn data-noexport="" id=pi-target-after-state>Pi target after state<a class=self-link href=#pi-target-after-state></a></dfn></span><a class=self-link href=#pi-target-after-head></a></h4>
+
   <dd>
     <p>Consume the next input character:</p>
     <dl class=switch>
@@ -243,7 +255,8 @@ Parts of this work may be from another specification document.  If so, those par
     </dl>
    </dd>
 
-  <dt><dfn data-dfn-type=dfn data-noexport="" id=pi-data-state>Pi data state<a class=self-link href=#pi-data-state></a></dfn></dt>
+  <h4 class="heading settled" data-level=1.3.10 id=pi-data-head><span class=secno>1.3.10. </span><span class=content><dfn data-dfn-type=dfn data-noexport="" id=pi-data-state>Pi data state<a class=self-link href=#pi-data-state></a></dfn></span><a class=self-link href=#pi-data-head></a></h4>
+
   <dd>
     <p>Consume the next input character:</p>
 
@@ -261,8 +274,9 @@ Parts of this work may be from another specification document.  If so, those par
     </dl>
    </dd>
 
-  <dt><dfn data-dfn-type=dfn data-noexport="" id=pi-after-state>Pi after state<a class=self-link href=#pi-after-state></a></dfn></dt>
-    <dd>
+  <h4 class="heading settled" data-level=1.3.11 id=pi-after-head><span class=secno>1.3.11. </span><span class=content><dfn data-dfn-type=dfn data-noexport="" id=pi-after-state>Pi after state<a class=self-link href=#pi-after-state></a></dfn></span><a class=self-link href=#pi-after-head></a></h4>
+
+  <dd>
     <p>Consume the next input character:</p>
 
     <dl class=switch>
@@ -298,7 +312,8 @@ Parts of this work may be from another specification document.  If so, those par
     comment state</a>.</p>
   </dd>
 
-  <dt><dfn data-dfn-type=dfn data-noexport="" id=comment-state>Comment state<a class=self-link href=#comment-state></a></dfn></dt>
+  <h4 class="heading settled" data-level=1.3.12 id=comment-head><span class=secno>1.3.12. </span><span class=content><dfn data-dfn-type=dfn data-noexport="" id=comment-state>Comment state<a class=self-link href=#comment-state></a></dfn></span><a class=self-link href=#comment-head></a></h4>
+
   <dd>
     <p>Consume the next input character:</p>
 
@@ -315,7 +330,8 @@ Parts of this work may be from another specification document.  If so, those par
     </dl>
   </dd>
 
-  <dt><dfn data-dfn-type=dfn data-noexport="" id=comment-dash-state>Comment dash state<a class=self-link href=#comment-dash-state></a></dfn></dt>
+  <h4 class="heading settled" data-level=1.3.13 id=comment-dash-head><span class=secno>1.3.13. </span><span class=content><dfn data-dfn-type=dfn data-noexport="" id=comment-dash-state>Comment dash state<a class=self-link href=#comment-dash-state></a></dfn></span><a class=self-link href=#comment-dash-head></a></h4>
+
   <dd>
     <p>Consume the next input character:</p>
 
@@ -333,7 +349,8 @@ Parts of this work may be from another specification document.  If so, those par
     </dl>
   </dd>
 
-  <dt><dfn data-dfn-type=dfn data-noexport="" id=comment-end-state>Comment end state<a class=self-link href=#comment-end-state></a></dfn></dt>
+  <h4 class="heading settled" data-level=1.3.14 id=comment-end-head><span class=secno>1.3.14. </span><span class=content><dfn data-dfn-type=dfn data-noexport="" id=comment-end-state>Comment end state<a class=self-link href=#comment-end-state></a></dfn></span><a class=self-link href=#comment-end-head></a></h4>
+
   <dd>
     <p>Consume the next input character:</p>
 
@@ -356,7 +373,8 @@ Parts of this work may be from another specification document.  If so, those par
     </dl>
   </dd>
 
-  <dt><dfn data-dfn-type=dfn data-noexport="" id=cdata-state>CDATA state<a class=self-link href=#cdata-state></a></dfn></dt>
+  <h4 class="heading settled" data-level=1.3.15 id=cdata-head><span class=secno>1.3.15. </span><span class=content><dfn data-dfn-type=dfn data-noexport="" id=cdata-state>CDATA state<a class=self-link href=#cdata-state></a></dfn></span><a class=self-link href=#cdata-head></a></h4>
+
   <dd>
     <p>Consume the next input character:</p>
 
@@ -374,7 +392,8 @@ Parts of this work may be from another specification document.  If so, those par
     </dl>
   </dd>
 
-  <dt><dfn data-dfn-type=dfn data-noexport="" id=cdata-bracket-state>CDATA bracket state<a class=self-link href=#cdata-bracket-state></a></dfn></dt>
+  <h4 class="heading settled" data-level=1.3.16 id=cdata-bracket-head><span class=secno>1.3.16. </span><span class=content><dfn data-dfn-type=dfn data-noexport="" id=cdata-bracket-state>CDATA bracket state<a class=self-link href=#cdata-bracket-state></a></dfn></span><a class=self-link href=#cdata-bracket-head></a></h4>
+
   <dd>
     <p>Consume the next input character:</p>
 
@@ -393,7 +412,9 @@ Parts of this work may be from another specification document.  If so, those par
     </dl>
   </dd>
 
-  <dt><dfn data-dfn-type=dfn data-noexport="" id=cdata-end-state>CDATA end state<a class=self-link href=#cdata-end-state></a></dfn></dt>
+
+  <h4 class="heading settled" data-level=1.3.17 id=cdata-end-head><span class=secno>1.3.17. </span><span class=content><dfn data-dfn-type=dfn data-noexport="" id=cdata-end-state>CDATA end state<a class=self-link href=#cdata-end-state></a></dfn></span><a class=self-link href=#cdata-end-head></a></h4>
+
   <dd>
     <p>Consume the next input character:</p>
 
@@ -416,7 +437,9 @@ Parts of this work may be from another specification document.  If so, those par
     </dl>
   </dd>
 
-  <dt><dfn data-dfn-type=dfn data-noexport="" id=tag-name-state>Tag name state<a class=self-link href=#tag-name-state></a></dfn></dt>
+
+  <h4 class="heading settled" data-level=1.3.18 id=tag-name-head><span class=secno>1.3.18. </span><span class=content><dfn data-dfn-type=dfn data-noexport="" id=tag-name-state>Tag name state<a class=self-link href=#tag-name-state></a></dfn></span><a class=self-link href=#tag-name-head></a></h4>
+
   <dd>
     <p>Consume the next input character:</p>
     <dl class=switch>
@@ -441,7 +464,8 @@ Parts of this work may be from another specification document.  If so, those par
     </dl>
   </dd>
 
-  <dt><dfn data-dfn-type=dfn data-noexport="" id=empty-tag-state>Empty tag state<a class=self-link href=#empty-tag-state></a></dfn></dt>
+
+  <h4 class="heading settled" data-level=1.3.19 id=empty-tag-head><span class=secno>1.3.19. </span><span class=content><dfn data-dfn-type=dfn data-noexport="" id=empty-tag-state>Empty tag state<a class=self-link href=#empty-tag-state></a></dfn></span><a class=self-link href=#empty-tag-head></a></h4>
 
   <dd>
     <p>Consume the next input character:</p>
@@ -458,7 +482,7 @@ Parts of this work may be from another specification document.  If so, those par
    </dd>
 
 
-  <dt><dfn data-dfn-type=dfn data-noexport="" id=tag-attribute-name-before-state>Tag attribute name before state<a class=self-link href=#tag-attribute-name-before-state></a></dfn></dt>
+  <h4 class="heading settled" data-level=1.3.20 id=tag-attr-name-before-head><span class=secno>1.3.20. </span><span class=content><dfn data-dfn-type=dfn data-noexport="" id=tag-attribute-name-before-state>Tag attribute name before state<a class=self-link href=#tag-attribute-name-before-state></a></dfn></span><a class=self-link href=#tag-attr-name-before-head></a></h4>
 
   <dd>
     <p>Consume the next input character:</p>
@@ -489,7 +513,9 @@ Parts of this work may be from another specification document.  If so, those par
     </dl>
   </dd>
 
-  <dt><dfn data-dfn-type=dfn data-noexport="" id=tag-attribute-name-state>Tag attribute name state<a class=self-link href=#tag-attribute-name-state></a></dfn></dt>
+
+  <h4 class="heading settled" data-level=1.3.21 id=tag-attr-name-head><span class=secno>1.3.21. </span><span class=content><dfn data-dfn-type=dfn data-noexport="" id=tag-attribute-name-state>Tag attribute name state<a class=self-link href=#tag-attribute-name-state></a></dfn></span><a class=self-link href=#tag-attr-name-head></a></h4>
+
   <dd>
     <p>Consume the next input character:</p>
     <dl class=switch>
@@ -526,7 +552,9 @@ Parts of this work may be from another specification document.  If so, those par
     value that gets associated with it (if any).</p>
   </dd>
 
-  <dt><dfn data-dfn-type=dfn data-noexport="" id=tag-attribute-name-after-state>Tag attribute name after state<a class=self-link href=#tag-attribute-name-after-state></a></dfn></dt>
+
+  <h4 class="heading settled" data-level=1.3.22 id=tag-attr-name-after-head><span class=secno>1.3.22. </span><span class=content><dfn data-dfn-type=dfn data-noexport="" id=tag-attribute-name-after-state>Tag attribute name after state<a class=self-link href=#tag-attribute-name-after-state></a></dfn></span><a class=self-link href=#tag-attr-name-after-head></a></h4>
+
   <dd>
     <p>Consume the next input character:</p>
     <dl class=switch>
@@ -556,7 +584,8 @@ Parts of this work may be from another specification document.  If so, those par
   </dd>
 
 
-  <dt><dfn data-dfn-type=dfn data-noexport="" id=tag-attribute-value-before-state>Tag attribute value before state<a class=self-link href=#tag-attribute-value-before-state></a></dfn></dt>
+  <h4 class="heading settled" data-level=1.3.23 id=tag-attr-value-before-head><span class=secno>1.3.23. </span><span class=content><dfn data-dfn-type=dfn data-noexport="" id=tag-attribute-value-before-state>Tag attribute value before state<a class=self-link href=#tag-attribute-value-before-state></a></dfn></span><a class=self-link href=#tag-attr-value-before-head></a></h4>
+
   <dd>
     <p>Consume the next input character:</p>
     <dl class=switch>
@@ -588,7 +617,9 @@ Parts of this work may be from another specification document.  If so, those par
     </dl>
   </dd>
 
-  <dt><dfn data-dfn-type=dfn data-noexport="" id=tag-attribute-value-double-quoted-state>Tag attribute value double quoted state<a class=self-link href=#tag-attribute-value-double-quoted-state></a></dfn></dt>
+
+  <h4 class="heading settled" data-level=1.3.24 id=tag-attr-value-dquote-head><span class=secno>1.3.24. </span><span class=content><dfn data-dfn-type=dfn data-noexport="" id=tag-attribute-value-double-quoted-state>Tag attribute value double quoted state<a class=self-link href=#tag-attribute-value-double-quoted-state></a></dfn></span><a class=self-link href=#tag-attr-value-dquote-head></a></h4>
+
   <dd>
     <p>Consume the next input character:</p>
 
@@ -597,7 +628,9 @@ Parts of this work may be from another specification document.  If so, those par
       <dd>Switch to the <a data-link-type=dfn href=#tag-attribute-name-before-state title="tag attribute name before state">tag attribute name before state</a>.</dd>
 
       <dt>U+0026 AMPERSAND (<code>&amp;</code>)</dt>
-      <dd class=warning>...</dd>
+      <dd>Switch to <a data-link-type=dfn href=#character-reference-in-attribute-value-state title="character reference in attribute value state">character reference in attribute value state</a>, with the
+        <a data-link-type=dfn href=#additional-allowed-character title="additional allowed character">additional allowed character</a> being U+0022 QUOTATION MARK(<code>"</code>).
+      </dd>
 
       <dt>EOF</dt>
       <dd><a href="parse errors">Parse error</a>. Emit the current token and then reprocess the
@@ -610,7 +643,8 @@ Parts of this work may be from another specification document.  If so, those par
   </dd>
 
 
-  <dt><dfn data-dfn-type=dfn data-noexport="" id=tag-attribute-value-single-quoted-state>Tag attribute value single quoted state<a class=self-link href=#tag-attribute-value-single-quoted-state></a></dfn></dt>
+  <h4 class="heading settled" data-level=1.3.25 id=tag-attr-value-squote-head><span class=secno>1.3.25. </span><span class=content><dfn data-dfn-type=dfn data-noexport="" id=tag-attribute-value-single-quoted-state>Tag attribute value single quoted state<a class=self-link href=#tag-attribute-value-single-quoted-state></a></dfn></span><a class=self-link href=#tag-attr-value-squote-head></a></h4>
+
   <dd>
     <p>Consume the next input character:</p>
 
@@ -619,7 +653,9 @@ Parts of this work may be from another specification document.  If so, those par
       <dd>Switch to the <a data-link-type=dfn href=#tag-attribute-name-before-state title="tag attribute name before state">tag attribute name before state</a>.</dd>
 
       <dt>U+0026 AMPERSAND (<code>&amp;</code>)</dt>
-      <dd class=warning>...</dd>
+      <dd>Switch to <a data-link-type=dfn href=#character-reference-in-attribute-value-state title="character reference in attribute value state">character reference in attribute value state</a>, with the
+        <a data-link-type=dfn href=#additional-allowed-character title="additional allowed character">additional allowed character</a> being APOSTROPHE (<code>'</code>).
+      </dd>
 
       <dt>EOF</dt>
       <dd><a href="parse errors">Parse error</a>. Emit the current token and then reprocess the
@@ -631,7 +667,9 @@ Parts of this work may be from another specification document.  If so, those par
     </dl>
   </dd>
 
-  <dt><dfn data-dfn-type=dfn data-noexport="" id=tag-attribute-value-unquoted-state>Tag attribute value unquoted state<a class=self-link href=#tag-attribute-value-unquoted-state></a></dfn></dt>
+
+  <h4 class="heading settled" data-level=1.3.26 id=tag-attr-value-unquote-head><span class=secno>1.3.26. </span><span class=content><dfn data-dfn-type=dfn data-noexport="" id=tag-attribute-value-unquoted-state>Tag attribute value unquoted state<a class=self-link href=#tag-attribute-value-unquoted-state></a></dfn></span><a class=self-link href=#tag-attr-value-unquote-head></a></h4>
+
   <dd>
     <p>Consume the next input character:</p>
       <dl class=switch>
@@ -641,7 +679,10 @@ Parts of this work may be from another specification document.  If so, those par
       <dd>Switch to the <a data-link-type=dfn href=#tag-attribute-name-before-state title="tag attribute name before state">tag attribute name before state</a>.</dd>
 
       <dt>U+0026 AMPERSAND (<code>&amp;</code>):
-      <dd class=warning>...</dd>
+      <dd>
+        Switch to <a data-link-type=dfn href=#character-reference-in-attribute-value-state title="character reference in attribute value state">character reference in attribute value state</a>, with the
+        <a data-link-type=dfn href=#additional-allowed-character title="additional allowed character">additional allowed character</a> being U+003E GREATER-THAN SIGN(<code>&gt;</code>).
+      </dd>
 
       <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
       <dd>Emit the current token as start tag token and then switch to the
@@ -656,10 +697,20 @@ Parts of this work may be from another specification document.  If so, those par
       <dd>Append the input character to the current attribute’s value. Stay in
      the current state.</dd>
     </dl>
-   </dd>
+  </dd>
+
+  <h4 class="heading settled" data-level=1.3.27 id=charref-attr-head><span class=secno>1.3.27. </span><span class=content><dfn data-dfn-type=dfn data-noexport="" id=character-reference-in-attribute-value-state>Character reference in attribute value state<a class=self-link href=#character-reference-in-attribute-value-state></a></dfn></span><a class=self-link href=#charref-attr-head></a></h4>
+
+  <dd>
+    Attempt to <a data-link-type=dfn href=#consume-a-character-reference title="consume a character reference">consume a character reference</a>.
+    <p>If nothing is returned, append a U+0026 AMPERSAND (&amp;) character to current attribute’s value.</p>
+    <p>Otherwise append returned character tokens to current attribute’s value.</p>
+    <p>Finally, switch back to attribute value state that switched to this state.
+  </dd>
 
 
-  <dt><dfn data-dfn-type=dfn data-noexport="" id=bogus-comment-state>Bogus comment state<a class=self-link href=#bogus-comment-state></a></dfn></dt>
+  <h4 class="heading settled" data-level=1.3.28 id=bogus-comment-head><span class=secno>1.3.28. </span><span class=content><dfn data-dfn-type=dfn data-noexport="" id=bogus-comment-state>Bogus comment state<a class=self-link href=#bogus-comment-state></a></dfn></span><a class=self-link href=#bogus-comment-head></a></h4>
+
   <dd><p>Consume every character up to the first U+003E GREATER-THAN SIGN (<code>&gt;</code>) or
    EOF, whichever comes first. Emit a comment token whose data is the
    concatenation of all those consumed characters. Then consume the next input
@@ -667,10 +718,18 @@ Parts of this work may be from another specification document.  If so, those par
    character if that was the character consumed.</dd>
 
 
-  <dt><dfn data-dfn-type=dfn data-noexport="" id=doctype-state>DOCTYPE state<a class=self-link href=#doctype-state></a></dfn></dt>
+  <h4 class="heading settled" data-level=1.3.29 id=charref-tokenizer-head><span class=secno>1.3.29. </span><span class=content><dfn data-dfn-type=dfn data-noexport="" id=tokenizing-character-references>Tokenizing character references<a class=self-link href=#tokenizing-character-references></a></dfn></span><a class=self-link href=#charref-tokenizer-head></a></h4>
+
+  <dd>
+    <p>This section defines how to <dfn data-dfn-type=dfn data-noexport="" id=consume-a-character-reference>consume a character reference<a class=self-link href=#consume-a-character-reference></a></dfn>, optionally with an <dfn data-dfn-type=dfn data-noexport="" id=additional-allowed-character>additional allowed character<a class=self-link href=#additional-allowed-character></a></dfn>, which, if specified where the algorithm is invoked, adds a character to the list of characters that cause there to not be a character reference.</p>
+
+    <p>This definition is used when parsing character <a href="Data state">in text</a> and in <a href="Character reference in attribute value state">attributes</a>.</p>
+  </dd>
+
+
+  <h4 class="heading settled" data-level=1.3.30 id=doctype-head><span class=secno>1.3.30. </span><span class=content><dfn data-dfn-type=dfn data-noexport="" id=doctype-state>DOCTYPE state<a class=self-link href=#doctype-state></a></dfn></span><a class=self-link href=#doctype-head></a></h4>
+
   <p class=warning>TODO</p>
-
-
 </dl>
 
 <h3 class="heading settled" data-level=1.4 id=tree-construction><span class=secno>1.4. </span><span class=content>Tree construction</span><a class=self-link href=#tree-construction></a></h3>
@@ -842,6 +901,6 @@ readability, these words do not appear in all uppercase letters in this specific
 
 <p>Conformance requirements phrased as algorithms or specific steps may be implemented in any manner, so long as the end
 result is equivalent.
-<h2 class="no-num heading settled" id=references><span class=content>References</span><a class=self-link href=#references></a></h2><h3 class="no-num heading settled" id=normative><span class=content>Normative References</span><a class=self-link href=#normative></a></h3><dl><dt id=biblio-rfc2119 title=rfc2119><a class=self-link href=#biblio-rfc2119></a>[rfc2119]<dd>S. Bradner. <a href=https://tools.ietf.org/html/rfc2119>Key words for use in RFCs to Indicate Requirement Levels</a>. March 1997. Best Current Practice. URL: <a href=https://tools.ietf.org/html/rfc2119>https://tools.ietf.org/html/rfc2119</a></dl><h2 class="no-num heading settled" id=index><span class=content>Index</span><a class=self-link href=#index></a></h2><ul class=indexlist><li>append a
-  character, <a href=#append-a-character title="section 1.4">1.4</a><li>Bogus comment state, <a href=#bogus-comment-state title="section 1.3">1.3</a><li>CDATA bracket state, <a href=#cdata-bracket-state title="section 1.3">1.3</a><li>CDATA end state, <a href=#cdata-end-state title="section 1.3">1.3</a><li>CDATA state, <a href=#cdata-state title="section 1.3">1.3</a><li>Comment dash state, <a href=#comment-dash-state title="section 1.3">1.3</a><li>Comment end state, <a href=#comment-end-state title="section 1.3">1.3</a><li>Comment state, <a href=#comment-state title="section 1.3">1.3</a><li>create an element for the token, <a href=#create-an-element-for-the-token title="section 1.4">1.4</a><li>current element, <a href=#current-element title="section 1.4">1.4</a><li>Data state, <a href=#data-state title="section 1.3">1.3</a><li>DOCTYPE state, <a href=#doctype-state title="section 1.3">1.3</a><li>element in
-  scope, <a href=#element-in-scope title="section 1.4">1.4</a><li>Empty tag state, <a href=#empty-tag-state title="section 1.3">1.3</a><li>End phase, <a href=#end-phase title="section 1.4">1.4</a><li>End tag name after state, <a href=#end-tag-name-after-state title="section 1.3">1.3</a><li>End tag name state, <a href=#end-tag-name-state title="section 1.3">1.3</a><li>End tag state, <a href=#end-tag-state title="section 1.3">1.3</a><li>insert an element, <a href=#insert-an-element title="section 1.4">1.4</a><li>Main phase, <a href=#main-phase title="section 1.4">1.4</a><li>Markup declaration state, <a href=#markup-declaration-state title="section 1.3">1.3</a><li>Pi after state, <a href=#pi-after-state title="section 1.3">1.3</a><li>Pi data state, <a href=#pi-data-state title="section 1.3">1.3</a><li>Pi state, <a href=#pi-state title="section 1.3">1.3</a><li>Pi target after state, <a href=#pi-target-after-state title="section 1.3">1.3</a><li>Pi target state, <a href=#pi-target-state title="section 1.3">1.3</a><li>stack of open elements, <a href=#stack-of-open-elements title="section 1.4">1.4</a><li>Start phase, <a href=#start-phase title="section 1.4">1.4</a><li>stop parsing, <a href=#stop-parsing title="section 1.4">1.4</a><li>Tag attribute name after state, <a href=#tag-attribute-name-after-state title="section 1.3">1.3</a><li>Tag attribute name before state, <a href=#tag-attribute-name-before-state title="section 1.3">1.3</a><li>Tag attribute name state, <a href=#tag-attribute-name-state title="section 1.3">1.3</a><li>Tag attribute value before state, <a href=#tag-attribute-value-before-state title="section 1.3">1.3</a><li>Tag attribute value double quoted state, <a href=#tag-attribute-value-double-quoted-state title="section 1.3">1.3</a><li>Tag attribute value single quoted state, <a href=#tag-attribute-value-single-quoted-state title="section 1.3">1.3</a><li>Tag attribute value unquoted state, <a href=#tag-attribute-value-unquoted-state title="section 1.3">1.3</a><li>Tag name state, <a href=#tag-name-state title="section 1.3">1.3</a><li>Tag state, <a href=#tag-state title="section 1.3">1.3</a><li>Tokenization, <a href=#tokenization title="section 1.3">1.3</a><li>XML parser, <a href=#xml-parser title="section 1">1</a></ul>
+<h2 class="no-num heading settled" id=references><span class=content>References</span><a class=self-link href=#references></a></h2><h3 class="no-num heading settled" id=normative><span class=content>Normative References</span><a class=self-link href=#normative></a></h3><dl><dt id=biblio-rfc2119 title=rfc2119><a class=self-link href=#biblio-rfc2119></a>[rfc2119]<dd>S. Bradner. <a href=https://tools.ietf.org/html/rfc2119>Key words for use in RFCs to Indicate Requirement Levels</a>. March 1997. Best Current Practice. URL: <a href=https://tools.ietf.org/html/rfc2119>https://tools.ietf.org/html/rfc2119</a></dl><h2 class="no-num heading settled" id=index><span class=content>Index</span><a class=self-link href=#index></a></h2><ul class=indexlist><li>additional allowed character, <a href=#additional-allowed-character title="section 1.3.29">1.3.29</a><li>append a
+  character, <a href=#append-a-character title="section 1.4">1.4</a><li>Bogus comment state, <a href=#bogus-comment-state title="section 1.3.28">1.3.28</a><li>CDATA bracket state, <a href=#cdata-bracket-state title="section 1.3.16">1.3.16</a><li>CDATA end state, <a href=#cdata-end-state title="section 1.3.17">1.3.17</a><li>CDATA state, <a href=#cdata-state title="section 1.3.15">1.3.15</a><li>Character reference in attribute value state, <a href=#character-reference-in-attribute-value-state title="section 1.3.27">1.3.27</a><li>Character reference in data state, <a href=#character-reference-in-data-state title="section 1.3.2">1.3.2</a><li>Comment dash state, <a href=#comment-dash-state title="section 1.3.13">1.3.13</a><li>Comment end state, <a href=#comment-end-state title="section 1.3.14">1.3.14</a><li>Comment state, <a href=#comment-state title="section 1.3.12">1.3.12</a><li>consume a character reference, <a href=#consume-a-character-reference title="section 1.3.29">1.3.29</a><li>create an element for the token, <a href=#create-an-element-for-the-token title="section 1.4">1.4</a><li>current element, <a href=#current-element title="section 1.4">1.4</a><li>Data state, <a href=#data-state title="section 1.3.1">1.3.1</a><li>DOCTYPE state, <a href=#doctype-state title="section 1.3.30">1.3.30</a><li>element in
+  scope, <a href=#element-in-scope title="section 1.4">1.4</a><li>Empty tag state, <a href=#empty-tag-state title="section 1.3.19">1.3.19</a><li>End phase, <a href=#end-phase title="section 1.4">1.4</a><li>End tag name after state, <a href=#end-tag-name-after-state title="section 1.3.6">1.3.6</a><li>End tag name state, <a href=#end-tag-name-state title="section 1.3.5">1.3.5</a><li>End tag state, <a href=#end-tag-state title="section 1.3.4">1.3.4</a><li>insert an element, <a href=#insert-an-element title="section 1.4">1.4</a><li>Main phase, <a href=#main-phase title="section 1.4">1.4</a><li>Markup declaration state, <a href=#markup-declaration-state title="section 1.3.11">1.3.11</a><li>Pi after state, <a href=#pi-after-state title="section 1.3.11">1.3.11</a><li>Pi data state, <a href=#pi-data-state title="section 1.3.10">1.3.10</a><li>Pi state, <a href=#pi-state title="section 1.3.7">1.3.7</a><li>Pi target after state, <a href=#pi-target-after-state title="section 1.3.9">1.3.9</a><li>Pi target state, <a href=#pi-target-state title="section 1.3.8">1.3.8</a><li>stack of open elements, <a href=#stack-of-open-elements title="section 1.4">1.4</a><li>Start phase, <a href=#start-phase title="section 1.4">1.4</a><li>stop parsing, <a href=#stop-parsing title="section 1.4">1.4</a><li>Tag attribute name after state, <a href=#tag-attribute-name-after-state title="section 1.3.22">1.3.22</a><li>Tag attribute name before state, <a href=#tag-attribute-name-before-state title="section 1.3.20">1.3.20</a><li>Tag attribute name state, <a href=#tag-attribute-name-state title="section 1.3.21">1.3.21</a><li>Tag attribute value before state, <a href=#tag-attribute-value-before-state title="section 1.3.23">1.3.23</a><li>Tag attribute value double quoted state, <a href=#tag-attribute-value-double-quoted-state title="section 1.3.24">1.3.24</a><li>Tag attribute value single quoted state, <a href=#tag-attribute-value-single-quoted-state title="section 1.3.25">1.3.25</a><li>Tag attribute value unquoted state, <a href=#tag-attribute-value-unquoted-state title="section 1.3.26">1.3.26</a><li>Tag name state, <a href=#tag-name-state title="section 1.3.18">1.3.18</a><li>Tag state, <a href=#tag-state title="section 1.3.3">1.3.3</a><li>Tokenization, <a href=#tokenization title="section 1.3">1.3</a><li>Tokenizing character references, <a href=#tokenizing-character-references title="section 1.3.29">1.3.29</a><li>XML parser, <a href=#xml-parser title="section 1">1</a></ul>
