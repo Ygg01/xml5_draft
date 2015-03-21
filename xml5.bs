@@ -49,7 +49,7 @@ Group: whatwg
     <p>Consume the next input character:</p>
     <dl class="switch">
       <dt>U+0026 AMPERSAND (<code>&amp;</code>)
-      <dd class="warning">TODO</dd>
+      <dd>Switch to <a>character reference in data state</a>.</dd>
 
       <dt>U+003C LESSER-THAN SIGN (<code>&lt;</code>)</dt>
       <dd>Switch to the <a>Tag state</a>.</dd>
@@ -579,7 +579,9 @@ Group: whatwg
       <dd>Switch to the <a>tag attribute name before state</a>.</dd>
 
       <dt>U+0026 AMPERSAND (<code>&amp;</code>)</dt>
-      <dd class="warning">...</dd>
+      <dd>Switch to <a>character reference in attribute value state</a>, with the
+        <a>additional allowed character</a> being U+0022 QUOTATION MARK(<code>"</code>).
+      </dd>
 
       <dt>EOF</dt>
       <dd><a href="parse errors">Parse error</a>. Emit the current token and then reprocess the
@@ -601,7 +603,9 @@ Group: whatwg
       <dd>Switch to the <a>tag attribute name before state</a>.</dd>
 
       <dt>U+0026 AMPERSAND (<code>&amp;</code>)</dt>
-      <dd class="warning">...</dd>
+      <dd>Switch to <a>character reference in attribute value state</a>, with the
+        <a>additional allowed character</a> being APOSTROPHE (<code>'</code>).
+      </dd>
 
       <dt>EOF</dt>
       <dd><a href="parse errors">Parse error</a>. Emit the current token and then reprocess the
@@ -623,7 +627,10 @@ Group: whatwg
       <dd>Switch to the <a>tag attribute name before state</a>.</dd>
 
       <dt>U+0026 AMPERSAND (<code>&amp;</code>):
-      <dd class="warning">...</dd>
+      <dd>
+        Switch to <a>character reference in attribute value state</a>, with the
+        <a>additional allowed character</a> being U+003E GREATER-THAN SIGN(<code>&gt;</code>).
+      </dd>
 
       <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
       <dd>Emit the current token as start tag token and then switch to the
@@ -639,6 +646,13 @@ Group: whatwg
      the current state.</dd>
     </dl>
    </dd>
+  <dt><dfn>Character reference in attribute value state</dfn></dt>
+  <dd>
+    Attempt to <a>consume a character reference</a>.
+    <p>If nothing is returned, append a U+0026 AMPERSAND (&amp;) character to current attribute's value.</p>
+    <p>Otherwise append returned character tokens to current attribute's value.</p>
+    <p>Finally, switch back to attribute value state that switched to this state.
+  </dd>
 
 
   <dt><dfn>Bogus comment state</dfn></dt>
@@ -648,6 +662,12 @@ Group: whatwg
    character and switch to the <a>data state</a> reprocessing the EOF
    character if that was the character consumed.</p></dd>
 
+  <dt><dfn>Tokenizing character references</dfn></dt>
+  <dd>
+    <p>This section defines how to <dfn>consume a character reference</dfn>, optionally with an <dfn>additional allowed character</dfn>, which, if specified where the algorithm is invoked, adds a character to the list of characters that cause there to not be a character reference.</p>
+
+    <p>This definition is used when parsing character <a href="Data state">in text</a> and in <a href= "Character reference in attribute value state">attributes</a>.</p>
+  </dd>
 
   <dt><dfn>DOCTYPE state</dfn></dt>
   <p class="warning">TODO</p>
