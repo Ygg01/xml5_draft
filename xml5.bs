@@ -43,7 +43,9 @@ Group: whatwg
 </h3>
 
 <dl>
-  <dt><dfn>Data state</dfn></dt>
+  <h4 class="heading" id="data-head">
+    <span class="content"><dfn>Data state</dfn></span>
+  </h4>
 
   <dd>
     <p>Consume the next input character:</p>
@@ -62,7 +64,20 @@ Group: whatwg
     </dl>
   </dd>
 
-  <dt><dfn>Tag state</dfn></dt>
+  <h4 class="heading" id="charref-data-head">
+    <span class="content"><dfn>Character reference in data state</dfn></span>
+  </h4>
+
+  <dd>
+    <p>Switch to the <a>data state</a>.</p>
+    <p>Attempt to <a>consume a character reference</a>.</p>
+    <p>If nothing is returned emit a U+0026 AMPERSAND character (&amp;) token.</p>
+    <p>Otherwise, emit character tokens that were returned.</p>
+  </dd>
+
+  <h4 class="heading" id="tag-head">
+    <span class="content"><dfn>Tag state</dfn></span>
+  </h4>
 
   <dd>
     <p>Consume the next input character:</p>
@@ -95,35 +110,39 @@ Group: whatwg
     </dl>
   </dd>
 
-  <dt><dfn>End tag state</dfn></dt>
+  <h4 class="heading" id="end-tag-head">
+    <span class="content"><dfn>End tag state</dfn></span>
+  </h4>
 
-    <dd>
-    <p>Consume the next input character:</p>
+  <dd>
+  <p>Consume the next input character:</p>
 
-    <dl class="switch">
-    <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
+  <dl class="switch">
+  <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
 
-    <dd>Emit a short end tag token and then switch to the <a>data
-    state</a>.</dd>
-    <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-    <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-    <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-    <dt>U+003C LESSER-THAN SIGN (<code>&lt;</code>)</dt>
-    <dt>U+003A (<code>:</code>)</dt>
-    <dt>EOF</dt>
+  <dd>Emit a short end tag token and then switch to the <a>data
+  state</a>.</dd>
+  <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+  <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+  <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+  <dt>U+003C LESSER-THAN SIGN (<code>&lt;</code>)</dt>
+  <dt>U+003A (<code>:</code>)</dt>
+  <dt>EOF</dt>
 
-    <dd><a href="parse errors">Parse error</a>. Emit a U+003C LESSER-THAN SIGN (<code>&lt;</code>) character
-     token and a U+002F SOLIDUS (<code>/</code>) character token. Reconsume the current
-     input character in the <a>data state</a>.</dd>
+  <dd><a href="parse errors">Parse error</a>. Emit a U+003C LESSER-THAN SIGN (<code>&lt;</code>) character
+   token and a U+002F SOLIDUS (<code>/</code>) character token. Reconsume the current
+   input character in the <a>data state</a>.</dd>
 
-    <dt>Anything else</dt>
+  <dt>Anything else</dt>
 
-    <dd>Create an end tag token and set its name to the input character, then
-     switch to the <a>end tag name state</a>.</dd>
-    </dl>
-    </dd>
+  <dd>Create an end tag token and set its name to the input character, then
+   switch to the <a>end tag name state</a>.</dd>
+  </dl>
+  </dd>
 
-  <dt><dfn>End tag name state</dfn></dt>
+  <h4 class="heading" id="end-tag-name-head">
+    <span class="content"><dfn>End tag name state</dfn></span>
+  </h4>
 
   <dd>
     <p>Consume the next input character:</p>
@@ -147,7 +166,9 @@ Group: whatwg
     </dl>
   </dd>
 
-  <dt><dfn>End tag name after state</dfn></dt>
+  <h4 class="heading" id="end-tag-after-head">
+    <span class="content"><dfn>End tag name after state</dfn></span>
+  </h4>
 
   <dd>
     <p>Consume the next input character:</p>
@@ -170,7 +191,10 @@ Group: whatwg
     </dl>
   </dd>
 
-  <dt><dfn>Pi state</dfn></dt>
+  <h4 class="heading" id="pi-head">
+    <span class="content"><dfn>Pi state</dfn></span>
+  </h4>
+
   <dd>
     <p>Consume the next input character:</p>
     <dl class="switch">
@@ -188,7 +212,10 @@ Group: whatwg
     </dl>
   </dd>
 
-  <dt><dfn>Pi target state</dfn></dt>
+  <h4 class="heading" id="pi-target-head">
+    <span class="content"><dfn>Pi target state</dfn></span>
+  </h4>
+
   <dd>
     <p>Consume the next input character:</p>
     <dl class="switch">
@@ -210,7 +237,10 @@ Group: whatwg
     </dl>
   </dd>
 
-  <dt><dfn>Pi target after state</dfn></dt>
+  <h4 class="heading" id="pi-target-after-head">
+    <span class="content"><dfn>Pi target after state</dfn></span>
+  </h4>
+
   <dd>
     <p>Consume the next input character:</p>
     <dl class="switch">
@@ -225,7 +255,10 @@ Group: whatwg
     </dl>
    </dd>
 
-  <dt><dfn>Pi data state</dfn></dt>
+  <h4 class="heading" id="pi-data-head">
+    <span class="content"><dfn>Pi data state</dfn></span>
+  </h4>
+
   <dd>
     <p>Consume the next input character:</p>
 
@@ -243,8 +276,11 @@ Group: whatwg
     </dl>
    </dd>
 
-  <dt><dfn>Pi after state</dfn></dt>
-    <dd>
+  <h4 class="heading" id="pi-after-head">
+    <span class="content"><dfn>Pi after state</dfn></span>
+  </h4>
+
+  <dd>
     <p>Consume the next input character:</p>
 
     <dl class="switch">
@@ -280,7 +316,10 @@ Group: whatwg
     comment state</a>.</p>
   </dd>
 
-  <dt><dfn>Comment state</dfn></dt>
+  <h4 class="heading" id="comment-head">
+    <span class="content"><dfn>Comment state</dfn></span>
+  </h4>
+
   <dd>
     <p>Consume the next input character:</p>
 
@@ -297,7 +336,10 @@ Group: whatwg
     </dl>
   </dd>
 
-  <dt><dfn>Comment dash state</dfn></dt>
+  <h4 class="heading" id="comment-dash-head">
+    <span class="content"><dfn>Comment dash state</dfn></span>
+  </h4>
+
   <dd>
     <p>Consume the next input character:</p>
 
@@ -315,7 +357,10 @@ Group: whatwg
     </dl>
   </dd>
 
-  <dt><dfn>Comment end state</dfn></dt>
+  <h4 class="heading" id="comment-end-head">
+    <span class="content"><dfn>Comment end state</dfn></span>
+  </h4>
+
   <dd>
     <p>Consume the next input character:</p>
 
@@ -338,7 +383,10 @@ Group: whatwg
     </dl>
   </dd>
 
-  <dt><dfn>CDATA state</dfn></dt>
+  <h4 class="heading" id="cdata-head">
+    <span class="content"><dfn>CDATA state</dfn></span>
+  </h4>
+
   <dd>
     <p>Consume the next input character:</p>
 
@@ -356,7 +404,10 @@ Group: whatwg
     </dl>
   </dd>
 
-  <dt><dfn>CDATA bracket state</dfn></dt>
+  <h4 class="heading" id="cdata-bracket-head">
+    <span class="content"><dfn>CDATA bracket state</dfn></span>
+  </h4>
+
   <dd>
     <p>Consume the next input character:</p>
 
@@ -375,7 +426,11 @@ Group: whatwg
     </dl>
   </dd>
 
-  <dt><dfn>CDATA end state</dfn></dt>
+
+  <h4 class="heading" id="cdata-end-head">
+    <span class="content"><dfn>CDATA end state</dfn></span>
+  </h4>
+
   <dd>
     <p>Consume the next input character:</p>
 
@@ -398,7 +453,11 @@ Group: whatwg
     </dl>
   </dd>
 
-  <dt><dfn>Tag name state</dfn></dt>
+
+  <h4 class="heading" id="tag-name-head">
+    <span class="content"><dfn>Tag name state</dfn></span>
+  </h4>
+
   <dd>
     <p>Consume the next input character:</p>
     <dl class="switch">
@@ -423,7 +482,10 @@ Group: whatwg
     </dl>
   </dd>
 
-  <dt><dfn>Empty tag state</dfn></dt>
+
+  <h4 class="heading" id="empty-tag-head">
+    <span class="content"><dfn>Empty tag state</dfn></span>
+  </h4>
 
   <dd>
     <p>Consume the next input character:</p>
@@ -440,7 +502,9 @@ Group: whatwg
    </dd>
 
 
-  <dt><dfn>Tag attribute name before state</dfn></dt>
+  <h4 class="heading" id="tag-attr-name-before-head">
+    <span class="content"><dfn>Tag attribute name before state</dfn></span>
+  </h4>
 
   <dd>
     <p>Consume the next input character:</p>
@@ -471,7 +535,11 @@ Group: whatwg
     </dl>
   </dd>
 
-  <dt><dfn>Tag attribute name state</dfn></dt>
+
+  <h4 class="heading" id="tag-attr-name-head">
+    <span class="content"><dfn>Tag attribute name state</dfn></span>
+  </h4>
+
   <dd>
     <p>Consume the next input character:</p>
     <dl class="switch">
@@ -508,7 +576,11 @@ Group: whatwg
     value that gets associated with it (if any).</p>
   </dd>
 
-  <dt><dfn>Tag attribute name after state</dfn></dt>
+
+  <h4 class="heading" id="tag-attr-name-after-head">
+    <span class="content"><dfn>Tag attribute name after state</dfn></span>
+  </h4>
+
   <dd>
     <p>Consume the next input character:</p>
     <dl class="switch">
@@ -538,7 +610,10 @@ Group: whatwg
   </dd>
 
 
-  <dt><dfn>Tag attribute value before state</dfn></dt>
+  <h4 class="heading" id="tag-attr-value-before-head">
+    <span class="content"><dfn>Tag attribute value before state</dfn></span>
+  </h4>
+
   <dd>
     <p>Consume the next input character:</p>
     <dl class="switch">
@@ -570,7 +645,11 @@ Group: whatwg
     </dl>
   </dd>
 
-  <dt><dfn>Tag attribute value double quoted state</dfn></dt>
+
+  <h4 class="heading" id="tag-attr-value-dquote-head">
+    <span class="content"><dfn>Tag attribute value double quoted state</dfn></span>
+  </h4>
+
   <dd>
     <p>Consume the next input character:</p>
 
@@ -594,7 +673,10 @@ Group: whatwg
   </dd>
 
 
-  <dt><dfn>Tag attribute value single quoted state</dfn></dt>
+  <h4 class="heading" id="tag-attr-value-squote-head">
+    <span class="content"><dfn>Tag attribute value single quoted state</dfn></span>
+  </h4>
+
   <dd>
     <p>Consume the next input character:</p>
 
@@ -617,7 +699,11 @@ Group: whatwg
     </dl>
   </dd>
 
-  <dt><dfn>Tag attribute value unquoted state</dfn></dt>
+
+  <h4 class="heading" id="tag-attr-value-unquote-head">
+    <span class="content"><dfn>Tag attribute value unquoted state</dfn></span>
+  </h4>
+
   <dd>
     <p>Consume the next input character:</p>
       <dl class="switch">
@@ -645,8 +731,12 @@ Group: whatwg
       <dd>Append the input character to the current attribute's value. Stay in
      the current state.</dd>
     </dl>
-   </dd>
-  <dt><dfn>Character reference in attribute value state</dfn></dt>
+  </dd>
+
+  <h4 class="heading" id="charref-attr-head">
+    <span class="content"><dfn>Character reference in attribute value state</dfn></span>
+  </h4>
+
   <dd>
     Attempt to <a>consume a character reference</a>.
     <p>If nothing is returned, append a U+0026 AMPERSAND (&amp;) character to current attribute's value.</p>
@@ -655,24 +745,33 @@ Group: whatwg
   </dd>
 
 
-  <dt><dfn>Bogus comment state</dfn></dt>
+  <h4 class="heading" id="bogus-comment-head">
+    <span class="content"><dfn>Bogus comment state</dfn></span>
+  </h4>
+
   <dd><p>Consume every character up to the first U+003E GREATER-THAN SIGN (<code>&gt;</code>) or
    EOF, whichever comes first. Emit a comment token whose data is the
    concatenation of all those consumed characters. Then consume the next input
    character and switch to the <a>data state</a> reprocessing the EOF
    character if that was the character consumed.</p></dd>
 
-  <dt><dfn>Tokenizing character references</dfn></dt>
+
+  <h4 class="heading" id="charref-tokenizer-head">
+    <span class="content"><dfn>Tokenizing character references</dfn></span>
+  </h4>
+
   <dd>
     <p>This section defines how to <dfn>consume a character reference</dfn>, optionally with an <dfn>additional allowed character</dfn>, which, if specified where the algorithm is invoked, adds a character to the list of characters that cause there to not be a character reference.</p>
 
     <p>This definition is used when parsing character <a href="Data state">in text</a> and in <a href= "Character reference in attribute value state">attributes</a>.</p>
   </dd>
 
-  <dt><dfn>DOCTYPE state</dfn></dt>
+
+  <h4 class="heading" id="doctype-head">
+    <span class="content"><dfn>DOCTYPE state</dfn></span>
+  </h4>
+
   <p class="warning">TODO</p>
-
-
 </dl>
 
 <h3 class="heading" data-level="1" id="tree-construction">
