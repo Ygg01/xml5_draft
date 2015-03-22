@@ -37,10 +37,14 @@ Group: whatwg
 <p>The stream of Unicode characters that consists the input to the tokenization stage will be initially seen by the user agent as a stream of octets (typically coming over the network or from the local file system). The octets encode Unicode code points according to a particular encoding, which the user agent must use to decode the octets into code points.</p>
 
 <p class="warning">Define how to find the encoding</p>
+<p class="warning">Decide how to deal with null values</p>
+
 
 <h3 class="heading" data-level="1" id="tokenization-overview">
   <span class="content"><dfn>Tokenization</dfn></span>
 </h3>
+
+<p class="warning">Decide how to deal with namespaces</p>
 
 <dl>
   <h4 class="heading" id="data-head">
