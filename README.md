@@ -3,7 +3,7 @@ Draft for XML5 proposal.
 
 The original version of this proposal is hosted on [XML5 code repository](https://github.com/annevk/xml5).
 
-What's XML5 
+What's XML5
 ==========
 
 XML5 is simply put, a more relaxed version of XML syntax. Basically, take the best aspects of HTML(5) syntax and apply it to XML.
@@ -16,10 +16,13 @@ Motivation behind this is to allow easier parsing of XML generated using string 
 How to read this?
 =================
 
-Hopefully a link to rendered version will be up sooner or later, but in case it isn't you can compile resources yourself:
+Here is the [rendered version](http://ygg01.github.io/xml5_draft/).
+
+Otherwise you can download and compile he source sourself
 
 1. [Install bikeshed](https://github.com/tabatkins/bikeshed/blob/master/docs/install.md)
 2. Clone the the repository ````$ git clone https://github.com/Ygg01/xml5_draft````
-3. TODO
+3. Change to xml5_draft the repository ````$ cd xml5_draft````
+4. Run bikeshed ````$ bikeshed````
 
 
