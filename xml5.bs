@@ -776,6 +776,7 @@ Group: whatwg
       <dt>U+000C FORM FEED (<code class="non-print">FF</code>)</dt>
       <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
       <dt>U+003C LESS-THAN SIGN (<code>&lt;</code>)</dt>
+      <dt>U+0025 PERCENT SIGN (<code>%</code>)</dt>
       <dt>U+0026 AMPERSAND (<code>&amp;</code>)</dt>
       <dt>EOF</dt>
       <dt>The <a>additional allowed character</a> if there is one</dt>
