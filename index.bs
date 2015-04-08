@@ -921,9 +921,11 @@ The stream of Unicode characters that consists the input to the tokenization sta
   and push it into the <a>stack of open elements</a> so
   that it becomes the new <a>current element</a>.
 
+<dl>
 
 <dt><dfn>Start phase</dfn></dt>
 
+<dd><p>
   Each token emitted from the tokenization stage <em class="ct">must</em> be
   processed as follows until the algorithm below switches to a different
   phase:
@@ -981,6 +983,7 @@ The stream of Unicode characters that consists the input to the tokenization sta
 
 <dt><dfn>Main phase</dfn></dt>
 
+<dd><p>
 Once a start tag token has been encountered (as detailed in the previous
 phase) each token <em class="ct">must</em> be process using the following
 steps until further notice:
@@ -1049,7 +1052,7 @@ steps until further notice:
 </dl>
 
 <dt><dfn>End phase</dfn></dt>
-
+<dd><p>
   Tokens in end phase <em class="ct">must</em> be handled as follows:
 
 <dl class="switch">
@@ -1081,7 +1084,9 @@ steps until further notice:
   </dd>
 </dl>
 
-Once the user agent <dfn lt="stop parsing">stops parsing</dfn> the
+</dl>
+
+<p>Once the user agent <dfn lt="stop parsing">stops parsing</dfn> the
 document, it <em class="ct">must</em> follow these steps:
 
 <p class="warning">TODO</p>

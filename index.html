@@ -39,7 +39,7 @@
    <h1 class="p-name no-ref allcaps" id="title">XML5</h1>
   
    <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Living Standard — Last Updated
-    <time class="dt-updated" datetime="2015-04-07">7 April 2015</time></span></h2>
+    <time class="dt-updated" datetime="2015-04-08">8 April 2015</time></span></h2>
   
    <div data-fill-with="spec-metadata">
     <dl>
@@ -1743,247 +1743,295 @@
   that it becomes the new <a data-link-type="dfn" href="#current-element">current element</a>.</p>
 
 
+   <dl>
 
-   <dt><dfn data-dfn-type="dfn" data-noexport="" id="start-phase">Start phase<a class="self-link" href="#start-phase"></a></dfn>
+
+    <dt><dfn data-dfn-type="dfn" data-noexport="" id="start-phase">Start phase<a class="self-link" href="#start-phase"></a></dfn>
 
 
-   <p>Each token emitted from the tokenization stage <em class="ct">must</em> be
+    <dd>
+     <p>
+  Each token emitted from the tokenization stage <em class="ct">must</em> be
   processed as follows until the algorithm below switches to a different
-  phase:</p>
+  phase:
 
-
-   <dl class="switch">
+</p>
+     <dl class="switch">
   
-    <dt>A start tag token
+      <dt>A start tag token
+      
   
-    <dd>
+      <dd>
 
 
-     <p><a data-link-type="dfn" href="#create-an-element-for-the-token">Create an element for the token</a> and then append it to the
+       <p><a data-link-type="dfn" href="#create-an-element-for-the-token">Create an element for the token</a> and then append it to the
     <code>Document</code> node and push it into the <a data-link-type="dfn" href="#stack-of-open-elements">stack of open elements</a>.</p>
-     
+       
 
 
-     <p>This element is the root element and the first <a data-link-type="dfn" href="#current-element">current
+       <p>This element is the root element and the first <a data-link-type="dfn" href="#current-element">current
     element</a>. Then switch to the <a data-link-type="dfn" href="#main-phase">main phase</a>.</p>
-     
+       
   
+      
 
   
-    <dt>An empty tag token
+      <dt>An empty tag token
+      
   
-    <dd>
+      <dd>
 
 
-     <p><a data-link-type="dfn" href="#create-an-element-for-the-token">Create an element for the token</a> and append it to the
+       <p><a data-link-type="dfn" href="#create-an-element-for-the-token">Create an element for the token</a> and append it to the
     <code>Document</code> node. Then switch to the <a data-link-type="dfn" href="#end-phase">end phase</a>.</p>
-     
+       
 
   
+      
 
   
-    <dt>A comment token
+      <dt>A comment token
+      
   
-    <dd>
+      <dd>
 
 
-     <p>Append a <code>Comment</code> node to the <code>Document</code> node
+       <p>Append a <code>Comment</code> node to the <code>Document</code> node
     with the <code>data</code> attribute set to the data given in the
     token.</p>
-     
+       
 
   
+      
 
   
-    <dt>A processing instruction token
+      <dt>A processing instruction token
+      
   
-    <dd>
+      <dd>
 
 
-     <p>Append a <code>ProcessingInstruction</code> node to the
+       <p>Append a <code>ProcessingInstruction</code> node to the
     <code>Document</code> node with the <code>target</code> and <code>data</code>
     atributes set to the target and data given in the token.</p>
-     
+       
 
   
+      
 
   
-    <dt>An end-of-file token
+      <dt>An end-of-file token
+      
   
-    <dd>
+      <dd>
 
 
-     <p><a data-link-type="dfn" href="#parse-errors">Parse error</a>. Reprocess the token in the <a data-link-type="dfn" href="#end-phase">end
+       <p><a data-link-type="dfn" href="#parse-errors">Parse error</a>. Reprocess the token in the <a data-link-type="dfn" href="#end-phase">end
     phase</a>.</p>
-     
+       
 
   
+      
 
   
-    <dt>Anything else
+      <dt>Anything else
+      
   
-    <dd>
+      <dd>
     <a data-link-type="dfn" href="#parse-errors">Parse error</a>. Ignore the token.
   
-</dl>
+      
+
+     </dl>
 
 
-   <dt><dfn data-dfn-type="dfn" data-noexport="" id="main-phase">Main phase<a class="self-link" href="#main-phase"></a></dfn>
+    <dt><dfn data-dfn-type="dfn" data-noexport="" id="main-phase">Main phase<a class="self-link" href="#main-phase"></a></dfn>
 
 
-   <p>Once a start tag token has been encountered (as detailed in the previous
+    <dd>
+     <p>
+Once a start tag token has been encountered (as detailed in the previous
 phase) each token <em class="ct">must</em> be process using the following
-steps until further notice:</p>
+steps until further notice:
 
-
-   <dl class="switch">
+</p>
+     <dl class="switch">
   
-    <dt>A character token
+      <dt>A character token
+      
   
-    <dd>
+      <dd>
 
 
-     <p><a data-link-type="dfn" href="#append-a-character">Append a character</a> to the <a data-link-type="dfn" href="#current-element">current
+       <p><a data-link-type="dfn" href="#append-a-character">Append a character</a> to the <a data-link-type="dfn" href="#current-element">current
     element</a>.</p>
-     
+       
 
   
+      
 
   
-    <dt>A start tag token
+      <dt>A start tag token
+      
   
-    <dd>
-     <p><a data-link-type="dfn" href="#insert-an-element">Insert an element</a> for the token.</p>
+      <dd>
+       <p><a data-link-type="dfn" href="#insert-an-element">Insert an element</a> for the token.</p>
+      
 
   
-    <dt>An empty tag token
+      <dt>An empty tag token
+      
   
-    <dd>
-     <p><a data-link-type="dfn" href="#create-an-element-for-the-token">Create an element for the token</a> and append it to the
+      <dd>
+       <p><a data-link-type="dfn" href="#create-an-element-for-the-token">Create an element for the token</a> and append it to the
     <a data-link-type="dfn" href="#current-element">current element</a>.</p>
+      
 
   
-    <dt>An end tag token
+      <dt>An end tag token
+      
   
-    <dd>
+      <dd>
 
 
-     <p>If the tag name of the <a href="current element">current node</a> does not match the tag
+       <p>If the tag name of the <a href="current element">current node</a> does not match the tag
     name of the end tag token this is a <a data-link-type="dfn" href="#parse-errors">parse error</a>.</p>
-     
+       
 
 
-     <p>If there is an <a data-link-type="dfn" href="#element-in-scope">element in scope</a> with the same tag name as
+       <p>If there is an <a data-link-type="dfn" href="#element-in-scope">element in scope</a> with the same tag name as
     that of the token pop nodes from the <a data-link-type="dfn" href="#stack-of-open-elements">stack of open elements</a>
     until the first such element has been popped from the stack.</p>
-     
+       
 
 
-     <p>If there are no more elements on the stack of open elements at this point
+       <p>If there are no more elements on the stack of open elements at this point
     switch to the <a data-link-type="dfn" href="#end-phase">end phase</a>.</p>
-     
+       
   
+      
 
   
-    <dt>A short end tag token
+      <dt>A short end tag token
+      
   
-    <dd>
+      <dd>
 
 
-     <p>Pop an element from the <a data-link-type="dfn" href="#stack-of-open-elements">stack of open elements</a>. If there
+       <p>Pop an element from the <a data-link-type="dfn" href="#stack-of-open-elements">stack of open elements</a>. If there
     are no more elements on the stack of open elements switch to the <a data-link-type="dfn" href="#end-phase">end
     phase</a>.</p>
-     
+       
 
   
+      
 
   
-    <dt>A comment token
+      <dt>A comment token
+      
   
-    <dd>
+      <dd>
 
 
-     <p>Append a <code>Comment</code> node to the <a data-link-type="dfn" href="#current-element">current element</a>
+       <p>Append a <code>Comment</code> node to the <a data-link-type="dfn" href="#current-element">current element</a>
     with the <code>data</code> attribute set to the data given in the
     token.</p>
-     
+       
 
   
+      
 
   
-    <dt>A processing instruction token
+      <dt>A processing instruction token
+      
   
-    <dd>
+      <dd>
     Append a <code>ProcessingInstruction</code> node to the <a data-link-type="dfn" href="#current-element">current
     element</a> with the <code>target</code> and <code>data</code> atributes
     set to the target and data given in the token.
 
   
+      
 
   
-    <dt>An end-of-file token
+      <dt>An end-of-file token
+      
   
-    <dd>
+      <dd>
     <a data-link-type="dfn" href="#parse-errors">Parse error</a>. Reprocess the token in the <a data-link-type="dfn" href="#end-phase">end phase</a>.
 
   
-</dl>
+      
+
+     </dl>
 
 
-   <dt><dfn data-dfn-type="dfn" data-noexport="" id="end-phase">End phase<a class="self-link" href="#end-phase"></a></dfn>
+    <dt><dfn data-dfn-type="dfn" data-noexport="" id="end-phase">End phase<a class="self-link" href="#end-phase"></a></dfn>
 
+    <dd>
+     <p>
+  Tokens in end phase <em class="ct">must</em> be handled as follows:
 
-   <p>Tokens in end phase <em class="ct">must</em> be handled as follows:</p>
-
-
-   <dl class="switch">
+</p>
+     <dl class="switch">
   
-    <dt>A comment token
+      <dt>A comment token
+      
   
-    <dd>Append a <code>Comment</code> node to the <code>Document</code> node
+      <dd>Append a <code>Comment</code> node to the <code>Document</code> node
     with the <code>data</code> attribute set to the data given in the
     token.
   
+      
 
   
-    <dt>A processing instruction token
+      <dt>A processing instruction token
+      
   
-    <dd>
+      <dd>
 
 
-     <p>Append a <code>ProcessingInstruction</code> node to the
+       <p>Append a <code>ProcessingInstruction</code> node to the
     <code>Document</code> node with the <code>target</code> and <code>data</code>
     atributes set to the target and data given in the token.</p>
-     
+       
 
   
+      
 
   
-    <dt>An end-of-file token
+      <dt>An end-of-file token
+      
   
-    <dd>
+      <dd>
 
 
-     <p><a data-link-type="dfn" href="#stop-parsing">Stop parsing</a>.</p>
-     
+       <p><a data-link-type="dfn" href="#stop-parsing">Stop parsing</a>.</p>
+       
   
+      
 
   
-    <dt>Anything else
+      <dt>Anything else
+      
   
-    <dd>
+      <dd>
 
 
-     <p><a data-link-type="dfn" href="#parse-errors">Parse error</a>. Ignore the token.</p>
-     
+       <p><a data-link-type="dfn" href="#parse-errors">Parse error</a>. Ignore the token.</p>
+       
   
+      
+
+     </dl>
+
 </dl>
 
 
    <p>Once the user agent <dfn data-dfn-type="dfn" data-lt="stop parsing" data-noexport="" id="stop-parsing">stops parsing<a class="self-link" href="#stop-parsing"></a></dfn> the
-document, it <em class="ct">must</em> follow these steps:</p>
+document, it <em class="ct">must</em> follow these steps:
 
-
+</p>
    <p class="warning">TODO</p>
 
 
