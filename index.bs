@@ -1,14 +1,14 @@
-<h1>XML5</h1>
 <pre class='metadata'>
-Title:XML 5
-Status:ED
-ED: http://www.example.org
+Title: XML5 Standard
+H1: XML5
+Status: LS
+Logo: https://resources.whatwg.org/logo.svg
 Shortname: xml5
 Level:1
-Editor: Anne van Kesteren, Opera Software ASA, <annevk@annevk.nl>
-Abstract: Something something
+Editor: Anne van Kesteren, Mozilla, <annevk@annevk.nl>
+Abstract: XML with well-defined error handling.
 Editor: Daniel Fath, Unaffiliated,  <daniel.fath7@gmail.com>
-Group: whatwg
+Group: WHATWG
 </pre>
 <style type="text/css">
   switch { padding-left: 2em; }
@@ -1081,7 +1081,7 @@ steps until further notice:
   </dd>
 </dl>
 
-Once the user agent <dfn title="stop parsing">stops parsing</dfn> the
+Once the user agent <dfn lt="stop parsing">stops parsing</dfn> the
 document, it <em class="ct">must</em> follow these steps:
 
 <p class="warning">TODO</p>

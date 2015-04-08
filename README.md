@@ -16,7 +16,7 @@ Motivation behind this is to allow easier parsing of XML generated using string 
 How to read this?
 =================
 
-Here is the [rendered version](http://ygg01.github.io/xml5_draft/).
+Here is the [rendered version](https://ygg01.github.io/xml5_draft/).
 
 Otherwise you can download and compile the source yourself
 
@@ -24,5 +24,3 @@ Otherwise you can download and compile the source yourself
 2. Clone the the repository ````$ git clone https://github.com/Ygg01/xml5_draft````
 3. Change to xml5_draft the repository ````$ cd xml5_draft````
 4. Run bikeshed ````$ bikeshed````
-
-
