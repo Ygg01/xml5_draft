@@ -165,6 +165,9 @@ The stream of Unicode characters that consists the input to the tokenization sta
       <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
       <dd>Switch to the <a>end tag name after state</a>.</dd>
 
+      <dt>U+002F SOLIDUS (<code>/</code>)</dt>
+      <dd><a>Parse error</a>. Switch to the <a>end tag name after state</a>.</dd>
+
       <dt>EOF</dt>
       <dd><a>Parse error</a>. Emit the current token and then reprocess the
        current input character in the <a>data state</a>.</dd>
