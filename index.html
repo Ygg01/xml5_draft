@@ -39,7 +39,7 @@
    <h1 class="p-name no-ref allcaps" id="title">XML5</h1>
   
    <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Living Standard — Last Updated
-    <time class="dt-updated" datetime="2015-04-08">8 April 2015</time></span></h2>
+    <time class="dt-updated" datetime="2015-04-11">11 April 2015</time></span></h2>
   
    <div data-fill-with="spec-metadata">
     <dl>
@@ -89,25 +89,26 @@
         <li><a href="#pi-target-after-head"><span class="secno">1.3.9</span> <span class="content"><span>Pi target after state</span></span></a>
         <li><a href="#pi-data-head"><span class="secno">1.3.10</span> <span class="content"><span>Pi data state</span></span></a>
         <li><a href="#pi-after-head"><span class="secno">1.3.11</span> <span class="content"><span>Pi after state</span></span></a>
-        <li><a href="#comment-head"><span class="secno">1.3.12</span> <span class="content"><span>Comment state</span></span></a>
-        <li><a href="#comment-dash-head"><span class="secno">1.3.13</span> <span class="content"><span>Comment dash state</span></span></a>
-        <li><a href="#comment-end-head"><span class="secno">1.3.14</span> <span class="content"><span>Comment end state</span></span></a>
-        <li><a href="#cdata-head"><span class="secno">1.3.15</span> <span class="content"><span>CDATA state</span></span></a>
-        <li><a href="#cdata-bracket-head"><span class="secno">1.3.16</span> <span class="content"><span>CDATA bracket state</span></span></a>
-        <li><a href="#cdata-end-head"><span class="secno">1.3.17</span> <span class="content"><span>CDATA end state</span></span></a>
-        <li><a href="#tag-name-head"><span class="secno">1.3.18</span> <span class="content"><span>Tag name state</span></span></a>
-        <li><a href="#empty-tag-head"><span class="secno">1.3.19</span> <span class="content"><span>Empty tag state</span></span></a>
-        <li><a href="#tag-attr-name-before-head"><span class="secno">1.3.20</span> <span class="content"><span>Tag attribute name before state</span></span></a>
-        <li><a href="#tag-attr-name-head"><span class="secno">1.3.21</span> <span class="content"><span>Tag attribute name state</span></span></a>
-        <li><a href="#tag-attr-name-after-head"><span class="secno">1.3.22</span> <span class="content"><span>Tag attribute name after state</span></span></a>
-        <li><a href="#tag-attr-value-before-head"><span class="secno">1.3.23</span> <span class="content"><span>Tag attribute value before state</span></span></a>
-        <li><a href="#tag-attr-value-dquote-head"><span class="secno">1.3.24</span> <span class="content"><span>Tag attribute value double quoted state</span></span></a>
-        <li><a href="#tag-attr-value-squote-head"><span class="secno">1.3.25</span> <span class="content"><span>Tag attribute value single quoted state</span></span></a>
-        <li><a href="#tag-attr-value-unquote-head"><span class="secno">1.3.26</span> <span class="content"><span>Tag attribute value unquoted state</span></span></a>
-        <li><a href="#charref-attr-head"><span class="secno">1.3.27</span> <span class="content"><span>Character reference in attribute value state</span></span></a>
-        <li><a href="#bogus-comment-head"><span class="secno">1.3.28</span> <span class="content"><span>Bogus comment state</span></span></a>
-        <li><a href="#charref-tokenizer-head"><span class="secno">1.3.29</span> <span class="content"><span>Tokenizing character references</span></span></a>
-        <li><a href="#doctype-head"><span class="secno">1.3.30</span> <span class="content"><span>DOCTYPE state</span></span></a>
+        <li><a href="#markup-decl"><span class="secno">1.3.12</span> <span class="content"><span>Markup declaration state</span></span></a>
+        <li><a href="#comment-head"><span class="secno">1.3.13</span> <span class="content"><span>Comment state</span></span></a>
+        <li><a href="#comment-dash-head"><span class="secno">1.3.14</span> <span class="content"><span>Comment dash state</span></span></a>
+        <li><a href="#comment-end-head"><span class="secno">1.3.15</span> <span class="content"><span>Comment end state</span></span></a>
+        <li><a href="#cdata-head"><span class="secno">1.3.16</span> <span class="content"><span>CDATA state</span></span></a>
+        <li><a href="#cdata-bracket-head"><span class="secno">1.3.17</span> <span class="content"><span>CDATA bracket state</span></span></a>
+        <li><a href="#cdata-end-head"><span class="secno">1.3.18</span> <span class="content"><span>CDATA end state</span></span></a>
+        <li><a href="#tag-name-head"><span class="secno">1.3.19</span> <span class="content"><span>Tag name state</span></span></a>
+        <li><a href="#empty-tag-head"><span class="secno">1.3.20</span> <span class="content"><span>Empty tag state</span></span></a>
+        <li><a href="#tag-attr-name-before-head"><span class="secno">1.3.21</span> <span class="content"><span>Tag attribute name before state</span></span></a>
+        <li><a href="#tag-attr-name-head"><span class="secno">1.3.22</span> <span class="content"><span>Tag attribute name state</span></span></a>
+        <li><a href="#tag-attr-name-after-head"><span class="secno">1.3.23</span> <span class="content"><span>Tag attribute name after state</span></span></a>
+        <li><a href="#tag-attr-value-before-head"><span class="secno">1.3.24</span> <span class="content"><span>Tag attribute value before state</span></span></a>
+        <li><a href="#tag-attr-value-dquote-head"><span class="secno">1.3.25</span> <span class="content"><span>Tag attribute value double quoted state</span></span></a>
+        <li><a href="#tag-attr-value-squote-head"><span class="secno">1.3.26</span> <span class="content"><span>Tag attribute value single quoted state</span></span></a>
+        <li><a href="#tag-attr-value-unquote-head"><span class="secno">1.3.27</span> <span class="content"><span>Tag attribute value unquoted state</span></span></a>
+        <li><a href="#charref-attr-head"><span class="secno">1.3.28</span> <span class="content"><span>Character reference in attribute value state</span></span></a>
+        <li><a href="#bogus-comment-head"><span class="secno">1.3.29</span> <span class="content"><span>Bogus comment state</span></span></a>
+        <li><a href="#charref-tokenizer-head"><span class="secno">1.3.30</span> <span class="content"><span>Tokenizing character references</span></span></a>
+        <li><a href="#doctype-head"><span class="secno">1.3.31</span> <span class="content"><span>DOCTYPE state</span></span></a>
        </ul>
       <li><a href="#tree-construction"><span class="secno">1.4</span> <span class="content">Tree construction</span></a>
      </ul>
@@ -134,7 +135,7 @@
    <p>This section and its subsection define the <dfn data-dfn-type="dfn" data-noexport="" id="xml-parser">XML parser<a class="self-link" href="#xml-parser"></a></dfn>.</p>
 
 
-   <p>This specification defines the parsing rules for XML documents, whether they are syntactically correct or not. Certain points in the parsing algorithm are said to be <dfn data-dfn-type="dfn" data-noexport="" id="parse-errors" title="parse error">parse errors<a class="self-link" href="#parse-errors"></a></dfn>. The handling for parse errors is well-defined: user agents must either act as described below when encountering such problems, or must terminate processing at the first error that they encounter for which they do not wish to apply the rules described below.</p>
+   <p>This specification defines the parsing rules for XML documents, whether they are syntactically correct or not. Certain points in the parsing algorithm are said to be <dfn data-dfn-type="dfn" data-lt="parse error" data-noexport="" id="parse-error">parse errors<a class="self-link" href="#parse-error"></a></dfn>. The handling for parse errors is well-defined: user agents must either act as described below when encountering such problems, or must terminate processing at the first error that they encounter for which they do not wish to apply the rules described below.</p>
 
 
    <h3 class="heading settled" data-level="1.1" id="parsing-overview"><span class="secno">1.1. </span><span class="content">Overview</span><a class="self-link" href="#parsing-overview"></a></h3>
@@ -282,7 +283,7 @@
       
 
       
-      <dd><a data-link-type="dfn" href="#parse-errors">Parse error</a>. Emit a U+003C LESSER-THAN SIGN (<code>&lt;</code>) character.
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Emit a U+003C LESSER-THAN SIGN (<code>&lt;</code>) character.
       Reconsume the current input character in the <a data-link-type="dfn" href="#data-state">data state</a>.
       
 
@@ -338,7 +339,7 @@
       
 
   
-      <dd><a data-link-type="dfn" href="#parse-errors">Parse error</a>. Emit a U+003C LESSER-THAN SIGN (<code>&lt;</code>) character
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Emit a U+003C LESSER-THAN SIGN (<code>&lt;</code>) character
    token and a U+002F SOLIDUS (<code>/</code>) character token. Reconsume the current
    input character in the <a data-link-type="dfn" href="#data-state">data state</a>.
       
@@ -384,7 +385,7 @@
       <dt>EOF
       
       
-      <dd><a data-link-type="dfn" href="#parse-errors">Parse error</a>. Emit the current token and then eprocess the
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Emit the current token and then reprocess the
        current input character in the <a data-link-type="dfn" href="#data-state">data state</a>.
       
 
@@ -442,7 +443,7 @@
       <dt>EOF
       
       
-      <dd><a data-link-type="dfn" href="#parse-errors">Parse error</a>. Emit the current token and then reprocess the
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Emit the current token and then reprocess the
      current input character in the <a data-link-type="dfn" href="#data-state">data state</a>.
       
 
@@ -450,7 +451,7 @@
       <dt>Anything else
       
       
-      <dd><a data-link-type="dfn" href="#parse-errors">Parse error</a>. Stay in the current state.
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Stay in the current state.
       
     
      </dl>
@@ -481,7 +482,7 @@
       <dt>EOF
       
       
-      <dd><a data-link-type="dfn" href="#parse-errors">Parse error</a>. Reprocess the current input character in the
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Reprocess the current input character in the
       <a data-link-type="dfn" href="#bogus-comment-state">bogus comment state</a>.
       
 
@@ -526,7 +527,7 @@
       <dt>EOF
       
       
-      <dd><a data-link-type="dfn" href="#parse-errors">Parse error</a>. Emit the current token and then reprocess the
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Emit the current token and then reprocess the
      current input character in the <a data-link-type="dfn" href="#data-state">data state</a>.
       
 
@@ -607,7 +608,7 @@
       <dt>EOF
       
       
-      <dd><a data-link-type="dfn" href="#parse-errors">Parse error</a>. Emit the current token and then reprocess the
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Emit the current token and then reprocess the
      current input character in the <a data-link-type="dfn" href="#data-state">data state</a>.
       
 
@@ -662,7 +663,8 @@
    
 
   
-    <dt><dfn data-dfn-type="dfn" data-noexport="" id="markup-declaration-state">Markup declaration state<a class="self-link" href="#markup-declaration-state"></a></dfn>
+    <h4 class="heading settled" data-level="1.3.12" id="markup-decl"><span class="secno">1.3.12. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="markup-declaration-state">Markup declaration state<a class="self-link" href="#markup-declaration-state"></a></dfn></span><a class="self-link" href="#markup-decl"></a></h4>
+
   
     <dd>
     If the next two characters are both U+002D (<code>-</code>)
@@ -677,19 +679,19 @@
 
 
      <p>Otherwise, if the next seven characters are an exact match for "DOCTYPE",
-    then this is a <a data-link-type="dfn" href="#parse-errors">parse error</a>. Consume those characters and switch
+    then this is a <a data-link-type="dfn" href="#parse-error">parse error</a>. Consume those characters and switch
     to the <a data-link-type="dfn" href="#doctype-state">DOCTYPE state</a>.</p>
      
     
 
 
-     <p>Otherwise, this is a <a data-link-type="dfn" href="#parse-errors">parse error</a>. Switch to the <a data-link-type="dfn" href="#bogus-comment-state">bogus
+     <p>Otherwise, this is a <a data-link-type="dfn" href="#parse-error">parse error</a>. Switch to the <a data-link-type="dfn" href="#bogus-comment-state">bogus
     comment state</a>.</p>
      
   
 
   
-    <h4 class="heading settled" data-level="1.3.12" id="comment-head"><span class="secno">1.3.12. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="comment-state">Comment state<a class="self-link" href="#comment-state"></a></dfn></span><a class="self-link" href="#comment-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.13" id="comment-head"><span class="secno">1.3.13. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="comment-state">Comment state<a class="self-link" href="#comment-state"></a></dfn></span><a class="self-link" href="#comment-head"></a></h4>
 
   
     <dd>
@@ -711,7 +713,7 @@
       <dt>EOF
       
       
-      <dd><a data-link-type="dfn" href="#parse-errors">Parse error</a>. Emit the comment token and then reprocess the
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Emit the comment token and then reprocess the
      current input character in the <a data-link-type="dfn" href="#data-state">data state</a>.
       
 
@@ -727,7 +729,7 @@
   
 
   
-    <h4 class="heading settled" data-level="1.3.13" id="comment-dash-head"><span class="secno">1.3.13. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="comment-dash-state">Comment dash state<a class="self-link" href="#comment-dash-state"></a></dfn></span><a class="self-link" href="#comment-dash-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.14" id="comment-dash-head"><span class="secno">1.3.14. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="comment-dash-state">Comment dash state<a class="self-link" href="#comment-dash-state"></a></dfn></span><a class="self-link" href="#comment-dash-head"></a></h4>
 
   
     <dd>
@@ -749,7 +751,7 @@
       <dt>EOF
       
       
-      <dd><a data-link-type="dfn" href="#parse-errors">Parse error</a>. Emit the comment token and then reprocess the
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Emit the comment token and then reprocess the
      current input character in the <a data-link-type="dfn" href="#data-state">data state</a>.
       
 
@@ -766,7 +768,7 @@
   
 
   
-    <h4 class="heading settled" data-level="1.3.14" id="comment-end-head"><span class="secno">1.3.14. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="comment-end-state">Comment end state<a class="self-link" href="#comment-end-state"></a></dfn></span><a class="self-link" href="#comment-end-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.15" id="comment-end-head"><span class="secno">1.3.15. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="comment-end-state">Comment end state<a class="self-link" href="#comment-end-state"></a></dfn></span><a class="self-link" href="#comment-end-head"></a></h4>
 
   
     <dd>
@@ -796,7 +798,7 @@
       <dt>EOF
       
       
-      <dd><a data-link-type="dfn" href="#parse-errors">Parse error</a>. Emit the comment token and then reprocess the
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Emit the comment token and then reprocess the
      current input character in the <a data-link-type="dfn" href="#data-state">data state</a>.
       
 
@@ -814,7 +816,7 @@
   
 
   
-    <h4 class="heading settled" data-level="1.3.15" id="cdata-head"><span class="secno">1.3.15. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="cdata-state">CDATA state<a class="self-link" href="#cdata-state"></a></dfn></span><a class="self-link" href="#cdata-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.16" id="cdata-head"><span class="secno">1.3.16. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="cdata-state">CDATA state<a class="self-link" href="#cdata-state"></a></dfn></span><a class="self-link" href="#cdata-head"></a></h4>
 
   
     <dd>
@@ -836,7 +838,7 @@
       <dt>EOF
       
       
-      <dd><a data-link-type="dfn" href="#parse-errors">Parse error</a>. Reprocess the current input character in the
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Reprocess the current input character in the
       <a data-link-type="dfn" href="#data-state">data state</a>.
       
 
@@ -853,7 +855,7 @@
   
 
   
-    <h4 class="heading settled" data-level="1.3.16" id="cdata-bracket-head"><span class="secno">1.3.16. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="cdata-bracket-state">CDATA bracket state<a class="self-link" href="#cdata-bracket-state"></a></dfn></span><a class="self-link" href="#cdata-bracket-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.17" id="cdata-bracket-head"><span class="secno">1.3.17. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="cdata-bracket-state">CDATA bracket state<a class="self-link" href="#cdata-bracket-state"></a></dfn></span><a class="self-link" href="#cdata-bracket-head"></a></h4>
 
   
     <dd>
@@ -875,7 +877,7 @@
       <dt>EOF
       
       
-      <dd><a data-link-type="dfn" href="#parse-errors">Parse error</a>. Reprocess the current input character in the
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Reprocess the current input character in the
       <a data-link-type="dfn" href="#data-state">data state</a>.
       
 
@@ -894,7 +896,7 @@
 
 
   
-    <h4 class="heading settled" data-level="1.3.17" id="cdata-end-head"><span class="secno">1.3.17. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="cdata-end-state">CDATA end state<a class="self-link" href="#cdata-end-state"></a></dfn></span><a class="self-link" href="#cdata-end-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.18" id="cdata-end-head"><span class="secno">1.3.18. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="cdata-end-state">CDATA end state<a class="self-link" href="#cdata-end-state"></a></dfn></span><a class="self-link" href="#cdata-end-head"></a></h4>
 
   
     <dd>
@@ -924,7 +926,7 @@
       <dt>EOF
       
       
-      <dd><a data-link-type="dfn" href="#parse-errors">Parse error</a>. Reconsume the current input character in the
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Reconsume the current input character in the
       <a data-link-type="dfn" href="#data-state">data state</a>.
       
 
@@ -943,7 +945,7 @@
 
 
   
-    <h4 class="heading settled" data-level="1.3.18" id="tag-name-head"><span class="secno">1.3.18. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="tag-name-state">Tag name state<a class="self-link" href="#tag-name-state"></a></dfn></span><a class="self-link" href="#tag-name-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.19" id="tag-name-head"><span class="secno">1.3.19. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="tag-name-state">Tag name state<a class="self-link" href="#tag-name-state"></a></dfn></span><a class="self-link" href="#tag-name-head"></a></h4>
 
   
     <dd>
@@ -978,7 +980,7 @@
       <dt>EOF
       
       
-      <dd><a data-link-type="dfn" href="#parse-errors">Parse error</a>. Emit the current token and then reprocess the
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Emit the current token and then reprocess the
      current input character in the <a data-link-type="dfn" href="#data-state">data state</a>.
       
 
@@ -1003,7 +1005,7 @@
 
 
   
-    <h4 class="heading settled" data-level="1.3.19" id="empty-tag-head"><span class="secno">1.3.19. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="empty-tag-state">Empty tag state<a class="self-link" href="#empty-tag-state"></a></dfn></span><a class="self-link" href="#empty-tag-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.20" id="empty-tag-head"><span class="secno">1.3.20. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="empty-tag-state">Empty tag state<a class="self-link" href="#empty-tag-state"></a></dfn></span><a class="self-link" href="#empty-tag-head"></a></h4>
 
   
     <dd>
@@ -1026,7 +1028,7 @@
       <dt>Anything else
       
       
-      <dd><a data-link-type="dfn" href="#parse-errors">Parse error</a>. Reprocess the current input character in the
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Reprocess the current input character in the
       <a data-link-type="dfn" href="#tag-attribute-name-before-state">tag attribute name before state</a>.
       
     
@@ -1036,7 +1038,7 @@
 
 
   
-    <h4 class="heading settled" data-level="1.3.20" id="tag-attr-name-before-head"><span class="secno">1.3.20. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="tag-attribute-name-before-state">Tag attribute name before state<a class="self-link" href="#tag-attribute-name-before-state"></a></dfn></span><a class="self-link" href="#tag-attr-name-before-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.21" id="tag-attr-name-before-head"><span class="secno">1.3.21. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="tag-attribute-name-before-state">Tag attribute name before state<a class="self-link" href="#tag-attribute-name-before-state"></a></dfn></span><a class="self-link" href="#tag-attr-name-before-head"></a></h4>
 
   
     <dd>
@@ -1079,14 +1081,14 @@
       <dt>U+003A COLON (<code>:</code>)
       
       
-      <dd><a data-link-type="dfn" href="#parse-errors">Parse error</a>. Stay in the current state.
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Stay in the current state.
       
 
       
       <dt>EOF
       
       
-      <dd><a data-link-type="dfn" href="#parse-errors">Parse error</a>. Emit the current token and then reprocess the
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Emit the current token and then reprocess the
      current input character in the <a data-link-type="dfn" href="#data-state">data state</a>.
       
 
@@ -1105,7 +1107,7 @@
 
 
   
-    <h4 class="heading settled" data-level="1.3.21" id="tag-attr-name-head"><span class="secno">1.3.21. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="tag-attribute-name-state">Tag attribute name state<a class="self-link" href="#tag-attribute-name-state"></a></dfn></span><a class="self-link" href="#tag-attr-name-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.22" id="tag-attr-name-head"><span class="secno">1.3.22. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="tag-attribute-name-state">Tag attribute name state<a class="self-link" href="#tag-attribute-name-state"></a></dfn></span><a class="self-link" href="#tag-attr-name-head"></a></h4>
 
   
     <dd>
@@ -1155,7 +1157,7 @@
       <dt>EOF
       
       
-      <dd><a data-link-type="dfn" href="#parse-errors">Parse error</a>. Emit the current token as start tag token and
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Emit the current token as start tag token and
      then reprocess the current input character in the <a data-link-type="dfn" href="#data-state">data
      state</a>.
       
@@ -1184,7 +1186,7 @@
 
 
   
-    <h4 class="heading settled" data-level="1.3.22" id="tag-attr-name-after-head"><span class="secno">1.3.22. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="tag-attribute-name-after-state">Tag attribute name after state<a class="self-link" href="#tag-attribute-name-after-state"></a></dfn></span><a class="self-link" href="#tag-attr-name-after-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.23" id="tag-attr-name-after-head"><span class="secno">1.3.23. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="tag-attribute-name-after-state">Tag attribute name after state<a class="self-link" href="#tag-attribute-name-after-state"></a></dfn></span><a class="self-link" href="#tag-attr-name-after-head"></a></h4>
 
   
     <dd>
@@ -1233,7 +1235,7 @@
       <dt>EOF
       
       
-      <dd><a data-link-type="dfn" href="#parse-errors">Parse error</a>. Emit the current token and then reprocess the
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Emit the current token and then reprocess the
      current input character in the <a data-link-type="dfn" href="#data-state">data state</a>.
       
 
@@ -1252,7 +1254,7 @@
 
 
   
-    <h4 class="heading settled" data-level="1.3.23" id="tag-attr-value-before-head"><span class="secno">1.3.23. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="tag-attribute-value-before-state">Tag attribute value before state<a class="self-link" href="#tag-attribute-value-before-state"></a></dfn></span><a class="self-link" href="#tag-attr-value-before-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.24" id="tag-attr-value-before-head"><span class="secno">1.3.24. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="tag-attribute-value-before-state">Tag attribute value before state<a class="self-link" href="#tag-attribute-value-before-state"></a></dfn></span><a class="self-link" href="#tag-attr-value-before-head"></a></h4>
 
   
     <dd>
@@ -1308,7 +1310,7 @@
       <dt>EOF
       
       
-      <dd><a data-link-type="dfn" href="#parse-errors">Parse error</a>. Emit the current token and then reprocess the
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Emit the current token and then reprocess the
      current input character in the <a data-link-type="dfn" href="#data-state">data state</a>.
       
 
@@ -1326,7 +1328,7 @@
 
 
   
-    <h4 class="heading settled" data-level="1.3.24" id="tag-attr-value-dquote-head"><span class="secno">1.3.24. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="tag-attribute-value-double-quoted-state">Tag attribute value double quoted state<a class="self-link" href="#tag-attribute-value-double-quoted-state"></a></dfn></span><a class="self-link" href="#tag-attr-value-dquote-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.25" id="tag-attr-value-dquote-head"><span class="secno">1.3.25. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="tag-attribute-value-double-quoted-state">Tag attribute value double quoted state<a class="self-link" href="#tag-attribute-value-double-quoted-state"></a></dfn></span><a class="self-link" href="#tag-attr-value-dquote-head"></a></h4>
 
   
     <dd>
@@ -1357,7 +1359,7 @@
       <dt>EOF
       
       
-      <dd><a data-link-type="dfn" href="#parse-errors">Parse error</a>. Emit the current token and then reprocess the
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Emit the current token and then reprocess the
      current input character in the <a data-link-type="dfn" href="#data-state">data state</a>.
       
 
@@ -1375,7 +1377,7 @@
 
 
   
-    <h4 class="heading settled" data-level="1.3.25" id="tag-attr-value-squote-head"><span class="secno">1.3.25. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="tag-attribute-value-single-quoted-state">Tag attribute value single quoted state<a class="self-link" href="#tag-attribute-value-single-quoted-state"></a></dfn></span><a class="self-link" href="#tag-attr-value-squote-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.26" id="tag-attr-value-squote-head"><span class="secno">1.3.26. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="tag-attribute-value-single-quoted-state">Tag attribute value single quoted state<a class="self-link" href="#tag-attribute-value-single-quoted-state"></a></dfn></span><a class="self-link" href="#tag-attr-value-squote-head"></a></h4>
 
   
     <dd>
@@ -1406,7 +1408,7 @@
       <dt>EOF
       
       
-      <dd><a data-link-type="dfn" href="#parse-errors">Parse error</a>. Emit the current token and then reprocess the
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Emit the current token and then reprocess the
      current input character in the <a data-link-type="dfn" href="#data-state">data state</a>.
       
 
@@ -1424,7 +1426,7 @@
 
 
   
-    <h4 class="heading settled" data-level="1.3.26" id="tag-attr-value-unquote-head"><span class="secno">1.3.26. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="tag-attribute-value-unquoted-state">Tag attribute value unquoted state<a class="self-link" href="#tag-attribute-value-unquoted-state"></a></dfn></span><a class="self-link" href="#tag-attr-value-unquote-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.27" id="tag-attr-value-unquote-head"><span class="secno">1.3.27. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="tag-attribute-value-unquoted-state">Tag attribute value unquoted state<a class="self-link" href="#tag-attribute-value-unquoted-state"></a></dfn></span><a class="self-link" href="#tag-attr-value-unquote-head"></a></h4>
 
   
     <dd>
@@ -1469,7 +1471,7 @@
       <dt>EOF
       
       
-      <dd><a data-link-type="dfn" href="#parse-errors">Parse error</a>. Emit the current token as start tag token and
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Emit the current token as start tag token and
      then reprocess the current input character in the
       <a data-link-type="dfn" href="#data-state">data state</a>.
       
@@ -1487,7 +1489,7 @@
   
 
   
-    <h4 class="heading settled" data-level="1.3.27" id="charref-attr-head"><span class="secno">1.3.27. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="character-reference-in-attribute-value-state">Character reference in attribute value state<a class="self-link" href="#character-reference-in-attribute-value-state"></a></dfn></span><a class="self-link" href="#charref-attr-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.28" id="charref-attr-head"><span class="secno">1.3.28. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="character-reference-in-attribute-value-state">Character reference in attribute value state<a class="self-link" href="#character-reference-in-attribute-value-state"></a></dfn></span><a class="self-link" href="#charref-attr-head"></a></h4>
 
   
     <dd>
@@ -1511,7 +1513,7 @@
 
 
   
-    <h4 class="heading settled" data-level="1.3.28" id="bogus-comment-head"><span class="secno">1.3.28. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="bogus-comment-state">Bogus comment state<a class="self-link" href="#bogus-comment-state"></a></dfn></span><a class="self-link" href="#bogus-comment-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.29" id="bogus-comment-head"><span class="secno">1.3.29. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="bogus-comment-state">Bogus comment state<a class="self-link" href="#bogus-comment-state"></a></dfn></span><a class="self-link" href="#bogus-comment-head"></a></h4>
 
   
     <dd>
@@ -1520,7 +1522,7 @@
 
 
   
-    <h4 class="heading settled" data-level="1.3.29" id="charref-tokenizer-head"><span class="secno">1.3.29. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="tokenizing-character-references">Tokenizing character references<a class="self-link" href="#tokenizing-character-references"></a></dfn></span><a class="self-link" href="#charref-tokenizer-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.30" id="charref-tokenizer-head"><span class="secno">1.3.30. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="tokenizing-character-references">Tokenizing character references<a class="self-link" href="#tokenizing-character-references"></a></dfn></span><a class="self-link" href="#charref-tokenizer-head"></a></h4>
 
   
     <dd>
@@ -1624,11 +1626,11 @@
        
 
 
-       <p>If no characters match the range, then don’t consume any characters. This is a <a data-link-type="dfn" href="#parse-errors">parse error</a>; return the U+0023 NUMBER SIGN character and if appropriate X character as string of text.</p>
+       <p>If no characters match the range, then don’t consume any characters. This is a <a data-link-type="dfn" href="#parse-error">parse error</a>; return the U+0023 NUMBER SIGN character and if appropriate X character as string of text.</p>
        
 
 
-       <p>Otherwise, if the next character is a U+003B SEMICOLON, consume that too. If it isn’t, there is a <a data-link-type="dfn" href="#parse-errors">parse error</a>.</p>
+       <p>Otherwise, if the next character is a U+003B SEMICOLON, consume that too. If it isn’t, there is a <a data-link-type="dfn" href="#parse-error">parse error</a>.</p>
        
 
 
@@ -1640,7 +1642,7 @@
        
 
 
-       <p>Otherwise, if the number is in the range 0xD800 to 0xDFFF or is greater than 0x10FFFF, then this is a <a data-link-type="dfn" href="#parse-errors">parse error</a>. Return a U+FFFD REPLACEMENT CHARACTER character token.</p>
+       <p>Otherwise, if the number is in the range 0xD800 to 0xDFFF or is greater than 0x10FFFF, then this is a <a data-link-type="dfn" href="#parse-error">parse error</a>. Return a U+FFFD REPLACEMENT CHARACTER character token.</p>
        
 
         
@@ -1668,7 +1670,7 @@
        
 
 
-       <p>Otherwise, a character reference is parsed. If the last character matched is not a U+003B SEMICOLON character (<code>;</code>), there is a <a data-link-type="dfn" href="#parse-errors">parse error</a>.</p>
+       <p>Otherwise, a character reference is parsed. If the last character matched is not a U+003B SEMICOLON character (<code>;</code>), there is a <a data-link-type="dfn" href="#parse-error">parse error</a>.</p>
        
 
 
@@ -1694,7 +1696,7 @@
 
 
   
-    <h4 class="heading settled" data-level="1.3.30" id="doctype-head"><span class="secno">1.3.30. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="doctype-state">DOCTYPE state<a class="self-link" href="#doctype-state"></a></dfn></span><a class="self-link" href="#doctype-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.31" id="doctype-head"><span class="secno">1.3.31. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="doctype-state">DOCTYPE state<a class="self-link" href="#doctype-state"></a></dfn></span><a class="self-link" href="#doctype-head"></a></h4>
 
   
     <p class="warning">TODO</p>
@@ -1826,7 +1828,7 @@
       <dd>
 
 
-       <p><a data-link-type="dfn" href="#parse-errors">Parse error</a>. Reprocess the token in the <a data-link-type="dfn" href="#end-phase">end
+       <p><a data-link-type="dfn" href="#parse-error">Parse error</a>. Reprocess the token in the <a data-link-type="dfn" href="#end-phase">end
     phase</a>.</p>
        
 
@@ -1838,7 +1840,7 @@
       
   
       <dd>
-    <a data-link-type="dfn" href="#parse-errors">Parse error</a>. Ignore the token.
+    <a data-link-type="dfn" href="#parse-error">Parse error</a>. Ignore the token.
   
       
 
@@ -1895,7 +1897,7 @@ steps until further notice:
 
 
        <p>If the tag name of the <a href="current element">current node</a> does not match the tag
-    name of the end tag token this is a <a data-link-type="dfn" href="#parse-errors">parse error</a>.</p>
+    name of the end tag token this is a <a data-link-type="dfn" href="#parse-error">parse error</a>.</p>
        
 
 
@@ -1958,7 +1960,7 @@ steps until further notice:
       
   
       <dd>
-    <a data-link-type="dfn" href="#parse-errors">Parse error</a>. Reprocess the token in the <a data-link-type="dfn" href="#end-phase">end phase</a>.
+    <a data-link-type="dfn" href="#parse-error">Parse error</a>. Reprocess the token in the <a data-link-type="dfn" href="#end-phase">end phase</a>.
 
   
       
@@ -2018,7 +2020,7 @@ steps until further notice:
       <dd>
 
 
-       <p><a data-link-type="dfn" href="#parse-errors">Parse error</a>. Ignore the token.</p>
+       <p><a data-link-type="dfn" href="#parse-error">Parse error</a>. Ignore the token.</p>
        
   
       
@@ -2069,36 +2071,36 @@ and not intended to be performant.)
   <h2 class="no-num heading settled" id="index"><span class="content">Index</span><a class="self-link" href="#index"></a></h2>
   <h3 class="no-num heading settled" id="index-defined-here"><span class="content">Terms defined by this specification</span><a class="self-link" href="#index-defined-here"></a></h3>
   <ul class="indexlist">
-   <li>additional allowed character, <a href="#additional-allowed-character">1.3.29</a>
+   <li>additional allowed character, <a href="#additional-allowed-character">1.3.30</a>
    <li>append a
   character, <a href="#append-a-character">1.4</a>
    <li>ASCII digits, <a href="#ascii-digits">3</a>
    <li>ASCII hex digits, <a href="#ascii-hex-digits">3</a>
-   <li>Bogus comment state, <a href="#bogus-comment-state">1.3.28</a>
-   <li>CDATA bracket state, <a href="#cdata-bracket-state">1.3.16</a>
-   <li>CDATA end state, <a href="#cdata-end-state">1.3.17</a>
-   <li>CDATA state, <a href="#cdata-state">1.3.15</a>
-   <li>Character reference in attribute value state, <a href="#character-reference-in-attribute-value-state">1.3.27</a>
+   <li>Bogus comment state, <a href="#bogus-comment-state">1.3.29</a>
+   <li>CDATA bracket state, <a href="#cdata-bracket-state">1.3.17</a>
+   <li>CDATA end state, <a href="#cdata-end-state">1.3.18</a>
+   <li>CDATA state, <a href="#cdata-state">1.3.16</a>
+   <li>Character reference in attribute value state, <a href="#character-reference-in-attribute-value-state">1.3.28</a>
    <li>Character reference in data state, <a href="#character-reference-in-data-state">1.3.2</a>
-   <li>Comment dash state, <a href="#comment-dash-state">1.3.13</a>
-   <li>Comment end state, <a href="#comment-end-state">1.3.14</a>
-   <li>Comment state, <a href="#comment-state">1.3.12</a>
-   <li>consume a character reference, <a href="#consume-a-character-reference">1.3.29</a>
+   <li>Comment dash state, <a href="#comment-dash-state">1.3.14</a>
+   <li>Comment end state, <a href="#comment-end-state">1.3.15</a>
+   <li>Comment state, <a href="#comment-state">1.3.13</a>
+   <li>consume a character reference, <a href="#consume-a-character-reference">1.3.30</a>
    <li>create an element for the token, <a href="#create-an-element-for-the-token">1.4</a>
    <li>current element, <a href="#current-element">1.4</a>
    <li>Data state, <a href="#data-state">1.3.1</a>
-   <li>DOCTYPE state, <a href="#doctype-state">1.3.30</a>
+   <li>DOCTYPE state, <a href="#doctype-state">1.3.31</a>
    <li>element in
   scope, <a href="#element-in-scope">1.4</a>
-   <li>Empty tag state, <a href="#empty-tag-state">1.3.19</a>
+   <li>Empty tag state, <a href="#empty-tag-state">1.3.20</a>
    <li>End phase, <a href="#end-phase">1.4</a>
    <li>End tag name after state, <a href="#end-tag-name-after-state">1.3.6</a>
    <li>End tag name state, <a href="#end-tag-name-state">1.3.5</a>
    <li>End tag state, <a href="#end-tag-state">1.3.4</a>
    <li>insert an element, <a href="#insert-an-element">1.4</a>
    <li>Main phase, <a href="#main-phase">1.4</a>
-   <li>Markup declaration state, <a href="#markup-declaration-state">1.3.11</a>
-   <li>parse errors, <a href="#parse-errors">1</a>
+   <li>Markup declaration state, <a href="#markup-declaration-state">1.3.12</a>
+   <li>parse error, <a href="#parse-error">1</a>
    <li>Pi after state, <a href="#pi-after-state">1.3.11</a>
    <li>Pi data state, <a href="#pi-data-state">1.3.10</a>
    <li>Pi state, <a href="#pi-state">1.3.7</a>
@@ -2107,22 +2109,22 @@ and not intended to be performant.)
    <li>stack of open elements, <a href="#stack-of-open-elements">1.4</a>
    <li>Start phase, <a href="#start-phase">1.4</a>
    <li>stop parsing, <a href="#stop-parsing">1.4</a>
-   <li>Tag attribute name after state, <a href="#tag-attribute-name-after-state">1.3.22</a>
-   <li>Tag attribute name before state, <a href="#tag-attribute-name-before-state">1.3.20</a>
-   <li>Tag attribute name state, <a href="#tag-attribute-name-state">1.3.21</a>
-   <li>Tag attribute value before state, <a href="#tag-attribute-value-before-state">1.3.23</a>
-   <li>Tag attribute value double quoted state, <a href="#tag-attribute-value-double-quoted-state">1.3.24</a>
-   <li>Tag attribute value single quoted state, <a href="#tag-attribute-value-single-quoted-state">1.3.25</a>
-   <li>Tag attribute value unquoted state, <a href="#tag-attribute-value-unquoted-state">1.3.26</a>
-   <li>Tag name state, <a href="#tag-name-state">1.3.18</a>
+   <li>Tag attribute name after state, <a href="#tag-attribute-name-after-state">1.3.23</a>
+   <li>Tag attribute name before state, <a href="#tag-attribute-name-before-state">1.3.21</a>
+   <li>Tag attribute name state, <a href="#tag-attribute-name-state">1.3.22</a>
+   <li>Tag attribute value before state, <a href="#tag-attribute-value-before-state">1.3.24</a>
+   <li>Tag attribute value double quoted state, <a href="#tag-attribute-value-double-quoted-state">1.3.25</a>
+   <li>Tag attribute value single quoted state, <a href="#tag-attribute-value-single-quoted-state">1.3.26</a>
+   <li>Tag attribute value unquoted state, <a href="#tag-attribute-value-unquoted-state">1.3.27</a>
+   <li>Tag name state, <a href="#tag-name-state">1.3.19</a>
    <li>Tag state, <a href="#tag-state">1.3.3</a>
    <li>Tokenization, <a href="#tokenization">1.3</a>
-   <li>Tokenizing character references, <a href="#tokenizing-character-references">1.3.29</a>
+   <li>Tokenizing character references, <a href="#tokenizing-character-references">1.3.30</a>
    <li>XML parser, <a href="#xml-parser">1</a></ul>
   <h2 class="no-num heading settled" id="references"><span class="content">References</span><a class="self-link" href="#references"></a></h2>
   <h3 class="no-num heading settled" id="normative"><span class="content">Normative References</span><a class="self-link" href="#normative"></a></h3>
   <dl>
    <dt id="biblio-rfc2119"><a class="self-link" href="#biblio-rfc2119"></a>[RFC2119]
-   <dd>S. Bradner. <a href="https://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>. March 1997. Best Current Practice. URL: <a href="https://tools.ietf.org/html/rfc2119">https://tools.ietf.org/html/rfc2119</a></dl>
+   <dd>S. Bradner. <a href="http://www.ietf.org/rfc/rfc2119.txt">Key words for use in RFCs to Indicate Requirement Levels</a>. March 1997. Best Current Practice. URL: <a href="http://www.ietf.org/rfc/rfc2119.txt">http://www.ietf.org/rfc/rfc2119.txt</a></dl>
  </body>
 </html>
