@@ -61,7 +61,7 @@ The stream of Unicode characters that consists the input to the tokenization sta
       <dd>Switch to <a>character reference in data state</a>.</dd>
 
       <dt>U+003C LESSER-THAN SIGN (<code>&lt;</code>)</dt>
-      <dd>Switch to the <a>Tag state</a>.</dd>
+      <dd>Switch to the <a>tag state</a>.</dd>
 
       <dt>EOF</dt>
       <dd>Emit an end-of-file token.</dd>
@@ -95,7 +95,7 @@ The stream of Unicode characters that consists the input to the tokenization sta
 
     <dl class="switch">
       <dt>U+002F SOLIDUS (<code>/</code>)</dt>
-      <dd>Switch to the <a>End tag state</a>.</dd>
+      <dd>Switch to the <a>end tag state</a>.</dd>
 
       <dt>U+003F QUESTION MARK(<code>?</code>)</dt>
 
@@ -500,7 +500,7 @@ The stream of Unicode characters that consists the input to the tokenization sta
      current input character in the <a>data state</a>.</dd>
 
       <dt>U+002F SOLIDUS (<code>/</code>)</dt>
-      <dd>Switch to the <a>empty tag state</a>.</dd>
+      <dd>Set current tag to empty tag. Switch to the <a>empty tag state</a>.</dd>
 
       <dt>Anything else</dt>
       <dd>Append  the current input character to the tag name and stay in the
@@ -548,7 +548,7 @@ The stream of Unicode characters that consists the input to the tokenization sta
       <dd>Emit the current token and then switch to the <a>data state</a>.</dd>
 
       <dt>U+002F SOLIDUS (<code>/</code>)</dt>
-      <dd>Switch to the <a>Empty tag state</a>.</dd>
+      <dd>Set current tag to empty tag. Switch to the <a>empty tag state</a>.</dd>
 
       <dt>U+003A COLON (<code>:</code>)</dt>
       <dd><a>Parse error</a>. Stay in the current state.</dd>
@@ -587,7 +587,7 @@ The stream of Unicode characters that consists the input to the tokenization sta
       <dd>Switch to the <a>tag attribute name after state</a>.</dd>
 
       <dt>U+002F SOLIDUS (<code>/</code>)</dt>
-      <dd>Switch to the <a>Empty tag state</a>.</dd>
+      <dd>Set current tag to empty tag. Switch to the <a>empty tag state</a>.</dd>
 
       <dt>EOF</dt>
       <dd><a>Parse error</a>. Emit the current token as start tag token and
@@ -630,7 +630,7 @@ The stream of Unicode characters that consists the input to the tokenization sta
       <dd>Emit the current token and then switch to the <a>data state</a>.</dd>
 
       <dt>U+002F SOLIDUS (<code>/</code>)</dt>
-      <dd>Switch to the <a>empty tag state</a>.</dd>
+      <dd>Set current tag to empty tag. Switch to the <a>empty tag state</a>.</dd>
 
       <dt>EOF</dt>
       <dd><a>Parse error</a>. Emit the current token and then reprocess the
