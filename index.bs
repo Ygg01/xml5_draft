@@ -349,6 +349,9 @@ The stream of Unicode characters that consists the input to the tokenization sta
       <dt>U+002D HYPHEN-MINUS, (<code>-</code>)</dt>
       <dd>Switch to the <a>comment dash state</a>.</dd>
 
+      <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
+      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit the comment token.</dd>
+
       <dt>EOF</dt>
       <dd><a>Parse error</a>. Emit the comment token and then reprocess the
      current input character in the <a>data state</a>.</dd>
