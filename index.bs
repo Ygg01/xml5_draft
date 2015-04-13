@@ -242,7 +242,7 @@ The stream of Unicode characters that consists the input to the tokenization sta
       <dd>Switch to the <a>pi target after state</a>.</dd>
 
       <dt>EOF</dt>
-      <dd><a>Parse error</a>. Emit the current token and then reprocess the
+      <dd><a>Parse error</a>. Emit the current processing instruction token and then reprocess the
      current input character in the <a>data state</a>.</dd>
 
       <dt>U+003F QUESTION MARK(<code>?</code>)</dt>
@@ -285,7 +285,7 @@ The stream of Unicode characters that consists the input to the tokenization sta
       <dd>Switch to the <a>pi after state</a>.</dd>
 
       <dt>EOF</dt>
-      <dd><a>Parse error</a>. Emit the current token and then reprocess the
+      <dd><a>Parse error</a>. Emit the current processing instruction token and then reprocess the
      current input character in the <a>data state</a>.</dd>
 
       <dt>Anything else</dt>
