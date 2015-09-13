@@ -329,9 +329,7 @@ The stream of Unicode characters that consists the input to the tokenization sta
     state</a>.
 
     Otherwise, if the next seven characters are an exact match for "DOCTYPE",
-    then this is a <a>parse error</a>. Consume those characters and switch
-    to the <a>DOCTYPE state</a>.
-    <!-- XXX make them legal? -->
+    then this consume those characters and switch to the <a>DOCTYPE state</a>.
 
     Otherwise, this is a <a>parse error</a>. Switch to the <a>bogus
     comment state</a>.
@@ -879,7 +877,7 @@ The stream of Unicode characters that consists the input to the tokenization sta
         If there wasn't a parse error return a reference with name equal to consumed characters, omitting the U+003B SEMICOLON character (<code>;</code>).
 
         <div class="example">
-          If the markup contains following attribute <code>This is a &amp;ref;</code>, character tokenizer should return this as a reference named ref. However if the attribute defined is defined as <code>This is &amp;notref</code>, then the tokenizer will interpret this as a text <code>This is &amp;notref</code>, while emitting a parse error.
+          If the markup contains following attribute <code>This is a &amp;ref;</code>, character tokenizer should return this as a reference named ref. However if the attribute defined is defined as <code>This is &amp;notref</code>, then the tokenizer will interpret this as a text <code>This is &amp;notref</code>, while emitting a <a>parse error</a>.
         </div>
 
       </dd>
@@ -906,7 +904,7 @@ The stream of Unicode characters that consists the input to the tokenization sta
 
       <dt>Anything else</dt>
       <dd><a>Parse error</a>. Switch to <a>before DOCTYPE name state</a>. Reconsume the character.
-     the current state.</dd>
+      </dd>
     </dl>
   </dd>
 
@@ -960,7 +958,7 @@ The stream of Unicode characters that consists the input to the tokenization sta
       <dd> Create a new DOCTYPE token. Emit token. Switch to <a>data state</a>.</dd>
 
       <dt>EOF</dt>
-      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token with default attributes.
+      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token.
       Reconsume the EOF character.</dd>
 
       <dt>Anything else</dt>
@@ -987,13 +985,15 @@ The stream of Unicode characters that consists the input to the tokenization sta
       <dd> Switch to data state. Emit current DOCTYPE token.</dd>
 
       <dt>EOF</dt>
-      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token with default attributes.
+      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token.
       Reconsume the EOF character.</dd>
 
       <dt>Anything else</dt>
       <dd>If the six characters starting from the current input character are an <a>ASCII case-insensitive</a> match for word "PUBLIC", then consume those characters and switch to the <a>after DOCTYPE public keyword state</a>.
 
-      Otherwise, if the six characters starting from the current input character are not an <a>ASCII case-insensitive</a>match for word "PUBLIC", then consume those characters and switch to the <a>after DOCTYPE public keyword state</a></dd>
+      Otherwise, if the six characters starting from the current input character are an <a>ASCII case-insensitive</a> match for word "SYSTEM", then consume those charactes and switch to the <a>after DOCTYPE system keyword state</a>.
+
+      Otherwise, this is a <a>parse error</a>. Switch to <a>bogus DOCTYPE state</a>.
     </dl>
   </dd>
 
@@ -1026,7 +1026,6 @@ The stream of Unicode characters that consists the input to the tokenization sta
     </dl>
   </dd>
 
-
   <h4 class="heading" id="after_doctype_system_keyword_state">
     <span class="content"><dfn>After DOCTYPE system keyword state</dfn></span>
   </h4>
@@ -1052,7 +1051,7 @@ The stream of Unicode characters that consists the input to the tokenization sta
       <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit that DOCTYPE token. Reconsume the EOF character.</dd>
 
       <dt>Anything else</dt>
-      <dd><a>Parse error</a>. Switch to the <a>bogus DOCTYPE state</a>. Emit that DOCTYPE token. Reconsume the EOF character.</dd>
+      <dd><a>Parse error</a>. Switch to the <a>bogus DOCTYPE state</a>.</dd>
     </dl>
   </dd>
 
@@ -1079,7 +1078,7 @@ The stream of Unicode characters that consists the input to the tokenization sta
       <dd><a>Parse error</a>. Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
 
       <dt>EOF</dt>
-      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token with default attributes. Reconsume the EOF character.</dd>
+      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token. Reconsume the EOF character.</dd>
 
       <dt>Anything else</dt>
       <dd><a>Parse error</a>. Switch to the <a>bogus DOCTYPE state</a>.</dd>
@@ -1108,7 +1107,7 @@ The stream of Unicode characters that consists the input to the tokenization sta
       <dd><a>Parse error</a>. Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
 
       <dt>EOF</dt>
-      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token with default attributes. Reconsume the EOF character.</dd>
+      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token. Reconsume the EOF character.</dd>
 
       <dt>Anything else</dt>
       <dd><a>Parse error</a>. Switch to the <a>bogus DOCTYPE state</a>.</dd>
@@ -1128,7 +1127,7 @@ The stream of Unicode characters that consists the input to the tokenization sta
       <dd><a>Parse error</a>. Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
 
       <dt>EOF</dt>
-      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token with default attributes. Reconsume the EOF character.</dd>
+      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token. Reconsume the EOF character.</dd>
 
       <dt>Anything else</dt>
       <dd>Append the current input character to the current DOCTYPE token's public identifier.</dd>
@@ -1149,7 +1148,7 @@ The stream of Unicode characters that consists the input to the tokenization sta
       <dd><a>Parse error</a>. Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
 
       <dt>EOF</dt>
-      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token with default attributes. Reconsume the EOF character.</dd>
+      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token. Reconsume the EOF character.</dd>
 
       <dt>Anything else</dt>
       <dd>Append the current input character to the current DOCTYPE token's public identifier.</dd>
@@ -1178,10 +1177,10 @@ The stream of Unicode characters that consists the input to the tokenization sta
       <dd>Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
 
       <dt>EOF</dt>
-      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token with default attributes. Reconsume the EOF character.</dd>
+      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token. Reconsume the EOF character.</dd>
 
       <dt>Anything else</dt>
-      <dd>Append the current input character to the current DOCTYPE token's public identifier.</dd>
+      <dd><a>Parse error</a>. Switch to <a>bogus DOCTYPE state</a>.</dd>
     </dl>
   </dd>
 
@@ -1207,7 +1206,7 @@ The stream of Unicode characters that consists the input to the tokenization sta
       <dd>Set the DOCTYPE token's system identifier to the empty string (not missing) then switch to the <a>DOCTYPE system identifier (double-quoted) state</a>.</dd>
 
       <dt>EOF</dt>
-      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token with default attributes. Reconsume the EOF character.</dd>
+      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token. Reconsume the EOF character.</dd>
 
       <dt>Anything else</dt>
       <dd><a>Parse error</a>. Switch to <a>Bogus DOCTYPE state</a>.</dd>
@@ -1227,7 +1226,7 @@ The stream of Unicode characters that consists the input to the tokenization sta
       <dd><a>Parse error</a>. Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
 
       <dt>EOF</dt>
-      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token with default attributes. Reconsume the EOF character.</dd>
+      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token. Reconsume the EOF character.</dd>
 
       <dt>Anything else</dt>
       <dd>Append the current input character to the current DOCTYPE token's system identifier.</dd>
@@ -1247,7 +1246,7 @@ The stream of Unicode characters that consists the input to the tokenization sta
       <dd><a>Parse error</a>. Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
 
       <dt>EOF</dt>
-      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token with default attributes. Reconsume the EOF character.</dd>
+      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token. Reconsume the EOF character.</dd>
 
       <dt>Anything else</dt>
       <dd>Append the current input character to the current DOCTYPE token's system identifier.</dd>
@@ -1270,7 +1269,7 @@ The stream of Unicode characters that consists the input to the tokenization sta
       <dd>Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
 
       <dt>EOF</dt>
-      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token with default attributes. Reconsume the EOF character.</dd>
+      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token. Reconsume the EOF character.</dd>
 
       <dt>Anything else</dt>
       <dd><a>Parse error</a>. Switch to <a>Bogus DOCTYPE state</a>.</dd>
@@ -1284,10 +1283,10 @@ The stream of Unicode characters that consists the input to the tokenization sta
     Consume the next input character:
     <dl class="switch">
       <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
-      <dd>Switch to <a>data state</a>. Emit DOCTYPE token with default attributes.</dd>
+      <dd>Switch to <a>data state</a>. Emit DOCTYPE token.</dd>
 
       <dt>EOF</dt>
-      <dd>Switch to the <a>data state</a>. Emit DOCTYPE token with default attributes. Reconsume the EOF character.</dd>
+      <dd>Switch to the <a>data state</a>. Emit DOCTYPE token. Reconsume the EOF character.</dd>
 
       <dt>Anything else</dt>
       <dd>Ignore character.</dd>
@@ -1460,7 +1459,7 @@ steps until further notice:
   </dd>
 </dl>
 
-<dt><dfn>End phase</dfn></dt>
+<dt><dfn>End phase</dfn></dt>before
 <dd><p>
   Tokens in end phase <em class="ct">must</em> be handled as follows:
 
@@ -1511,3 +1510,7 @@ document, it <em class="ct">must</em> follow these steps:
 The <dfn>ASCII digits</dfn> are the characters in the range U+0030 DIGIT ZERO (<code>0</code>) to U+0039 DIGIT NINE (<code>9</code>).
 
 The <dfn>ASCII hex digits</dfn>  are the characters in the ranges U+0030 DIGIT ZERO (<code>0</code>) to U+0039 DIGIT NINE (<code>9</code>), U+0041 LATIN CAPITAL LETTER A to U+0046 LATIN CAPITAL LETTER F, and U+0061 LATIN SMALL LETTER A to U+0066 LATIN SMALL LETTER F.
+
+The <dfn>lowercase ASCII letters</dfn> are characters in the range between  U+0061 LATIN SMALL LETTER A to U+007A LATIN SMALL LETTER Z.
+
+The <dfn>uppercase ASCII letters</dfn> are characters in the range between U+0041 LATIN CAPITAL LETTER A to U+005A LATIN CAPITAL LETTER Z.

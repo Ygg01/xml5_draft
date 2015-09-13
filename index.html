@@ -39,7 +39,7 @@
    <h1 class="p-name no-ref allcaps" id="title">XML5</h1>
   
    <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Living Standard — Last Updated
-    <time class="dt-updated" datetime="2015-04-12">12 April 2015</time></span></h2>
+    <time class="dt-updated" datetime="2015-10-17">17 October 2015</time></span></h2>
   
    <div data-fill-with="spec-metadata">
     <dl>
@@ -78,37 +78,52 @@
       <li><a href="#input-stream"><span class="secno">1.2</span> <span class="content">Input stream</span></a>
       <li><a href="#tokenization-overview"><span class="secno">1.3</span> <span class="content"><span>Tokenization</span></span></a>
        <ul class="toc">
-        <li><a href="#data-head"><span class="secno">1.3.1</span> <span class="content"><span>Data state</span></span></a>
-        <li><a href="#charref-data-head"><span class="secno">1.3.2</span> <span class="content"><span>Character reference in data state</span></span></a>
-        <li><a href="#tag-head"><span class="secno">1.3.3</span> <span class="content"><span>Tag state</span></span></a>
-        <li><a href="#end-tag-head"><span class="secno">1.3.4</span> <span class="content"><span>End tag state</span></span></a>
-        <li><a href="#end-tag-name-head"><span class="secno">1.3.5</span> <span class="content"><span>End tag name state</span></span></a>
-        <li><a href="#end-tag-after-head"><span class="secno">1.3.6</span> <span class="content"><span>End tag name after state</span></span></a>
-        <li><a href="#pi-head"><span class="secno">1.3.7</span> <span class="content"><span>Pi state</span></span></a>
-        <li><a href="#pi-target-head"><span class="secno">1.3.8</span> <span class="content"><span>Pi target state</span></span></a>
-        <li><a href="#pi-target-after-head"><span class="secno">1.3.9</span> <span class="content"><span>Pi target after state</span></span></a>
-        <li><a href="#pi-data-head"><span class="secno">1.3.10</span> <span class="content"><span>Pi data state</span></span></a>
-        <li><a href="#pi-after-head"><span class="secno">1.3.11</span> <span class="content"><span>Pi after state</span></span></a>
-        <li><a href="#markup-decl"><span class="secno">1.3.12</span> <span class="content"><span>Markup declaration state</span></span></a>
-        <li><a href="#comment-head"><span class="secno">1.3.13</span> <span class="content"><span>Comment state</span></span></a>
-        <li><a href="#comment-dash-head"><span class="secno">1.3.14</span> <span class="content"><span>Comment dash state</span></span></a>
-        <li><a href="#comment-end-head"><span class="secno">1.3.15</span> <span class="content"><span>Comment end state</span></span></a>
-        <li><a href="#cdata-head"><span class="secno">1.3.16</span> <span class="content"><span>CDATA state</span></span></a>
-        <li><a href="#cdata-bracket-head"><span class="secno">1.3.17</span> <span class="content"><span>CDATA bracket state</span></span></a>
-        <li><a href="#cdata-end-head"><span class="secno">1.3.18</span> <span class="content"><span>CDATA end state</span></span></a>
-        <li><a href="#tag-name-head"><span class="secno">1.3.19</span> <span class="content"><span>Tag name state</span></span></a>
-        <li><a href="#empty-tag-head"><span class="secno">1.3.20</span> <span class="content"><span>Empty tag state</span></span></a>
-        <li><a href="#tag-attr-name-before-head"><span class="secno">1.3.21</span> <span class="content"><span>Tag attribute name before state</span></span></a>
-        <li><a href="#tag-attr-name-head"><span class="secno">1.3.22</span> <span class="content"><span>Tag attribute name state</span></span></a>
-        <li><a href="#tag-attr-name-after-head"><span class="secno">1.3.23</span> <span class="content"><span>Tag attribute name after state</span></span></a>
-        <li><a href="#tag-attr-value-before-head"><span class="secno">1.3.24</span> <span class="content"><span>Tag attribute value before state</span></span></a>
-        <li><a href="#tag-attr-value-dquote-head"><span class="secno">1.3.25</span> <span class="content"><span>Tag attribute value double quoted state</span></span></a>
-        <li><a href="#tag-attr-value-squote-head"><span class="secno">1.3.26</span> <span class="content"><span>Tag attribute value single quoted state</span></span></a>
-        <li><a href="#tag-attr-value-unquote-head"><span class="secno">1.3.27</span> <span class="content"><span>Tag attribute value unquoted state</span></span></a>
-        <li><a href="#charref-attr-head"><span class="secno">1.3.28</span> <span class="content"><span>Character reference in attribute value state</span></span></a>
-        <li><a href="#bogus-comment-head"><span class="secno">1.3.29</span> <span class="content"><span>Bogus comment state</span></span></a>
-        <li><a href="#charref-tokenizer-head"><span class="secno">1.3.30</span> <span class="content"><span>Tokenizing character references</span></span></a>
-        <li><a href="#doctype-head"><span class="secno">1.3.31</span> <span class="content"><span>DOCTYPE state</span></span></a>
+        <li><a href="#data_state"><span class="secno">1.3.1</span> <span class="content"><span>Data state</span></span></a>
+        <li><a href="#charref_data_head"><span class="secno">1.3.2</span> <span class="content"><span>Character reference in data state</span></span></a>
+        <li><a href="#tag_state"><span class="secno">1.3.3</span> <span class="content"><span>Tag state</span></span></a>
+        <li><a href="#end_tag_state"><span class="secno">1.3.4</span> <span class="content"><span>End tag state</span></span></a>
+        <li><a href="#end_stag_name_state"><span class="secno">1.3.5</span> <span class="content"><span>End tag name state</span></span></a>
+        <li><a href="#end_tag_name_after_state"><span class="secno">1.3.6</span> <span class="content"><span>End tag name after state</span></span></a>
+        <li><a href="#pi_state"><span class="secno">1.3.7</span> <span class="content"><span>Pi state</span></span></a>
+        <li><a href="#pi_target_state"><span class="secno">1.3.8</span> <span class="content"><span>Pi target state</span></span></a>
+        <li><a href="#pi_target_after_state"><span class="secno">1.3.9</span> <span class="content"><span>Pi target after state</span></span></a>
+        <li><a href="#pi_data_state"><span class="secno">1.3.10</span> <span class="content"><span>Pi data state</span></span></a>
+        <li><a href="#pi_after_state"><span class="secno">1.3.11</span> <span class="content"><span>Pi after state</span></span></a>
+        <li><a href="#markup_decl"><span class="secno">1.3.12</span> <span class="content"><span>Markup declaration state</span></span></a>
+        <li><a href="#comment_state"><span class="secno">1.3.13</span> <span class="content"><span>Comment state</span></span></a>
+        <li><a href="#comment_dash_state"><span class="secno">1.3.14</span> <span class="content"><span>Comment dash state</span></span></a>
+        <li><a href="#comment_end_state"><span class="secno">1.3.15</span> <span class="content"><span>Comment end state</span></span></a>
+        <li><a href="#cdata_state"><span class="secno">1.3.16</span> <span class="content"><span>CDATA state</span></span></a>
+        <li><a href="#cdata_bracket_state"><span class="secno">1.3.17</span> <span class="content"><span>CDATA bracket state</span></span></a>
+        <li><a href="#cdata_end_state"><span class="secno">1.3.18</span> <span class="content"><span>CDATA end state</span></span></a>
+        <li><a href="#tag_name_state"><span class="secno">1.3.19</span> <span class="content"><span>Tag name state</span></span></a>
+        <li><a href="#empty_tag_state"><span class="secno">1.3.20</span> <span class="content"><span>Empty tag state</span></span></a>
+        <li><a href="#tag_attr_name_before_state"><span class="secno">1.3.21</span> <span class="content"><span>Tag attribute name before state</span></span></a>
+        <li><a href="#tag_attr_name_state"><span class="secno">1.3.22</span> <span class="content"><span>Tag attribute name state</span></span></a>
+        <li><a href="#tag_attr_name_after_state"><span class="secno">1.3.23</span> <span class="content"><span>Tag attribute name after state</span></span></a>
+        <li><a href="#tag_attr_value_before_state"><span class="secno">1.3.24</span> <span class="content"><span>Tag attribute value before state</span></span></a>
+        <li><a href="#tag_attr_value_double_quote_state"><span class="secno">1.3.25</span> <span class="content"><span>Tag attribute value double quoted state</span></span></a>
+        <li><a href="#tag_attr_value_single_quote_state"><span class="secno">1.3.26</span> <span class="content"><span>Tag attribute value single quoted state</span></span></a>
+        <li><a href="#tag_attr_value_unquote_state"><span class="secno">1.3.27</span> <span class="content"><span>Tag attribute value unquoted state</span></span></a>
+        <li><a href="#charref_attr_state"><span class="secno">1.3.28</span> <span class="content"><span>Character reference in attribute value state</span></span></a>
+        <li><a href="#bogus_comment_state"><span class="secno">1.3.29</span> <span class="content"><span>Bogus comment state</span></span></a>
+        <li><a href="#tokenizing_character_ref"><span class="secno">1.3.30</span> <span class="content"><span>Tokenizing character references</span></span></a>
+        <li><a href="#doctype_state"><span class="secno">1.3.31</span> <span class="content"><span>DOCTYPE state</span></span></a>
+        <li><a href="#before_doctype_name_state"><span class="secno">1.3.32</span> <span class="content"><span>Before DOCTYPE name state</span></span></a>
+        <li><a href="#doctype_name_state"><span class="secno">1.3.33</span> <span class="content"><span>DOCTYPE name state</span></span></a>
+        <li><a href="#after_doctype_name_state"><span class="secno">1.3.34</span> <span class="content"><span>After DOCTYPE name state</span></span></a>
+        <li><a href="#after_doctype_public_keyword_state"><span class="secno">1.3.35</span> <span class="content"><span>After DOCTYPE public keyword state</span></span></a>
+        <li><a href="#after_doctype_system_keyword_state"><span class="secno">1.3.36</span> <span class="content"><span>After DOCTYPE system keyword state</span></span></a>
+        <li><a href="#before_doctype_system_identifier_state"><span class="secno">1.3.37</span> <span class="content"><span>Before DOCTYPE system identifier state</span></span></a>
+        <li><a href="#before_doctype_public_identifier_state"><span class="secno">1.3.38</span> <span class="content"><span>Before DOCTYPE public identifier state</span></span></a>
+        <li><a href="#doctype_public_identifier_single_quoted_state"><span class="secno">1.3.39</span> <span class="content"><span>DOCTYPE public identifier (single-quoted) state</span></span></a>
+        <li><a href="#doctype_public_identifier_double_quoted_state"><span class="secno">1.3.40</span> <span class="content"><span>DOCTYPE public identifier (double-quoted) state</span></span></a>
+        <li><a href="#after_doctype_public_identifier_state"><span class="secno">1.3.41</span> <span class="content"><span>After DOCTYPE public identifier state</span></span></a>
+        <li><a href="#between_doctype_public_and_system_identifier_state"><span class="secno">1.3.42</span> <span class="content"><span>Between DOCTYPE public and system identifiers state</span></span></a>
+        <li><a href="#doctype_system_identifier_single_quote_state"><span class="secno">1.3.43</span> <span class="content"><span>DOCTYPE system identifier (single-quoted) state</span></span></a>
+        <li><a href="#doctype_system_identifier_double_quote_state"><span class="secno">1.3.44</span> <span class="content"><span>DOCTYPE system identifier (double-quoted) state</span></span></a>
+        <li><a href="#after_doctype_system_identifier_state"><span class="secno">1.3.45</span> <span class="content"><span>After DOCTYPE system identifiers state</span></span></a>
+        <li><a href="#bogus_doctype_state"><span class="secno">1.3.46</span> <span class="content"><span>Bogus DOCTYPE state</span></span></a>
        </ul>
       <li><a href="#tree-construction"><span class="secno">1.4</span> <span class="content">Tree construction</span></a>
      </ul>
@@ -118,6 +133,7 @@
     <li><a href="#index"><span class="secno"></span> <span class="content">Index</span></a>
      <ul class="toc">
       <li><a href="#index-defined-here"><span class="secno"></span> <span class="content">Terms defined by this specification</span></a>
+      <li><a href="#index-defined-elsewhere"><span class="secno"></span> <span class="content">Terms defined by reference</span></a>
      </ul>
     <li><a href="#references"><span class="secno"></span> <span class="content">References</span></a>
      <ul class="toc">
@@ -164,7 +180,7 @@
 
    <dl>
   
-    <h4 class="heading settled" data-level="1.3.1" id="data-head"><span class="secno">1.3.1. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="data-state">Data state<a class="self-link" href="#data-state"></a></dfn></span><a class="self-link" href="#data-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.1" id="data_state"><span class="secno">1.3.1. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="data-state">Data state<a class="self-link" href="#data-state"></a></dfn></span><a class="self-link" href="#data_state"></a></h4>
 
   
     <dd>
@@ -207,7 +223,7 @@
   
 
   
-    <h4 class="heading settled" data-level="1.3.2" id="charref-data-head"><span class="secno">1.3.2. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="character-reference-in-data-state">Character reference in data state<a class="self-link" href="#character-reference-in-data-state"></a></dfn></span><a class="self-link" href="#charref-data-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.2" id="charref_data_head"><span class="secno">1.3.2. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="character-reference-in-data-state">Character reference in data state<a class="self-link" href="#character-reference-in-data-state"></a></dfn></span><a class="self-link" href="#charref_data_head"></a></h4>
 
   
     <dd>
@@ -227,7 +243,7 @@
   
 
   
-    <h4 class="heading settled" data-level="1.3.3" id="tag-head"><span class="secno">1.3.3. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="tag-state">Tag state<a class="self-link" href="#tag-state"></a></dfn></span><a class="self-link" href="#tag-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.3" id="tag_state"><span class="secno">1.3.3. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="tag-state">Tag state<a class="self-link" href="#tag-state"></a></dfn></span><a class="self-link" href="#tag_state"></a></h4>
 
   
     <dd>
@@ -301,7 +317,7 @@
   
 
   
-    <h4 class="heading settled" data-level="1.3.4" id="end-tag-head"><span class="secno">1.3.4. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="end-tag-state">End tag state<a class="self-link" href="#end-tag-state"></a></dfn></span><a class="self-link" href="#end-tag-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.4" id="end_tag_state"><span class="secno">1.3.4. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="end-tag-state">End tag state<a class="self-link" href="#end-tag-state"></a></dfn></span><a class="self-link" href="#end_tag_state"></a></h4>
 
   
     <dd>
@@ -358,7 +374,7 @@
   
 
   
-    <h4 class="heading settled" data-level="1.3.5" id="end-tag-name-head"><span class="secno">1.3.5. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="end-tag-name-state">End tag name state<a class="self-link" href="#end-tag-name-state"></a></dfn></span><a class="self-link" href="#end-tag-name-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.5" id="end_stag_name_state"><span class="secno">1.3.5. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="end-tag-name-state">End tag name state<a class="self-link" href="#end-tag-name-state"></a></dfn></span><a class="self-link" href="#end_stag_name_state"></a></h4>
 
   
     <dd>
@@ -416,7 +432,7 @@
   
 
   
-    <h4 class="heading settled" data-level="1.3.6" id="end-tag-after-head"><span class="secno">1.3.6. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="end-tag-name-after-state">End tag name after state<a class="self-link" href="#end-tag-name-after-state"></a></dfn></span><a class="self-link" href="#end-tag-after-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.6" id="end_tag_name_after_state"><span class="secno">1.3.6. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="end-tag-name-after-state">End tag name after state<a class="self-link" href="#end-tag-name-after-state"></a></dfn></span><a class="self-link" href="#end_tag_name_after_state"></a></h4>
 
   
     <dd>
@@ -466,7 +482,7 @@
   
 
   
-    <h4 class="heading settled" data-level="1.3.7" id="pi-head"><span class="secno">1.3.7. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="pi-state">Pi state<a class="self-link" href="#pi-state"></a></dfn></span><a class="self-link" href="#pi-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.7" id="pi_state"><span class="secno">1.3.7. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="pi-state">Pi state<a class="self-link" href="#pi-state"></a></dfn></span><a class="self-link" href="#pi_state"></a></h4>
 
   
     <dd>
@@ -507,7 +523,7 @@
   
 
   
-    <h4 class="heading settled" data-level="1.3.8" id="pi-target-head"><span class="secno">1.3.8. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="pi-target-state">Pi target state<a class="self-link" href="#pi-target-state"></a></dfn></span><a class="self-link" href="#pi-target-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.8" id="pi_target_state"><span class="secno">1.3.8. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="pi-target-state">Pi target state<a class="self-link" href="#pi-target-state"></a></dfn></span><a class="self-link" href="#pi_target_state"></a></h4>
 
   
     <dd>
@@ -558,7 +574,7 @@
   
 
   
-    <h4 class="heading settled" data-level="1.3.9" id="pi-target-after-head"><span class="secno">1.3.9. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="pi-target-after-state">Pi target after state<a class="self-link" href="#pi-target-after-state"></a></dfn></span><a class="self-link" href="#pi-target-after-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.9" id="pi_target_after_state"><span class="secno">1.3.9. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="pi-target-after-state">Pi target after state<a class="self-link" href="#pi-target-after-state"></a></dfn></span><a class="self-link" href="#pi_target_after_state"></a></h4>
 
   
     <dd>
@@ -594,7 +610,7 @@
    
 
   
-    <h4 class="heading settled" data-level="1.3.10" id="pi-data-head"><span class="secno">1.3.10. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="pi-data-state">Pi data state<a class="self-link" href="#pi-data-state"></a></dfn></span><a class="self-link" href="#pi-data-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.10" id="pi_data_state"><span class="secno">1.3.10. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="pi-data-state">Pi data state<a class="self-link" href="#pi-data-state"></a></dfn></span><a class="self-link" href="#pi_data_state"></a></h4>
 
   
     <dd>
@@ -632,7 +648,7 @@
    
 
   
-    <h4 class="heading settled" data-level="1.3.11" id="pi-after-head"><span class="secno">1.3.11. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="pi-after-state">Pi after state<a class="self-link" href="#pi-after-state"></a></dfn></span><a class="self-link" href="#pi-after-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.11" id="pi_after_state"><span class="secno">1.3.11. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="pi-after-state">Pi after state<a class="self-link" href="#pi-after-state"></a></dfn></span><a class="self-link" href="#pi_after_state"></a></h4>
 
   
     <dd>
@@ -670,7 +686,7 @@
    
 
   
-    <h4 class="heading settled" data-level="1.3.12" id="markup-decl"><span class="secno">1.3.12. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="markup-declaration-state">Markup declaration state<a class="self-link" href="#markup-declaration-state"></a></dfn></span><a class="self-link" href="#markup-decl"></a></h4>
+    <h4 class="heading settled" data-level="1.3.12" id="markup_decl"><span class="secno">1.3.12. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="markup-declaration-state">Markup declaration state<a class="self-link" href="#markup-declaration-state"></a></dfn></span><a class="self-link" href="#markup_decl"></a></h4>
 
   
     <dd>
@@ -686,10 +702,8 @@
 
 
      <p>Otherwise, if the next seven characters are an exact match for "DOCTYPE",
-    then this is a <a data-link-type="dfn" href="#parse-error">parse error</a>. Consume those characters and switch
-    to the <a data-link-type="dfn" href="#doctype-state">DOCTYPE state</a>.</p>
+    then this consume those characters and switch to the <a data-link-type="dfn" href="#doctype-state">DOCTYPE state</a>.</p>
      
-    
 
 
      <p>Otherwise, this is a <a data-link-type="dfn" href="#parse-error">parse error</a>. Switch to the <a data-link-type="dfn" href="#bogus-comment-state">bogus
@@ -698,7 +712,7 @@
   
 
   
-    <h4 class="heading settled" data-level="1.3.13" id="comment-head"><span class="secno">1.3.13. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="comment-state">Comment state<a class="self-link" href="#comment-state"></a></dfn></span><a class="self-link" href="#comment-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.13" id="comment_state"><span class="secno">1.3.13. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="comment-state">Comment state<a class="self-link" href="#comment-state"></a></dfn></span><a class="self-link" href="#comment_state"></a></h4>
 
   
     <dd>
@@ -743,7 +757,7 @@
   
 
   
-    <h4 class="heading settled" data-level="1.3.14" id="comment-dash-head"><span class="secno">1.3.14. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="comment-dash-state">Comment dash state<a class="self-link" href="#comment-dash-state"></a></dfn></span><a class="self-link" href="#comment-dash-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.14" id="comment_dash_state"><span class="secno">1.3.14. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="comment-dash-state">Comment dash state<a class="self-link" href="#comment-dash-state"></a></dfn></span><a class="self-link" href="#comment_dash_state"></a></h4>
 
   
     <dd>
@@ -782,7 +796,7 @@
   
 
   
-    <h4 class="heading settled" data-level="1.3.15" id="comment-end-head"><span class="secno">1.3.15. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="comment-end-state">Comment end state<a class="self-link" href="#comment-end-state"></a></dfn></span><a class="self-link" href="#comment-end-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.15" id="comment_end_state"><span class="secno">1.3.15. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="comment-end-state">Comment end state<a class="self-link" href="#comment-end-state"></a></dfn></span><a class="self-link" href="#comment_end_state"></a></h4>
 
   
     <dd>
@@ -830,7 +844,7 @@
   
 
   
-    <h4 class="heading settled" data-level="1.3.16" id="cdata-head"><span class="secno">1.3.16. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="cdata-state">CDATA state<a class="self-link" href="#cdata-state"></a></dfn></span><a class="self-link" href="#cdata-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.16" id="cdata_state"><span class="secno">1.3.16. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="cdata-state">CDATA state<a class="self-link" href="#cdata-state"></a></dfn></span><a class="self-link" href="#cdata_state"></a></h4>
 
   
     <dd>
@@ -869,7 +883,7 @@
   
 
   
-    <h4 class="heading settled" data-level="1.3.17" id="cdata-bracket-head"><span class="secno">1.3.17. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="cdata-bracket-state">CDATA bracket state<a class="self-link" href="#cdata-bracket-state"></a></dfn></span><a class="self-link" href="#cdata-bracket-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.17" id="cdata_bracket_state"><span class="secno">1.3.17. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="cdata-bracket-state">CDATA bracket state<a class="self-link" href="#cdata-bracket-state"></a></dfn></span><a class="self-link" href="#cdata_bracket_state"></a></h4>
 
   
     <dd>
@@ -900,8 +914,7 @@
       
       
       <dd>Emit a U+005D RIGHT SQUARE BRACKET (<code>]</code>) character as character token and also
-     emit the current input character as character token. Stay in the current
-     state.
+     emit the current input character as character token. Switch to <a data-link-type="dfn" href="#cdata-bracket-state">CDATA bracket state</a>.
       
     
      </dl>
@@ -910,7 +923,7 @@
 
 
   
-    <h4 class="heading settled" data-level="1.3.18" id="cdata-end-head"><span class="secno">1.3.18. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="cdata-end-state">CDATA end state<a class="self-link" href="#cdata-end-state"></a></dfn></span><a class="self-link" href="#cdata-end-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.18" id="cdata_end_state"><span class="secno">1.3.18. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="cdata-end-state">CDATA end state<a class="self-link" href="#cdata-end-state"></a></dfn></span><a class="self-link" href="#cdata_end_state"></a></h4>
 
   
     <dd>
@@ -959,7 +972,7 @@
 
 
   
-    <h4 class="heading settled" data-level="1.3.19" id="tag-name-head"><span class="secno">1.3.19. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="tag-name-state">Tag name state<a class="self-link" href="#tag-name-state"></a></dfn></span><a class="self-link" href="#tag-name-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.19" id="tag_name_state"><span class="secno">1.3.19. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="tag-name-state">Tag name state<a class="self-link" href="#tag-name-state"></a></dfn></span><a class="self-link" href="#tag_name_state"></a></h4>
 
   
     <dd>
@@ -1019,7 +1032,7 @@
 
 
   
-    <h4 class="heading settled" data-level="1.3.20" id="empty-tag-head"><span class="secno">1.3.20. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="empty-tag-state">Empty tag state<a class="self-link" href="#empty-tag-state"></a></dfn></span><a class="self-link" href="#empty-tag-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.20" id="empty_tag_state"><span class="secno">1.3.20. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="empty-tag-state">Empty tag state<a class="self-link" href="#empty-tag-state"></a></dfn></span><a class="self-link" href="#empty_tag_state"></a></h4>
 
   
     <dd>
@@ -1052,7 +1065,7 @@
 
 
   
-    <h4 class="heading settled" data-level="1.3.21" id="tag-attr-name-before-head"><span class="secno">1.3.21. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="tag-attribute-name-before-state">Tag attribute name before state<a class="self-link" href="#tag-attribute-name-before-state"></a></dfn></span><a class="self-link" href="#tag-attr-name-before-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.21" id="tag_attr_name_before_state"><span class="secno">1.3.21. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="tag-attribute-name-before-state">Tag attribute name before state<a class="self-link" href="#tag-attribute-name-before-state"></a></dfn></span><a class="self-link" href="#tag_attr_name_before_state"></a></h4>
 
   
     <dd>
@@ -1121,7 +1134,7 @@
 
 
   
-    <h4 class="heading settled" data-level="1.3.22" id="tag-attr-name-head"><span class="secno">1.3.22. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="tag-attribute-name-state">Tag attribute name state<a class="self-link" href="#tag-attribute-name-state"></a></dfn></span><a class="self-link" href="#tag-attr-name-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.22" id="tag_attr_name_state"><span class="secno">1.3.22. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="tag-attribute-name-state">Tag attribute name state<a class="self-link" href="#tag-attribute-name-state"></a></dfn></span><a class="self-link" href="#tag_attr_name_state"></a></h4>
 
   
     <dd>
@@ -1200,7 +1213,7 @@
 
 
   
-    <h4 class="heading settled" data-level="1.3.23" id="tag-attr-name-after-head"><span class="secno">1.3.23. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="tag-attribute-name-after-state">Tag attribute name after state<a class="self-link" href="#tag-attribute-name-after-state"></a></dfn></span><a class="self-link" href="#tag-attr-name-after-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.23" id="tag_attr_name_after_state"><span class="secno">1.3.23. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="tag-attribute-name-after-state">Tag attribute name after state<a class="self-link" href="#tag-attribute-name-after-state"></a></dfn></span><a class="self-link" href="#tag_attr_name_after_state"></a></h4>
 
   
     <dd>
@@ -1268,7 +1281,7 @@
 
 
   
-    <h4 class="heading settled" data-level="1.3.24" id="tag-attr-value-before-head"><span class="secno">1.3.24. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="tag-attribute-value-before-state">Tag attribute value before state<a class="self-link" href="#tag-attribute-value-before-state"></a></dfn></span><a class="self-link" href="#tag-attr-value-before-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.24" id="tag_attr_value_before_state"><span class="secno">1.3.24. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="tag-attribute-value-before-state">Tag attribute value before state<a class="self-link" href="#tag-attribute-value-before-state"></a></dfn></span><a class="self-link" href="#tag_attr_value_before_state"></a></h4>
 
   
     <dd>
@@ -1342,7 +1355,7 @@
 
 
   
-    <h4 class="heading settled" data-level="1.3.25" id="tag-attr-value-dquote-head"><span class="secno">1.3.25. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="tag-attribute-value-double-quoted-state">Tag attribute value double quoted state<a class="self-link" href="#tag-attribute-value-double-quoted-state"></a></dfn></span><a class="self-link" href="#tag-attr-value-dquote-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.25" id="tag_attr_value_double_quote_state"><span class="secno">1.3.25. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="tag-attribute-value-double-quoted-state">Tag attribute value double quoted state<a class="self-link" href="#tag-attribute-value-double-quoted-state"></a></dfn></span><a class="self-link" href="#tag_attr_value_double_quote_state"></a></h4>
 
   
     <dd>
@@ -1391,7 +1404,7 @@
 
 
   
-    <h4 class="heading settled" data-level="1.3.26" id="tag-attr-value-squote-head"><span class="secno">1.3.26. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="tag-attribute-value-single-quoted-state">Tag attribute value single quoted state<a class="self-link" href="#tag-attribute-value-single-quoted-state"></a></dfn></span><a class="self-link" href="#tag-attr-value-squote-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.26" id="tag_attr_value_single_quote_state"><span class="secno">1.3.26. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="tag-attribute-value-single-quoted-state">Tag attribute value single quoted state<a class="self-link" href="#tag-attribute-value-single-quoted-state"></a></dfn></span><a class="self-link" href="#tag_attr_value_single_quote_state"></a></h4>
 
   
     <dd>
@@ -1440,7 +1453,7 @@
 
 
   
-    <h4 class="heading settled" data-level="1.3.27" id="tag-attr-value-unquote-head"><span class="secno">1.3.27. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="tag-attribute-value-unquoted-state">Tag attribute value unquoted state<a class="self-link" href="#tag-attribute-value-unquoted-state"></a></dfn></span><a class="self-link" href="#tag-attr-value-unquote-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.27" id="tag_attr_value_unquote_state"><span class="secno">1.3.27. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="tag-attribute-value-unquoted-state">Tag attribute value unquoted state<a class="self-link" href="#tag-attribute-value-unquoted-state"></a></dfn></span><a class="self-link" href="#tag_attr_value_unquote_state"></a></h4>
 
   
     <dd>
@@ -1503,7 +1516,7 @@
   
 
   
-    <h4 class="heading settled" data-level="1.3.28" id="charref-attr-head"><span class="secno">1.3.28. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="character-reference-in-attribute-value-state">Character reference in attribute value state<a class="self-link" href="#character-reference-in-attribute-value-state"></a></dfn></span><a class="self-link" href="#charref-attr-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.28" id="charref_attr_state"><span class="secno">1.3.28. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="character-reference-in-attribute-value-state">Character reference in attribute value state<a class="self-link" href="#character-reference-in-attribute-value-state"></a></dfn></span><a class="self-link" href="#charref_attr_state"></a></h4>
 
   
     <dd>
@@ -1527,7 +1540,7 @@
 
 
   
-    <h4 class="heading settled" data-level="1.3.29" id="bogus-comment-head"><span class="secno">1.3.29. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="bogus-comment-state">Bogus comment state<a class="self-link" href="#bogus-comment-state"></a></dfn></span><a class="self-link" href="#bogus-comment-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.29" id="bogus_comment_state"><span class="secno">1.3.29. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="bogus-comment-state">Bogus comment state<a class="self-link" href="#bogus-comment-state"></a></dfn></span><a class="self-link" href="#bogus_comment_state"></a></h4>
 
   
     <dd>
@@ -1536,7 +1549,7 @@
 
 
   
-    <h4 class="heading settled" data-level="1.3.30" id="charref-tokenizer-head"><span class="secno">1.3.30. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="tokenizing-character-references">Tokenizing character references<a class="self-link" href="#tokenizing-character-references"></a></dfn></span><a class="self-link" href="#charref-tokenizer-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.30" id="tokenizing_character_ref"><span class="secno">1.3.30. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="tokenizing-character-references">Tokenizing character references<a class="self-link" href="#tokenizing-character-references"></a></dfn></span><a class="self-link" href="#tokenizing_character_ref"></a></h4>
 
   
     <dd>
@@ -1696,8 +1709,8 @@
        
 
         
-       <div class="example" id="example-787ee2b6"><a class="self-link" href="#example-787ee2b6"></a>
-          If the markup contains following attribute <code>This is a &amp;ref;</code>, character tokenizer should return this as a reference named ref. However if the attribute defined is defined as <code>This is &amp;notref</code>, then the tokenizer will interpret this as a text <code>This is &amp;notref</code>, while emitting a parse error.
+       <div class="example" id="example-46dfac1c"><a class="self-link" href="#example-46dfac1c"></a>
+          If the markup contains following attribute <code>This is a &amp;ref;</code>, character tokenizer should return this as a reference named ref. However if the attribute defined is defined as <code>This is &amp;notref</code>, then the tokenizer will interpret this as a text <code>This is &amp;notref</code>, while emitting a <a data-link-type="dfn" href="#parse-error">parse error</a>.
         </div>
        
 
@@ -1710,10 +1723,837 @@
 
 
   
-    <h4 class="heading settled" data-level="1.3.31" id="doctype-head"><span class="secno">1.3.31. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="doctype-state">DOCTYPE state<a class="self-link" href="#doctype-state"></a></dfn></span><a class="self-link" href="#doctype-head"></a></h4>
+    <h4 class="heading settled" data-level="1.3.31" id="doctype_state"><span class="secno">1.3.31. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="doctype-state">DOCTYPE state<a class="self-link" href="#doctype-state"></a></dfn></span><a class="self-link" href="#doctype_state"></a></h4>
+  
+    <dd>
+
+
+     <p>Consume the next input character:</p>
+     
+
+      
+     <dl class="switch">
+      
+      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)
+      
+      
+      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)
+      
+      
+      <dt>U+000C FORM FEED (<code class="non-print">FF</code>)
+      
+      
+      <dt>U+0020 SPACE (<code class="non-print">Space</code>)
+      
+      
+      <dd>Switch to the <a data-link-type="dfn" href="#before-doctype-name-state">before DOCTYPE name state</a>.
+      
+
+      
+      <dt>EOF
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Switch to <a data-link-type="dfn" href="#data-state">data state</a>.
+       Create new Doctype token. Emit Doctype token. Reconsume the EOF character.
+
+      
+      <dt>Anything else
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Switch to <a data-link-type="dfn" href="#before-doctype-name-state">before DOCTYPE name state</a>. Reconsume the character.
+      
+      
+    
+     </dl>
+     
+  
 
   
-    <p class="warning">TODO</p>
+    <h4 class="heading settled" data-level="1.3.32" id="before_doctype_name_state"><span class="secno">1.3.32. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="before-doctype-name-state">Before DOCTYPE name state<a class="self-link" href="#before-doctype-name-state"></a></dfn></span><a class="self-link" href="#before_doctype_name_state"></a></h4>
+
+  
+    <dd>
+
+
+     <p>Consume the next input character:</p>
+     
+
+      
+     <dl class="switch">
+      
+      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)
+      
+      
+      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)
+      
+      
+      <dt>U+000C FORM FEED (<code class="non-print">FF</code>)
+      
+      
+      <dt>U+0020 SPACE (<code class="non-print">Space</code>)
+      
+      
+      <dd>Ignore the character.
+      
+
+      
+      <dt><a data-link-type="dfn" href="#uppercase-ascii-letters">Uppercase ASCII letter</a>
+      
+      
+      <dd>Create a new DOCTYPE token. Set the token name to lowercase version of the current input character. Switch to the DOCTYPE name state.
+      
+
+      
+      <dt>U+003E GREATER-THAN SIGN(<code>></code>)
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a> Create a new DOCTYPE token. Emit token. Switch to <a data-link-type="dfn" href="#data-state">data state</a>.
+      
+
+      
+      <dt>EOF
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Switch to <a data-link-type="dfn" href="#data-state">data state</a>.
+       Create new Doctype token. Emit Doctype token. Reconsume the EOF character.
+
+      
+      <dt>Anything else
+      
+      
+      <dd>Create new DOCTYPE token. Set the token’s name to current input character. Switch to <a data-link-type="dfn" href="#doctype-name-state">DOCTYPE name state</a>.
+      
+    
+     </dl>
+     
+  
+
+  
+    <h4 class="heading settled" data-level="1.3.33" id="doctype_name_state"><span class="secno">1.3.33. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="doctype-name-state">DOCTYPE name state<a class="self-link" href="#doctype-name-state"></a></dfn></span><a class="self-link" href="#doctype_name_state"></a></h4>
+
+  
+    <dd>
+    Consume the next input character:
+
+    
+     <dl class="switch">
+      
+      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)
+      
+      
+      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)
+      
+      
+      <dt>U+000C FORM FEED (<code class="non-print">FF</code>)
+      
+      
+      <dt>U+0020 SPACE (<code class="non-print">Space</code>)
+      
+      
+      <dd>Switch to the <a data-link-type="dfn" href="#after-doctype-name-state">after DOCTYPE name state</a>.
+      
+
+      
+      <dt><a data-link-type="dfn" href="#uppercase-ascii-letters">Uppercase ASCII letter</a>
+      
+      
+      <dd>Append the lowercase version of current input character to current doctype token.
+      
+
+      
+      <dt>U+003E GREATER-THAN SIGN(<code>></code>)
+      
+      
+      <dd> Create a new DOCTYPE token. Emit token. Switch to <a data-link-type="dfn" href="#data-state">data state</a>.
+      
+
+      
+      <dt>EOF
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Switch to the <a data-link-type="dfn" href="#data-state">data state</a>. Emit DOCTYPE token.
+      Reconsume the EOF character.
+      
+
+      
+      <dt>Anything else
+      
+      
+      <dd>Append the current input character to the current DOCTYPE token’s name.
+      Reconsume the EOF character.
+      
+    
+     </dl>
+     
+  
+
+  
+    <h4 class="heading settled" data-level="1.3.34" id="after_doctype_name_state"><span class="secno">1.3.34. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="after-doctype-name-state">After DOCTYPE name state<a class="self-link" href="#after-doctype-name-state"></a></dfn></span><a class="self-link" href="#after_doctype_name_state"></a></h4>
+
+  
+    <dd>
+    Consume the next input character:
+
+    
+     <dl class="switch">
+      
+      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)
+      
+      
+      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)
+      
+      
+      <dt>U+000C FORM FEED (<code class="non-print">FF</code>)
+      
+      
+      <dt>U+0020 SPACE (<code class="non-print">Space</code>)
+      
+      
+      <dd>Ignore the character.
+      
+
+      
+      <dt>U+003E GREATER-THAN SIGN(<code>></code>)
+      
+      
+      <dd> Switch to data state. Emit current DOCTYPE token.
+      
+
+      
+      <dt>EOF
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Switch to the <a data-link-type="dfn" href="#data-state">data state</a>. Emit DOCTYPE token.
+      Reconsume the EOF character.
+      
+
+      
+      <dt>Anything else
+      
+      
+      <dd>If the six characters starting from the current input character are an <a data-link-type="dfn" href="http://dev.w3.org/csswg/css-syntax-3/#ascii-case-insensitive">ASCII case-insensitive</a> match for word "PUBLIC", then consume those characters and switch to the <a data-link-type="dfn" href="#after-doctype-public-keyword-state">after DOCTYPE public keyword state</a>.
+
+
+       <p>Otherwise, if the six characters starting from the current input character are an <a data-link-type="dfn" href="http://dev.w3.org/csswg/css-syntax-3/#ascii-case-insensitive">ASCII case-insensitive</a> match for word "SYSTEM", then consume those charactes and switch to the <a data-link-type="dfn" href="#after-doctype-system-keyword-state">after DOCTYPE system keyword state</a>.</p>
+       
+
+
+       <p>Otherwise, this is a <a data-link-type="dfn" href="#parse-error">parse error</a>. Switch to <a data-link-type="dfn" href="#bogus-doctype-state">bogus DOCTYPE state</a>.</p>
+       
+    
+     </dl>
+     
+  
+
+  
+    <h4 class="heading settled" data-level="1.3.35" id="after_doctype_public_keyword_state"><span class="secno">1.3.35. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="after-doctype-public-keyword-state">After DOCTYPE public keyword state<a class="self-link" href="#after-doctype-public-keyword-state"></a></dfn></span><a class="self-link" href="#after_doctype_public_keyword_state"></a></h4>
+  
+    <dd>
+    Consume the next input character:
+    
+     <dl class="switch">
+      
+      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)
+      
+      
+      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)
+      
+      
+      <dt>U+000C FORM FEED (<code class="non-print">FF</code>)
+      
+      
+      <dt>U+0020 SPACE (<code class="non-print">Space</code>)
+      
+      
+      <dd>Switch to the <a data-link-type="dfn" href="#before-doctype-public-identifier-state">before DOCTYPE public identifier state</a>.
+      
+
+      
+      <dt>U+0022 QUOTATION MARK(<code>"</code>)
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Set the DOCTYPE token’s public identifier current DOCTYPE token to the empty string (not missing), then switch to the <a data-link-type="dfn" href="#doctype-public-identifier-double_quoted-state">DOCTYPE public identifier (double-quoted) state</a>.
+      
+
+      
+      <dt>U+0027 APOSTROPHE(<code>'</code>)
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Set the DOCTYPE token’s public identifier current DOCTYPE token to the empty string (not missing), then switch to the <a data-link-type="dfn" href="#doctype-public-identifier-single_quoted-state">DOCTYPE public identifier (single-quoted) state</a>.
+      
+
+      
+      <dt>U+003E GREATER-THAN SIGN(<code>></code>)
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Set the DOCTYPE token’s public identifier current DOCTYPE token to the empty string (not missing), then switch to the <a data-link-type="dfn" href="#doctype-public-identifier-single_quoted-state">DOCTYPE public identifier (single-quoted) state</a>.
+      
+
+      
+      <dt>EOF
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Switch to the <a data-link-type="dfn" href="#data-state">data state</a>. Emit that DOCTYPE token. Reconsume the EOF character.
+      
+
+      
+      <dt>Anything else
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Switch to the <a data-link-type="dfn" href="#bogus-doctype-state">bogus DOCTYPE state</a>. Emit that DOCTYPE token. Reconsume the EOF character.
+      
+    
+     </dl>
+     
+  
+
+  
+    <h4 class="heading settled" data-level="1.3.36" id="after_doctype_system_keyword_state"><span class="secno">1.3.36. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="after-doctype-system-keyword-state">After DOCTYPE system keyword state<a class="self-link" href="#after-doctype-system-keyword-state"></a></dfn></span><a class="self-link" href="#after_doctype_system_keyword_state"></a></h4>
+  
+    <dd>
+    Consume the next input character:
+    
+     <dl class="switch">
+      
+      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)
+      
+      
+      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)
+      
+      
+      <dt>U+000C FORM FEED (<code class="non-print">FF</code>)
+      
+      
+      <dt>U+0020 SPACE (<code class="non-print">Space</code>)
+      
+      
+      <dd>Switch to the <a data-link-type="dfn" href="#before-doctype-system-identifier-state">before DOCTYPE system identifier state</a>.
+      
+
+      
+      <dt>U+0022 QUOTATION MARK(<code>"</code>)
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Set the DOCTYPE token’s public identifier current DOCTYPE token to the empty string (not missing), then switch to the <a data-link-type="dfn" href="#doctype-system-identifier-double_quoted-state">DOCTYPE system identifier (double-quoted) state</a>.
+      
+
+      
+      <dt>U+0027 APOSTROPHE(<code>'</code>)
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Set the DOCTYPE token’s public identifier current DOCTYPE token to the empty string (not missing), then switch to the <a data-link-type="dfn" href="#doctype-system-identifier-single_quoted-state">DOCTYPE system identifier (single-quoted) state</a>.
+      
+
+      
+      <dt>U+003E GREATER-THAN SIGN(<code>></code>)
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Set the DOCTYPE token’s public identifier current DOCTYPE token to the empty string (not missing), then switch to the <a data-link-type="dfn" href="#doctype-system-identifier-single_quoted-state">DOCTYPE system identifier (single-quoted) state</a>.
+      
+
+      
+      <dt>EOF
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Switch to the <a data-link-type="dfn" href="#data-state">data state</a>. Emit that DOCTYPE token. Reconsume the EOF character.
+      
+
+      
+      <dt>Anything else
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Switch to the <a data-link-type="dfn" href="#bogus-doctype-state">bogus DOCTYPE state</a>.
+      
+    
+     </dl>
+     
+  
+
+
+  
+    <h4 class="heading settled" data-level="1.3.37" id="before_doctype_system_identifier_state"><span class="secno">1.3.37. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="before-doctype-system-identifier-state">Before DOCTYPE system identifier state<a class="self-link" href="#before-doctype-system-identifier-state"></a></dfn></span><a class="self-link" href="#before_doctype_system_identifier_state"></a></h4>
+  
+    <dd>
+    Consume the next input character:
+    
+     <dl class="switch">
+      
+      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)
+      
+      
+      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)
+      
+      
+      <dt>U+000C FORM FEED (<code class="non-print">FF</code>)
+      
+      
+      <dt>U+0020 SPACE (<code class="non-print">Space</code>)
+      
+      
+      <dd>Ignore the character.
+      
+
+      
+      <dt>U+0022 QUOTATION MARK(<code>"</code>)
+      
+      
+      <dd>Set the DOCTYPE token’s system identifier current DOCTYPE token to the empty string (not missing), then switch to the <a data-link-type="dfn" href="#doctype-system-identifier-double_quoted-state">DOCTYPE system identifier (double-quoted) state</a>.
+      
+
+      
+      <dt>U+0027 APOSTROPHE(<code>'</code>)
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Set the DOCTYPE token’s system identifier current DOCTYPE token to the empty string (not missing), then switch to the <a data-link-type="dfn" href="#doctype-system-identifier-single_quoted-state">DOCTYPE system identifier (single-quoted) state</a>.
+      
+
+      
+      <dt>U+003E GREATER-THAN SIGN(<code>></code>)
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Switch to <a data-link-type="dfn" href="#data-state">data state</a>. Emit current DOCTYPE token.
+      
+
+      
+      <dt>EOF
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Switch to the <a data-link-type="dfn" href="#data-state">data state</a>. Emit DOCTYPE token. Reconsume the EOF character.
+      
+
+      
+      <dt>Anything else
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Switch to the <a data-link-type="dfn" href="#bogus-doctype-state">bogus DOCTYPE state</a>.
+      
+    
+     </dl>
+     
+  
+
+  
+    <h4 class="heading settled" data-level="1.3.38" id="before_doctype_public_identifier_state"><span class="secno">1.3.38. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="before-doctype-public-identifier-state">Before DOCTYPE public identifier state<a class="self-link" href="#before-doctype-public-identifier-state"></a></dfn></span><a class="self-link" href="#before_doctype_public_identifier_state"></a></h4>
+  
+    <dd>
+    Consume the next input character:
+    
+     <dl class="switch">
+      
+      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)
+      
+      
+      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)
+      
+      
+      <dt>U+000C FORM FEED (<code class="non-print">FF</code>)
+      
+      
+      <dt>U+0020 SPACE (<code class="non-print">Space</code>)
+      
+      
+      <dd>Ignore the character.
+      
+
+      
+      <dt>U+0022 QUOTATION MARK(<code>"</code>)
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Set the DOCTYPE token’s public identifier current DOCTYPE token to the empty string (not missing), then switch to the <a data-link-type="dfn" href="#doctype-public-identifier-double_quoted-state">DOCTYPE public identifier (double-quoted) state</a>.
+      
+
+      
+      <dt>U+0027 APOSTROPHE(<code>'</code>)
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Set the DOCTYPE token’s public identifier current DOCTYPE token to the empty string (not missing), then switch to the <a data-link-type="dfn" href="#doctype-public-identifier-single_quoted-state">DOCTYPE public identifier (single-quoted) state</a>.
+      
+
+      
+      <dt>U+003E GREATER-THAN SIGN(<code>></code>)
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Switch to <a data-link-type="dfn" href="#data-state">data state</a>. Emit current DOCTYPE token.
+      
+
+      
+      <dt>EOF
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Switch to the <a data-link-type="dfn" href="#data-state">data state</a>. Emit DOCTYPE token. Reconsume the EOF character.
+      
+
+      
+      <dt>Anything else
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Switch to the <a data-link-type="dfn" href="#bogus-doctype-state">bogus DOCTYPE state</a>.
+      
+    
+     </dl>
+     
+  
+
+  
+    <h4 class="heading settled" data-level="1.3.39" id="doctype_public_identifier_single_quoted_state"><span class="secno">1.3.39. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="doctype-public-identifier-single_quoted-state">DOCTYPE public identifier (single-quoted) state<a class="self-link" href="#doctype-public-identifier-single_quoted-state"></a></dfn></span><a class="self-link" href="#doctype_public_identifier_single_quoted_state"></a></h4>
+  
+    <dd>
+    Consume the next input character:
+    
+     <dl class="switch">
+      
+      <dt>U+0027 APOSTROPHE(<code>'</code>)
+      
+      
+      <dd>Switch to the <a data-link-type="dfn" href="#after-doctype-public-identifier-state">after DOCTYPE public identifier state</a>.
+      
+
+      
+      <dt>U+003E GREATER-THAN SIGN(<code>></code>)
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Switch to <a data-link-type="dfn" href="#data-state">data state</a>. Emit current DOCTYPE token.
+      
+
+      
+      <dt>EOF
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Switch to the <a data-link-type="dfn" href="#data-state">data state</a>. Emit DOCTYPE token. Reconsume the EOF character.
+      
+
+      
+      <dt>Anything else
+      
+      
+      <dd>Append the current input character to the current DOCTYPE token’s public identifier.
+      
+    
+     </dl>
+     
+  
+
+
+  
+    <h4 class="heading settled" data-level="1.3.40" id="doctype_public_identifier_double_quoted_state"><span class="secno">1.3.40. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="doctype-public-identifier-double_quoted-state">DOCTYPE public identifier (double-quoted) state<a class="self-link" href="#doctype-public-identifier-double_quoted-state"></a></dfn></span><a class="self-link" href="#doctype_public_identifier_double_quoted_state"></a></h4>
+  
+    <dd>
+    Consume the next input character:
+    
+     <dl class="switch">
+      
+      <dt>U+0022 QUOTATION MARK(<code>"</code>)
+      
+      
+      <dd>Switch to the <a data-link-type="dfn" href="#after-doctype-public-identifier-state">after DOCTYPE public identifier state</a>.
+      
+
+      
+      <dt>U+003E GREATER-THAN SIGN(<code>></code>)
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Switch to <a data-link-type="dfn" href="#data-state">data state</a>. Emit current DOCTYPE token.
+      
+
+      
+      <dt>EOF
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Switch to the <a data-link-type="dfn" href="#data-state">data state</a>. Emit DOCTYPE token. Reconsume the EOF character.
+      
+
+      
+      <dt>Anything else
+      
+      
+      <dd>Append the current input character to the current DOCTYPE token’s public identifier.
+      
+    
+     </dl>
+     
+  
+
+  
+    <h4 class="heading settled" data-level="1.3.41" id="after_doctype_public_identifier_state"><span class="secno">1.3.41. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="after-doctype-public-identifier-state">After DOCTYPE public identifier state<a class="self-link" href="#after-doctype-public-identifier-state"></a></dfn></span><a class="self-link" href="#after_doctype_public_identifier_state"></a></h4>
+  
+    <dd>
+    Consume the next input character:
+    
+     <dl class="switch">
+      
+      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)
+      
+      
+      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)
+      
+      
+      <dt>U+000C FORM FEED (<code class="non-print">FF</code>)
+      
+      
+      <dt>U+0020 SPACE (<code class="non-print">Space</code>)
+      
+      
+      <dd>Switch to the <a data-link-type="dfn" href="#between-doctype-public-and-system-identifiers-state">between DOCTYPE public and system identifiers state</a>.
+      
+
+      
+      <dt>U+0027 APOSTROPHE(<code>'</code>)
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Set the DOCTYPE token’s system identifier to the empty string (not missing) then switch to the <a data-link-type="dfn" href="#doctype-system-identifier-single_quoted-state">DOCTYPE system identifier (single-quoted) state</a>.
+      
+
+      
+      <dt>U+0022 QUOTATION MARK(<code>"</code>)
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Set the DOCTYPE token’s system identifier to the empty string (not missing) then switch to the <a data-link-type="dfn" href="#doctype-system-identifier-double_quoted-state">DOCTYPE system identifier (double-quoted) state</a>.
+      
+
+      
+      <dt>U+003E GREATER-THAN SIGN(<code>></code>)
+      
+      
+      <dd>Switch to <a data-link-type="dfn" href="#data-state">data state</a>. Emit current DOCTYPE token.
+      
+
+      
+      <dt>EOF
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Switch to the <a data-link-type="dfn" href="#data-state">data state</a>. Emit DOCTYPE token. Reconsume the EOF character.
+      
+
+      
+      <dt>Anything else
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Switch to <a data-link-type="dfn" href="#bogus-doctype-state">bogus DOCTYPE state</a>.
+      
+    
+     </dl>
+     
+  
+
+  
+    <h4 class="heading settled" data-level="1.3.42" id="between_doctype_public_and_system_identifier_state"><span class="secno">1.3.42. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="between-doctype-public-and-system-identifiers-state">Between DOCTYPE public and system identifiers state<a class="self-link" href="#between-doctype-public-and-system-identifiers-state"></a></dfn></span><a class="self-link" href="#between_doctype_public_and_system_identifier_state"></a></h4>
+  
+    <dd>
+    Consume the next input character:
+    
+     <dl class="switch">
+      
+      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)
+      
+      
+      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)
+      
+      
+      <dt>U+000C FORM FEED (<code class="non-print">FF</code>)
+      
+      
+      <dt>U+0020 SPACE (<code class="non-print">Space</code>)
+      
+      
+      <dd>Ignore the character.
+      
+
+      
+      <dt>U+003E GREATER-THAN SIGN(<code>></code>)
+      
+      
+      <dd>Switch to <a data-link-type="dfn" href="#data-state">data state</a>. Emit current DOCTYPE token.
+      
+
+      
+      <dt>U+0027 APOSTROPHE(<code>'</code>)
+      
+      
+      <dd>Set the DOCTYPE token’s system identifier to the empty string (not missing) then switch to the <a data-link-type="dfn" href="#doctype-system-identifier-single_quoted-state">DOCTYPE system identifier (single-quoted) state</a>.
+      
+
+      
+      <dt>U+0022 QUOTATION MARK(<code>"</code>)
+      
+      
+      <dd>Set the DOCTYPE token’s system identifier to the empty string (not missing) then switch to the <a data-link-type="dfn" href="#doctype-system-identifier-double_quoted-state">DOCTYPE system identifier (double-quoted) state</a>.
+      
+
+      
+      <dt>EOF
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Switch to the <a data-link-type="dfn" href="#data-state">data state</a>. Emit DOCTYPE token. Reconsume the EOF character.
+      
+
+      
+      <dt>Anything else
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Switch to <a data-link-type="dfn" href="#bogus-doctype-state">Bogus DOCTYPE state</a>.
+      
+    
+     </dl>
+     
+  
+
+  
+    <h4 class="heading settled" data-level="1.3.43" id="doctype_system_identifier_single_quote_state"><span class="secno">1.3.43. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="doctype-system-identifier-single_quoted-state">DOCTYPE system identifier (single-quoted) state<a class="self-link" href="#doctype-system-identifier-single_quoted-state"></a></dfn></span><a class="self-link" href="#doctype_system_identifier_single_quote_state"></a></h4>
+  
+    <dd>
+    Consume the next input character:
+    
+     <dl class="switch">
+      
+      <dt>U+0027 APOSTROPHE(<code>'</code>)
+      
+      
+      <dd>Switch to the <a data-link-type="dfn" href="#after-doctype-system-identifiers-state">after DOCTYPE system identifiers state</a>.
+      
+
+      
+      <dt>U+003E GREATER-THAN SIGN(<code>></code>)
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Switch to <a data-link-type="dfn" href="#data-state">data state</a>. Emit current DOCTYPE token.
+      
+
+      
+      <dt>EOF
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Switch to the <a data-link-type="dfn" href="#data-state">data state</a>. Emit DOCTYPE token. Reconsume the EOF character.
+      
+
+      
+      <dt>Anything else
+      
+      
+      <dd>Append the current input character to the current DOCTYPE token’s system identifier.
+      
+    
+     </dl>
+     
+  
+
+  
+    <h4 class="heading settled" data-level="1.3.44" id="doctype_system_identifier_double_quote_state"><span class="secno">1.3.44. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="doctype-system-identifier-double_quoted-state">DOCTYPE system identifier (double-quoted) state<a class="self-link" href="#doctype-system-identifier-double_quoted-state"></a></dfn></span><a class="self-link" href="#doctype_system_identifier_double_quote_state"></a></h4>
+  
+    <dd>
+    Consume the next input character:
+    
+     <dl class="switch">
+      
+      <dt>U+0022 QUOTATION MARK(<code>"</code>)
+      
+      
+      <dd>Switch to the <a data-link-type="dfn" href="#after-doctype-system-identifiers-state">after DOCTYPE system identifiers state</a>.
+      
+
+      
+      <dt>U+003E GREATER-THAN SIGN(<code>></code>)
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Switch to <a data-link-type="dfn" href="#data-state">data state</a>. Emit current DOCTYPE token.
+      
+
+      
+      <dt>EOF
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Switch to the <a data-link-type="dfn" href="#data-state">data state</a>. Emit DOCTYPE token. Reconsume the EOF character.
+      
+
+      
+      <dt>Anything else
+      
+      
+      <dd>Append the current input character to the current DOCTYPE token’s system identifier.
+      
+    
+     </dl>
+     
+  
+
+  
+    <h4 class="heading settled" data-level="1.3.45" id="after_doctype_system_identifier_state"><span class="secno">1.3.45. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="after-doctype-system-identifiers-state">After DOCTYPE system identifiers state<a class="self-link" href="#after-doctype-system-identifiers-state"></a></dfn></span><a class="self-link" href="#after_doctype_system_identifier_state"></a></h4>
+  
+    <dd>
+    Consume the next input character:
+    
+     <dl class="switch">
+      
+      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)
+      
+      
+      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)
+      
+      
+      <dt>U+000C FORM FEED (<code class="non-print">FF</code>)
+      
+      
+      <dt>U+0020 SPACE (<code class="non-print">Space</code>)
+      
+      
+      <dd>Ignore the character.
+      
+
+      
+      <dt>U+003E GREATER-THAN SIGN(<code>></code>)
+      
+      
+      <dd>Switch to <a data-link-type="dfn" href="#data-state">data state</a>. Emit current DOCTYPE token.
+      
+
+      
+      <dt>EOF
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Switch to the <a data-link-type="dfn" href="#data-state">data state</a>. Emit DOCTYPE token. Reconsume the EOF character.
+      
+
+      
+      <dt>Anything else
+      
+      
+      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Switch to <a data-link-type="dfn" href="#bogus-doctype-state">Bogus DOCTYPE state</a>.
+      
+    
+     </dl>
+     
+  
+
+  
+    <h4 class="heading settled" data-level="1.3.46" id="bogus_doctype_state"><span class="secno">1.3.46. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport="" id="bogus-doctype-state">Bogus DOCTYPE state<a class="self-link" href="#bogus-doctype-state"></a></dfn></span><a class="self-link" href="#bogus_doctype_state"></a></h4>
+  
+    <dd>
+    Consume the next input character:
+    
+     <dl class="switch">
+      
+      <dt>U+003E GREATER-THAN SIGN(<code>></code>)
+      
+      
+      <dd>Switch to <a data-link-type="dfn" href="#data-state">data state</a>. Emit DOCTYPE token.
+      
+
+      
+      <dt>EOF
+      
+      
+      <dd>Switch to the <a data-link-type="dfn" href="#data-state">data state</a>. Emit DOCTYPE token. Reconsume the EOF character.
+      
+
+      
+      <dt>Anything else
+      
+      
+      <dd>Ignore character.
+      
+    
+     </dl>
+     
+  
 </dl>
 
 
@@ -1982,7 +2822,7 @@ steps until further notice:
      </dl>
 
 
-    <dt><dfn data-dfn-type="dfn" data-noexport="" id="end-phase">End phase<a class="self-link" href="#end-phase"></a></dfn>
+    <dt><dfn data-dfn-type="dfn" data-noexport="" id="end-phase">End phase<a class="self-link" href="#end-phase"></a></dfn>before
 
     <dd>
      <p>
@@ -2062,6 +2902,12 @@ document, it <em class="ct">must</em> follow these steps:
 
    <p>The <dfn data-dfn-type="dfn" data-noexport="" id="ascii-hex-digits">ASCII hex digits<a class="self-link" href="#ascii-hex-digits"></a></dfn>  are the characters in the ranges U+0030 DIGIT ZERO (<code>0</code>) to U+0039 DIGIT NINE (<code>9</code>), U+0041 LATIN CAPITAL LETTER A to U+0046 LATIN CAPITAL LETTER F, and U+0061 LATIN SMALL LETTER A to U+0066 LATIN SMALL LETTER F.</p>
 
+
+   <p>The <dfn data-dfn-type="dfn" data-noexport="" id="lowercase-ascii-letters">lowercase ASCII letters<a class="self-link" href="#lowercase-ascii-letters"></a></dfn> are characters in the range between  U+0061 LATIN SMALL LETTER A to U+007A LATIN SMALL LETTER Z.</p>
+
+
+   <p>The <dfn data-dfn-type="dfn" data-noexport="" id="uppercase-ascii-letters">uppercase ASCII letters<a class="self-link" href="#uppercase-ascii-letters"></a></dfn> are characters in the range between U+0041 LATIN CAPITAL LETTER A to U+005A LATIN CAPITAL LETTER Z.</p>
+
 </main>
   
 
@@ -2086,11 +2932,21 @@ and not intended to be performant.)
   <h3 class="no-num heading settled" id="index-defined-here"><span class="content">Terms defined by this specification</span><a class="self-link" href="#index-defined-here"></a></h3>
   <ul class="indexlist">
    <li>additional allowed character, <a href="#additional-allowed-character">1.3.30</a>
+   <li>After DOCTYPE name state, <a href="#after-doctype-name-state">1.3.34</a>
+   <li>After DOCTYPE public identifier state, <a href="#after-doctype-public-identifier-state">1.3.41</a>
+   <li>After DOCTYPE public keyword state, <a href="#after-doctype-public-keyword-state">1.3.35</a>
+   <li>After DOCTYPE system identifiers state, <a href="#after-doctype-system-identifiers-state">1.3.45</a>
+   <li>After DOCTYPE system keyword state, <a href="#after-doctype-system-keyword-state">1.3.36</a>
    <li>append a
   character, <a href="#append-a-character">1.4</a>
    <li>ASCII digits, <a href="#ascii-digits">3</a>
    <li>ASCII hex digits, <a href="#ascii-hex-digits">3</a>
+   <li>Before DOCTYPE name state, <a href="#before-doctype-name-state">1.3.32</a>
+   <li>Before DOCTYPE public identifier state, <a href="#before-doctype-public-identifier-state">1.3.38</a>
+   <li>Before DOCTYPE system identifier state, <a href="#before-doctype-system-identifier-state">1.3.37</a>
+   <li>Between DOCTYPE public and system identifiers state, <a href="#between-doctype-public-and-system-identifiers-state">1.3.42</a>
    <li>Bogus comment state, <a href="#bogus-comment-state">1.3.29</a>
+   <li>Bogus DOCTYPE state, <a href="#bogus-doctype-state">1.3.46</a>
    <li>CDATA bracket state, <a href="#cdata-bracket-state">1.3.17</a>
    <li>CDATA end state, <a href="#cdata-end-state">1.3.18</a>
    <li>CDATA state, <a href="#cdata-state">1.3.16</a>
@@ -2103,7 +2959,12 @@ and not intended to be performant.)
    <li>create an element for the token, <a href="#create-an-element-for-the-token">1.4</a>
    <li>current element, <a href="#current-element">1.4</a>
    <li>Data state, <a href="#data-state">1.3.1</a>
+   <li>DOCTYPE name state, <a href="#doctype-name-state">1.3.33</a>
+   <li>DOCTYPE public identifier (double-quoted) state, <a href="#doctype-public-identifier-double_quoted-state">1.3.40</a>
+   <li>DOCTYPE public identifier (single-quoted) state, <a href="#doctype-public-identifier-single_quoted-state">1.3.39</a>
    <li>DOCTYPE state, <a href="#doctype-state">1.3.31</a>
+   <li>DOCTYPE system identifier (double-quoted) state, <a href="#doctype-system-identifier-double_quoted-state">1.3.44</a>
+   <li>DOCTYPE system identifier (single-quoted) state, <a href="#doctype-system-identifier-single_quoted-state">1.3.43</a>
    <li>element in
   scope, <a href="#element-in-scope">1.4</a>
    <li>Empty tag state, <a href="#empty-tag-state">1.3.20</a>
@@ -2112,6 +2973,7 @@ and not intended to be performant.)
    <li>End tag name state, <a href="#end-tag-name-state">1.3.5</a>
    <li>End tag state, <a href="#end-tag-state">1.3.4</a>
    <li>insert an element, <a href="#insert-an-element">1.4</a>
+   <li>lowercase ASCII letters, <a href="#lowercase-ascii-letters">3</a>
    <li>Main phase, <a href="#main-phase">1.4</a>
    <li>Markup declaration state, <a href="#markup-declaration-state">1.3.12</a>
    <li>parse error, <a href="#parse-error">1</a>
@@ -2134,10 +2996,19 @@ and not intended to be performant.)
    <li>Tag state, <a href="#tag-state">1.3.3</a>
    <li>Tokenization, <a href="#tokenization">1.3</a>
    <li>Tokenizing character references, <a href="#tokenizing-character-references">1.3.30</a>
+   <li>uppercase ASCII letters, <a href="#uppercase-ascii-letters">3</a>
    <li>XML parser, <a href="#xml-parser">1</a></ul>
+  <h3 class="no-num heading settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
+  <ul class="indexlist">
+   <li><a data-link-type="biblio" href="#biblio-css-syntax-3">[css-syntax-3]</a> defines the following terms:
+    <ul>
+     <li><a href="http://dev.w3.org/csswg/css-syntax-3/#ascii-case-insensitive">ascii case-insensitive</a>
+    </ul></ul>
   <h2 class="no-num heading settled" id="references"><span class="content">References</span><a class="self-link" href="#references"></a></h2>
   <h3 class="no-num heading settled" id="normative"><span class="content">Normative References</span><a class="self-link" href="#normative"></a></h3>
   <dl>
+   <dt id="biblio-css-syntax-3"><a class="self-link" href="#biblio-css-syntax-3"></a>[CSS-SYNTAX-3]
+   <dd>Tab Atkins Jr.; Simon Sapin. <a href="http://www.w3.org/TR/css-syntax-3/">CSS Syntax Module Level 3</a>. 20 February 2014. CR. URL: <a href="http://www.w3.org/TR/css-syntax-3/">http://www.w3.org/TR/css-syntax-3/</a>
    <dt id="biblio-rfc2119"><a class="self-link" href="#biblio-rfc2119"></a>[RFC2119]
    <dd>S. Bradner. <a href="http://www.ietf.org/rfc/rfc2119.txt">Key words for use in RFCs to Indicate Requirement Levels</a>. March 1997. Best Current Practice. URL: <a href="http://www.ietf.org/rfc/rfc2119.txt">http://www.ietf.org/rfc/rfc2119.txt</a></dl>
  </body>
