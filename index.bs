@@ -450,8 +450,7 @@ The stream of Unicode characters that consists the input to the tokenization sta
 
       <dt>Anything else</dt>
       <dd>Emit a U+005D RIGHT SQUARE BRACKET (<code>]</code>) character as character token and also
-     emit the current input character as character token. Stay in the current
-     state.</dd>
+     emit the current input character as character token. Switch to <a>CDATA bracket state</a>.</dd>
     </dl>
   </dd>
 
