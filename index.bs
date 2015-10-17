@@ -898,7 +898,7 @@ The stream of Unicode characters that consists the input to the tokenization sta
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
       <dt>U+000C FORM FEED (<code class="non-print">FF</code>)</dt>
-      <dt>U+000C SPACE (<code class="non-print">Space</code>)</dt>
+      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
       <dd>Switch to the <a>before DOCTYPE name state</a>.</dd>
 
       <dt>EOF</dt>
@@ -922,7 +922,7 @@ The stream of Unicode characters that consists the input to the tokenization sta
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
       <dt>U+000C FORM FEED (<code class="non-print">FF</code>)</dt>
-      <dt>U+000C SPACE (<code class="non-print">Space</code>)</dt>
+      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
       <dd>Ignore the character.</dd>
 
       <dt><a>Uppercase ASCII letter</a></dt>
@@ -950,7 +950,7 @@ The stream of Unicode characters that consists the input to the tokenization sta
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
       <dt>U+000C FORM FEED (<code class="non-print">FF</code>)</dt>
-      <dt>U+000C SPACE (<code class="non-print">Space</code>)</dt>
+      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
       <dd>Switch to the <a>after DOCTYPE name state</a>.</dd>
 
       <dt><a>Uppercase ASCII letter</a></dt>
@@ -980,7 +980,7 @@ The stream of Unicode characters that consists the input to the tokenization sta
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
       <dt>U+000C FORM FEED (<code class="non-print">FF</code>)</dt>
-      <dt>U+000C SPACE (<code class="non-print">Space</code>)</dt>
+      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
       <dd>Ignore the character.</dd>
 
       <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
@@ -1006,7 +1006,7 @@ The stream of Unicode characters that consists the input to the tokenization sta
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
       <dt>U+000C FORM FEED (<code class="non-print">FF</code>)</dt>
-      <dt>U+000C SPACE (<code class="non-print">Space</code>)</dt>
+      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
       <dd>Switch to the <a>before DOCTYPE public identifier state</a>.</dd>
 
       <dt>U+0022 QUOTATION MARK(<code>&quot;</code>)</dt>
@@ -1026,8 +1026,67 @@ The stream of Unicode characters that consists the input to the tokenization sta
     </dl>
   </dd>
 
-  <h4 class="heading" id="before-doctype-public-ident">
+
+  <h4 class="heading" id="after_doctype_system_keyword_state">
+    <span class="content"><dfn>After DOCTYPE system keyword state</dfn></span>
+  </h4>
+  <dd>
+    Consume the next input character:
+    <dl class="switch">
+      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+      <dt>U+000C FORM FEED (<code class="non-print">FF</code>)</dt>
+      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+      <dd>Switch to the <a>before DOCTYPE system identifier state</a>.</dd>
+
+      <dt>U+0022 QUOTATION MARK(<code>&quot;</code>)</dt>
+      <dd><a>Parse error</a>. Set the DOCTYPE token's public identifier current DOCTYPE token to the empty string (not missing), then switch to the <a>DOCTYPE system identifier (double-quoted) state</a>.</dd>
+
+      <dt>U+0027 APOSTROPHE(<code>'</code>)</dt>
       <dd><a>Parse error</a>. Set the DOCTYPE token's public identifier current DOCTYPE token to the empty string (not missing), then switch to the <a>DOCTYPE system identifier (single-quoted) state</a>.</dd>
+
+      <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
+      <dd><a>Parse error</a>. Set the DOCTYPE token's public identifier current DOCTYPE token to the empty string (not missing), then switch to the <a>DOCTYPE system identifier (single-quoted) state</a>.</dd>
+
+      <dt>EOF</dt>
+      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit that DOCTYPE token. Reconsume the EOF character.</dd>
+
+      <dt>Anything else</dt>
+      <dd><a>Parse error</a>. Switch to the <a>bogus DOCTYPE state</a>. Emit that DOCTYPE token. Reconsume the EOF character.</dd>
+    </dl>
+  </dd>
+
+
+  <h4 class="heading" id="before_doctype_system_identifier_state">
+    <span class="content"><dfn>Before DOCTYPE system identifier state</dfn></span>
+  </h4>
+  <dd>
+    Consume the next input character:
+    <dl class="switch">
+      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+      <dt>U+000C FORM FEED (<code class="non-print">FF</code>)</dt>
+      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+      <dd>Ignore the character.</dd>
+
+      <dt>U+0022 QUOTATION MARK(<code>&quot;</code>)</dt>
+      <dd>Set the DOCTYPE token's system identifier current DOCTYPE token to the empty string (not missing), then switch to the <a>DOCTYPE system identifier (double-quoted) state</a>.</dd>
+
+      <dt>U+0027 APOSTROPHE(<code>'</code>)</dt>
+      <dd><a>Parse error</a>. Set the DOCTYPE token's system identifier current DOCTYPE token to the empty string (not missing), then switch to the <a>DOCTYPE system identifier (single-quoted) state</a>.</dd>
+
+      <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
+      <dd><a>Parse error</a>. Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
+
+      <dt>EOF</dt>
+      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token with default attributes. Reconsume the EOF character.</dd>
+
+      <dt>Anything else</dt>
+      <dd><a>Parse error</a>. Switch to the <a>bogus DOCTYPE state</a>.</dd>
+    </dl>
+  </dd>
+
+  <h4 class="heading" id="before_doctype_public_identifier_state">
     <span class="content"><dfn>Before DOCTYPE public identifier state</dfn></span>
   </h4>
   <dd>
@@ -1036,7 +1095,7 @@ The stream of Unicode characters that consists the input to the tokenization sta
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
       <dt>U+000C FORM FEED (<code class="non-print">FF</code>)</dt>
-      <dt>U+000C SPACE (<code class="non-print">Space</code>)</dt>
+      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
       <dd>Ignore the character.</dd>
 
       <dt>U+0022 QUOTATION MARK(<code>&quot;</code>)</dt>
@@ -1106,7 +1165,7 @@ The stream of Unicode characters that consists the input to the tokenization sta
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
       <dt>U+000C FORM FEED (<code class="non-print">FF</code>)</dt>
-      <dt>U+000C SPACE (<code class="non-print">Space</code>)</dt>
+      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
       <dd>Switch to the <a>between DOCTYPE public and system identifiers state</a>.</dd>
 
       <dt>U+0027 APOSTROPHE(<code>'</code>)</dt>
@@ -1135,7 +1194,7 @@ The stream of Unicode characters that consists the input to the tokenization sta
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
       <dt>U+000C FORM FEED (<code class="non-print">FF</code>)</dt>
-      <dt>U+000C SPACE (<code class="non-print">Space</code>)</dt>
+      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
       <dd>Ignore the character.</dd>
 
       <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
@@ -1204,7 +1263,7 @@ The stream of Unicode characters that consists the input to the tokenization sta
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
       <dt>U+000C FORM FEED (<code class="non-print">FF</code>)</dt>
-      <dt>U+000C SPACE (<code class="non-print">Space</code>)</dt>
+      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
       <dd>Ignore the character.</dd>
 
       <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
