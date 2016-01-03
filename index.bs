@@ -924,7 +924,7 @@ The stream of Unicode characters that consists the input to the tokenization sta
       <dd>Ignore the character.</dd>
 
       <dt><a>Uppercase ASCII letter</a></dt>
-      <dd>Create a new DOCTYPE token. Set the token name to lowercase version of the current input character. Switch to the DOCTYPE name state.</dd>
+      <dd>Create a new DOCTYPE token. Set the token name to lowercase version of the current input character. Switch to the <a>DOCTYPE name state</a>.</dd>
 
       <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
       <dd><a>Parse error</a> Create a new DOCTYPE token. Emit token. Switch to <a>data state</a>.</dd>
@@ -1072,7 +1072,7 @@ The stream of Unicode characters that consists the input to the tokenization sta
       <dd>Set the DOCTYPE token's system identifier current DOCTYPE token to the empty string (not missing), then switch to the <a>DOCTYPE system identifier (double-quoted) state</a>.</dd>
 
       <dt>U+0027 APOSTROPHE(<code>'</code>)</dt>
-      <dd><a>Parse error</a>. Set the DOCTYPE token's system identifier current DOCTYPE token to the empty string (not missing), then switch to the <a>DOCTYPE system identifier (single-quoted) state</a>.</dd>
+      <dd>Set the DOCTYPE token's system identifier current DOCTYPE token to the empty string (not missing), then switch to the <a>DOCTYPE system identifier (single-quoted) state</a>.</dd>
 
       <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
       <dd><a>Parse error</a>. Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
@@ -1098,10 +1098,10 @@ The stream of Unicode characters that consists the input to the tokenization sta
       <dd>Ignore the character.</dd>
 
       <dt>U+0022 QUOTATION MARK(<code>&quot;</code>)</dt>
-      <dd><a>Parse error</a>. Set the DOCTYPE token's public identifier current DOCTYPE token to the empty string (not missing), then switch to the <a>DOCTYPE public identifier (double-quoted) state</a>.</dd>
+      <dd>Set the DOCTYPE token's public identifier current DOCTYPE token to the empty string (not missing), then switch to the <a>DOCTYPE public identifier (double-quoted) state</a>.</dd>
 
       <dt>U+0027 APOSTROPHE(<code>'</code>)</dt>
-      <dd><a>Parse error</a>. Set the DOCTYPE token's public identifier current DOCTYPE token to the empty string (not missing), then switch to the <a>DOCTYPE public identifier (single-quoted) state</a>.</dd>
+      <dd>Set the DOCTYPE token's public identifier current DOCTYPE token to the empty string (not missing), then switch to the <a>DOCTYPE public identifier (single-quoted) state</a>.</dd>
 
       <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
       <dd><a>Parse error</a>. Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
