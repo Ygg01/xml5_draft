@@ -39,7 +39,7 @@
    <h1 class="p-name no-ref allcaps" id="title">XML5</h1>
   
    <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Living Standard — Last Updated
-    <time class="dt-updated" datetime="2015-10-17">17 October 2015</time></span></h2>
+    <time class="dt-updated" datetime="2016-01-03">3 January 2016</time></span></h2>
   
    <div data-fill-with="spec-metadata">
     <dl>
@@ -1800,7 +1800,7 @@
       <dt><a data-link-type="dfn" href="#uppercase-ascii-letters">Uppercase ASCII letter</a>
       
       
-      <dd>Create a new DOCTYPE token. Set the token name to lowercase version of the current input character. Switch to the DOCTYPE name state.
+      <dd>Create a new DOCTYPE token. Set the token name to lowercase version of the current input character. Switch to the <a data-link-type="dfn" href="#doctype-name-state">DOCTYPE name state</a>.
       
 
       
@@ -2104,7 +2104,7 @@
       <dt>U+0027 APOSTROPHE(<code>'</code>)
       
       
-      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Set the DOCTYPE token’s system identifier current DOCTYPE token to the empty string (not missing), then switch to the <a data-link-type="dfn" href="#doctype-system-identifier-single_quoted-state">DOCTYPE system identifier (single-quoted) state</a>.
+      <dd>Set the DOCTYPE token’s system identifier current DOCTYPE token to the empty string (not missing), then switch to the <a data-link-type="dfn" href="#doctype-system-identifier-single_quoted-state">DOCTYPE system identifier (single-quoted) state</a>.
       
 
       
@@ -2159,14 +2159,14 @@
       <dt>U+0022 QUOTATION MARK(<code>"</code>)
       
       
-      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Set the DOCTYPE token’s public identifier current DOCTYPE token to the empty string (not missing), then switch to the <a data-link-type="dfn" href="#doctype-public-identifier-double_quoted-state">DOCTYPE public identifier (double-quoted) state</a>.
+      <dd>Set the DOCTYPE token’s public identifier current DOCTYPE token to the empty string (not missing), then switch to the <a data-link-type="dfn" href="#doctype-public-identifier-double_quoted-state">DOCTYPE public identifier (double-quoted) state</a>.
       
 
       
       <dt>U+0027 APOSTROPHE(<code>'</code>)
       
       
-      <dd><a data-link-type="dfn" href="#parse-error">Parse error</a>. Set the DOCTYPE token’s public identifier current DOCTYPE token to the empty string (not missing), then switch to the <a data-link-type="dfn" href="#doctype-public-identifier-single_quoted-state">DOCTYPE public identifier (single-quoted) state</a>.
+      <dd>Set the DOCTYPE token’s public identifier current DOCTYPE token to the empty string (not missing), then switch to the <a data-link-type="dfn" href="#doctype-public-identifier-single_quoted-state">DOCTYPE public identifier (single-quoted) state</a>.
       
 
       
@@ -2655,6 +2655,22 @@
        <p>Append a <code>Comment</code> node to the <code>Document</code> node
     with the <code>data</code> attribute set to the data given in the
     token.</p>
+       
+
+  
+      
+
+  
+      <dt>A doctype token
+      
+  
+      <dd>
+
+
+       <p>Append the given <code>DoctypeToken</code> node to the
+    <code>Document</code> node with the <code>name</code>, <code>public id</code>
+    and <code>system id</code>
+    atributes set to the name, public id and system id in the token.</p>
        
 
   
