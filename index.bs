@@ -1366,6 +1366,16 @@ The stream of Unicode characters that consists the input to the tokenization sta
 
   </dd>
 
+  <dt>A doctype token</dt>
+  <dd>
+
+    Append the given <code>DoctypeToken</code> node to the
+    <code>Document</code> node with the <code>name</code>, <code>public id</code>
+    and <code>system id</code>
+    atributes set to the name, public id and system id in the token.
+
+  </dd>
+
   <dt>A processing instruction token</dt>
   <dd>
 
