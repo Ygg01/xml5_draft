@@ -306,7 +306,7 @@ The stream of Unicode characters that consists the input to the tokenization sta
       <dd>Emit the current token and then switch to the <a>data state</a>.</dd>
 
       <dt>U+003F QUESTION MARK(<code>?</code>)</dt>
-      <dd>Append the current input character to the pi's data and stay in the
+      <dd>Append the current input character to the PI's data and stay in the
      current state.</dd>
 
       <dt>Anything else</dt>
@@ -344,23 +344,25 @@ The stream of Unicode characters that consists the input to the tokenization sta
     Consume the next input character:
 
     <dl class="switch">
-      <dt>U+002D HYPHEN-MINUS, (<code>-</code>)</dt>
-      <dd>Switch to the <a>comment dash state</a>.</dd>
+      <dt>U+003C LESS-THAN SIGN (<code>&lt;</code>)</dt>
+      <dd>Append the <a>current input character</a> to the comment tokens' date.
+         Switch to the <a>comment less-than sign state</a>.</dd>
 
-      <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
-      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit the comment token.</dd>
+      <dt>U+002D HYPHEN-MINUS (<code>-</code>)</dt>
+      <dd>Switch to the <a>comment end dash state</a>.</dd>
 
       <dt>EOF</dt>
-      <dd><a>Parse error</a>. Emit the comment token and then reprocess the
-     current input character in the <a>data state</a>.</dd>
+      <dd><a>Parse error</a>. Emit the comment token. Emit an end-of-file
+        token.</dd>
 
       <dt>Anything else</dt>
       <dd>Append the current character to the comment data.</dd>
     </dl>
   </dd>
 
-  <h4 class="heading" id="comment_dash_state">
-    <span class="content"><dfn>Comment dash state</dfn></span>
+
+  <h4 class="heading" id="comment_less_than_sign_state">
+    <span class="content"><dfn>Comment less-than sign state</dfn></span>
   </h4>
 
   <dd>
@@ -368,16 +370,91 @@ The stream of Unicode characters that consists the input to the tokenization sta
     Consume the next input character:
 
     <dl class="switch">
-      <dt>U+002D HYPHEN-MINUS, (<code>-</code>)</dt>
+      <dt>U+0021 EXCLAMATION-MARK (<code>!</code>)</dt>
+      <dd>Append the <a>current input character</a> to the comment token's data.
+         Switch to the <a>comment less-than sign state</a>.</dd>
+
+      <dt>U+003C LESS-THAN SIGN (<code>&lt;</code>)</dt>
+      <dd>Append the <a>current input character</a> to the comment token's data.
+      </dd>
+
+      <dt>Anything else</dt>
+      <dd><a>Reconsume</a> in the <a>comment state</a>.</dd>
+    </dl>
+  </dd>
+
+  <h4 class="heading" id="comment_less_than_sign_bang_state">
+    <span class="content"><dfn>Comment less-than sign bang state</dfn></span>
+  </h4>
+
+  <dd>
+
+    Consume the next input character:
+
+    <dl class="switch">
+      <dt>U+002D HYPHEN-MINUS (<code>-</code>)</dt>
+      <dd>Switch to the <a>comment less-than sign bang dash state</a>.</dd>
+
+      <dt>Anything else</dt>
+      <dd><a>Reconsume</a> in the <a>comment state</a>.</dd>
+    </dl>
+  </dd>
+
+  <h4 class="heading" id="comment_less_than_sign_bang_dash_state">
+    <span class="content"><dfn>Comment less-than sign bang dash state</dfn></span>
+  </h4>
+
+  <dd>
+
+    Consume the next input character:
+
+    <dl class="switch">
+      <dt>U+002D HYPHEN-MINUS (<code>-</code>)</dt>
+      <dd>Switch to the <a>comment less-than sign bang dash dash state</a>.</dd>
+
+      <dt>Anything else</dt>
+      <dd><a>Reconsume</a> in the <a>comment end dash state</a>.</dd>
+    </dl>
+  </dd>
+
+  <h4 class="heading" id="comment_less_than_sign_bang_dash_dash_state">
+    <span class="content"><dfn>Comment less-than sign bang dash dash state</dfn>
+    </span>
+  </h4>
+
+  <dd>
+
+    Consume the next input character:
+
+    <dl class="switch">
+      <dt>U+003E GREATER-THAN-SIGN (<code>&gt;</code>)</dt>
+      <dt>EOF</dt>
+      <dd><a>Reconsume</a> in the <a>comment end state</a>.</dd>
+
+      <dt>Anything else</dt>
+      <dd><a>Parse error</a>.<a>Reconsume</a> in the <a>comment end state</a>.
+      </dd>
+    </dl>
+  </dd>
+
+  <h4 class="heading" id="comment_end_dash_state">
+    <span class="content"><dfn>Comment end dash state</dfn></span>
+  </h4>
+
+  <dd>
+
+    Consume the next input character:
+
+    <dl class="switch">
+      <dt>U+002D HYPHEN-MINUS (<code>-</code>)</dt>
       <dd>Switch to the <a>comment end state</a>.</dd>
 
       <dt>EOF</dt>
-      <dd><a>Parse error</a>. Emit the comment token and then reprocess the
-     current input character in the <a>data state</a>.</dd>
+      <dd><a>Parse error</a>. Emit the comment token. Emit end-of-file token.</dd>
 
       <dt>Anything else</dt>
-      <dd>Append a U+002D (<code>-</code>) and the current input character to the
-     comment token's data. Stay in the current state.</dd>
+      <dd>Append a U+002D HYPHEN-MINUS (<code>-</code>) to the comment's token
+        data. <a>Reconsume</a> in the <a>comment state</a>.</dd>
     </dl>
   </dd>
 
@@ -391,19 +468,46 @@ The stream of Unicode characters that consists the input to the tokenization sta
 
     <dl class="switch">
       <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
-      <dd>Emit the comment token. Switch to the <a>data state</a>.</dd>
+      <dd>Switch to the <a>data state</a>.Emit the comment token.</dd>
 
-      <dt>U+002D HYPHEN-MINUS, (<code>-</code>)</dt>
-      <dd>Append the current input character to the comment token's data. Stay in
-     the current state.</dd>
+      <dt>U+0021 EXCLAMATION MARK(<code>!</code>)</dt>
+      <dd>Switch to the <a>comment end bang state</a>.</dd>
+
+      <dt>U+002D HYPHEN-MINUS (<code>-</code>)</dt>
+      <dd>Append a U+002D HYPHEN-MINUS character (<code>-</code>) to the comment
+         token's data.</dd>
 
       <dt>EOF</dt>
-      <dd><a>Parse error</a>. Emit the comment token and then reprocess the
-     current input character in the <a>data state</a>.</dd>
+      <dd><a>Parse error</a>. Emit the comment token. Emit an end-of-file token.
+      </dd>
 
       <dt>Anything else</dt>
       <dd>Append two U+002D (<code>-</code>) characters and the current input
-     character to the comment token's data. Switch to the <a>comment
+        character to the comment token's data. <a>Reconsume</a> in the <a>comment
+        state</a>.</dd>
+    </dl>
+  </dd>
+
+  <h4 class="heading" id="comment_end_bang_state">
+    <span class="content"><dfn>Comment end bang state</dfn></span>
+  </h4>
+
+  <dd>
+
+    Consume the next input character:
+
+    <dl class="switch">
+      <dt>U+002D HYPHEN-MINUS (<code>-</code>)</dt>
+      <dd>Append a U+002D HYPHEN-MINUS character (<code>-</code>) and U+0021 EXCLAMATION MARK character(<code>!</code>) to the comment token's data. Switch to the <a>comment end dash state</a>.</dd>
+
+      <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
+      <dd><a>Parse error</a>. Switch to the <a>data state</a>.Emit the comment token.</dd>
+
+      <dt>EOF</dt>
+      <dd><a>Parse error</a>. Emit the comment token. Emit an end-of-file token.</dd>
+
+      <dt>Anything else</dt>
+      <dd>Append two U+002D (<code>-</code>) characters and  U+0021 EXCLAMATION MARK character(<code>!</code>) to the comment token's data. <a>Reconsume</a> in the <a>comment
      state</a>.</dd>
     </dl>
   </dd>
@@ -1371,7 +1475,7 @@ The stream of Unicode characters that consists the input to the tokenization sta
 
     Append a <code>ProcessingInstruction</code> node to the
     <code>Document</code> node with the <code>target</code> and <code>data</code>
-    atributes set to the target and data given in the token.
+    attributes set to the target and data given in the token.
 
   </dd>
 
@@ -1447,7 +1551,7 @@ steps until further notice:
   <dt>A processing instruction token</dt>
   <dd>
     Append a <code>ProcessingInstruction</code> node to the <a>current
-    element</a> with the <code>target</code> and <code>data</code> atributes
+    element</a> with the <code>target</code> and <code>data</code> attributes
     set to the target and data given in the token.
 
   </dd>
@@ -1475,7 +1579,7 @@ steps until further notice:
 
     Append a <code>ProcessingInstruction</code> node to the
     <code>Document</code> node with the <code>target</code> and <code>data</code>
-    atributes set to the target and data given in the token.
+    attributes set to the target and data given in the token.
 
   </dd>
 
@@ -1514,3 +1618,5 @@ The <dfn>ASCII hex digits</dfn>  are the characters in the ranges U+0030 DIGIT Z
 The <dfn>lowercase ASCII letters</dfn> are characters in the range between  U+0061 LATIN SMALL LETTER A to U+007A LATIN SMALL LETTER Z.
 
 The <dfn>uppercase ASCII letters</dfn> are characters in the range between U+0041 LATIN CAPITAL LETTER A to U+005A LATIN CAPITAL LETTER Z.
+
+Comparing two strings in an <dfn>ASCII case-insensitive</dfn> manner means comparing them exactly, code point for code point, except that the characters in the range U+0041 to U+005A (i.e. LATIN CAPITAL LETTER A to LATIN CAPITAL LETTER Z) and the corresponding characters in the range U+0061 to U+007A (i.e. LATIN SMALL LETTER A to LATIN SMALL LETTER Z) are considered to also match.
