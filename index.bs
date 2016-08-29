@@ -45,6 +45,24 @@ The stream of Unicode characters that consists the input to the tokenization sta
   <span class="content"><dfn>Tokenization</dfn></span>
 </h3>
 
+Implementations must act as if they used the following state machine to tokenise
+HTML. The state machine must start in the data state. Most states consume a
+single character, which may have various side-effects, and either switches the
+state machine to a new state to reconsume the current input character, or
+switches it to a new state to consume the next character, or stays in the same
+state to consume the next character. Some states have more complicated behavior
+ and can consume several characters before switching to another state. In some
+ cases, the tokenizer state is also changed by the tree construction stage.
+
+ When a state says to <dfn>reconsume</dfn> a matched character in a specified state, that
+ means to switch to that state, but when it attempts to consume the next input
+ character, provide it with the current input character instead.
+
+ The <dfn>next input character</dfn> is the first character in the input stream that has
+ not yet been consumed or explicitly ignored by the requirements in this
+ section. Initially, the next input character is the first character in the
+ input. The <dfn>current input character</dfn> is the last character to have been consumed.
+
 <p class="warning">Decide how to deal with namespaces</p>
 
 <dl>
@@ -980,7 +998,7 @@ The stream of Unicode characters that consists the input to the tokenization sta
 
         If there wasn't a parse error return a reference with name equal to consumed characters, omitting the U+003B SEMICOLON character (<code>;</code>).
 
-        <div class="example">
+        <div class="example" id="ref_tokenizer_example">
           If the markup contains following attribute <code>This is a &amp;ref;</code>, character tokenizer should return this as a reference named ref. However if the attribute defined is defined as <code>This is &amp;notref</code>, then the tokenizer will interpret this as a text <code>This is &amp;notref</code>, while emitting a <a>parse error</a>.
         </div>
 
