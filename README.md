@@ -6,9 +6,29 @@ The original version of this proposal is hosted on [XML5 code repository](https:
 What's XML5
 ==========
 
-XML5 is simply put, a more relaxed version of XML syntax. Basically, take the best aspects of HTML(5) syntax and apply it to XML.
-And no, I don't mean [quirks mode](https://developer.mozilla.org/en-US/docs/Quirks_Mode_and_Standards_Mode) or the [adoption agency algorithm](https://html.spec.whatwg.org/#adoptionAgency).
-This includes dealing with Doctype in a way that doesn't cause horrible security exploits.
+XML5 is simply put, a more relaxed version of XML syntax. Basically, take the best aspects of HTML(5) syntax and apply it to XML. What this means in practice is following:
+
+   * DOCTYPE is simplified and optional. Also no known laughing bomb exploits.
+   * Creates a detailed rules for state transitions, to simplify implementations.
+   * Allows mixed content everywhere `<text>A <b>bold</b> new world</test>` becomes:  
+```
+    Tag('text')
+     |
+     +---Text('A ')
+     |
+     +---Tag('b')
+     |    |
+     |    +---Text('bold')
+     |
+     +---Text(' new world')
+```
+   * Writing one of escaped character inside tags automatically escapes them `<tag>Tom & Jerry</tag>` when parsed becomes:
+```
+    Tag('tag')
+     |
+     +---Text('Tom & Jerry')
+```
+   * XML comments are a lot more flexible (and a bit more difficult to parse), i.e. `--` is allowed in comments. Nested comments are prohibited.
 
 What XML5 strive to do is, to drop all notion of well-formedness out of the window and replace it with HTML-like error handling. XML5 parser will be able to parse any XML 1.0 and XML 1.1 documents, but a valid XML5 document wouldn't be parseable by a XML 1.0 or even XML 1.1 parser.
 Motivation behind this is to allow easier parsing of XML generated using string concatenation and used often on the web.
