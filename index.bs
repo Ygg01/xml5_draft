@@ -5,16 +5,23 @@ Status: LS
 Logo: https://resources.whatwg.org/logo.svg
 Shortname: xml5
 Level:1
-Editor: Anne van Kesteren, Mozilla, <annevk@annevk.nl>
+Editor: Anne van Kesteren, Mozilla, < annevk@annevk.nl >
 Abstract: XML with well-defined error handling.
-Editor: Daniel Fath, Unaffiliated,  <daniel.fath7@gmail.com>
-Group: WHATWG
+Editor: Daniel Fath, Unaffiliated,  < daniel.fath7@gmail.com >
+Group: WGORWHATEVER
 </pre>
-<style type="text/css">
+<style>
   switch { padding-left: 2em; }
   switch dt {text-indent: -1.5em; }
   switch dt:before {content: '\21AA'; padding: 0 0.5em 0 0; display: inline-block;}
-  .non-print { background-color: #BFBFBF;  border-radius: 0.2em;}
+  .non-print {
+        background-color: #040404;
+        border-radius: 0.3em;
+        border-style: outset;
+        border-color: #546464;
+        font-family: Lucida Console,ui-monospace;
+        color: #e2e6e6;
+  }
 </style>
 
 <h2 class="heading" data-level="1" id="parsing">
@@ -72,20 +79,20 @@ state to consume the next character. Some states have more complicated behavior
 
   <dd>
 
-    Consume the next input character:
+    Consume the <a>next input character</a>:
 
     <dl class="switch">
       <dt>U+0026 AMPERSAND (<code>&amp;</code>)
       <dd>Switch to <a>character reference in data state</a>.</dd>
 
       <dt>U+003C LESSER-THAN SIGN (<code>&lt;</code>)</dt>
-      <dd>Switch to the <a>tag state</a>.</dd>
+      <dd>Switch to the <a>tag open state</a>.</dd>
 
       <dt>EOF</dt>
       <dd>Emit an end-of-file token.</dd>
 
       <dt>Anything else</dt>
-      <dd>Emit the input character as character. Stay in this state.</dd>
+      <dd>Emit the <a>current input character</a> as character. Stay in this state.</dd>
     </dl>
   </dd>
 
@@ -103,17 +110,17 @@ state to consume the next character. Some states have more complicated behavior
     Otherwise, emit character tokens that were returned.
   </dd>
 
-  <h4 class="heading" id="tag_state">
-    <span class="content"><dfn>Tag state</dfn></span>
+  <h4 class="heading" id="tag_open_state">
+    <span class="content"><dfn>Tag open state</dfn></span>
   </h4>
 
   <dd>
 
-    Consume the next input character:
+    Consume the <a>next input character</a>:
 
     <dl class="switch">
       <dt>U+002F SOLIDUS (<code>/</code>)</dt>
-      <dd>Switch to the <a>end tag state</a>.</dd>
+      <dd>Switch to the <a>end tag open state</a>.</dd>
 
       <dt>U+003F QUESTION MARK(<code>?</code>)</dt>
 
@@ -140,13 +147,13 @@ state to consume the next character. Some states have more complicated behavior
     </dl>
   </dd>
 
-  <h4 class="heading" id="end_tag_state">
-    <span class="content"><dfn>End tag state</dfn></span>
+  <h4 class="heading" id="end_tag_open_state">
+    <span class="content"><dfn>End tag open state</dfn></span>
   </h4>
 
   <dd>
 
-  Consume the next input character:
+  Consume the <a>next input character</a>:
   <dl class="switch">
   <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
 
@@ -176,7 +183,7 @@ state to consume the next character. Some states have more complicated behavior
 
   <dd>
 
-    Consume the next input character:
+    Consume the <a>next input character</a>:
     <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
@@ -187,7 +194,7 @@ state to consume the next character. Some states have more complicated behavior
       <dd><a>Parse error</a>. Switch to the <a>end tag name after state</a>.</dd>
 
       <dt>EOF</dt>
-      <dd><a>Parse error</a>. Emit the current token and then reprocess the
+      <dd><a>Parse error</a>. Emit the start tag token and then reprocess the
        current input character in the <a>data state</a>.</dd>
 
       <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
@@ -205,7 +212,7 @@ state to consume the next character. Some states have more complicated behavior
 
   <dd>
 
-    Consume the next input character:
+    Consume the <a>next input character</a>:
     <dl class="switch">
       <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
       <dd>Emit the current token and then switch to the <a>data state</a>.</dd>
@@ -230,7 +237,7 @@ state to consume the next character. Some states have more complicated behavior
 
   <dd>
 
-    Consume the next input character:
+    Consume the <a>next input character</a>:
     <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
@@ -252,7 +259,7 @@ state to consume the next character. Some states have more complicated behavior
 
   <dd>
 
-    Consume the next input character:
+    Consume the <a>next input character</a>:
     <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
@@ -278,7 +285,7 @@ state to consume the next character. Some states have more complicated behavior
 
   <dd>
 
-    Consume the next input character:
+    Consume the <a>next input character</a>:
     <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
@@ -297,7 +304,7 @@ state to consume the next character. Some states have more complicated behavior
 
   <dd>
 
-    Consume the next input character:
+    Consume the <a>next input character</a>:
     <dl class="switch">
       <dt>U+003F QUESTION MARK(<code>?</code>)</dt>
       <dd>Switch to the <a>pi after state</a>.</dd>
@@ -318,7 +325,7 @@ state to consume the next character. Some states have more complicated behavior
 
   <dd>
 
-    Consume the next input character:
+    Consume the <a>next input character</a>:
     <dl class="switch">
       <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
       <dd>Emit the current token and then switch to the <a>data state</a>.</dd>
@@ -338,19 +345,25 @@ state to consume the next character. Some states have more complicated behavior
   </h4>
 
   <dd>
-    If the next two characters are both U+002D (<code>-</code>)
-    characters, consume those two characters, create a comment token whose data
-    is the empty string and then switch to the <a>comment state</a>.
 
-    Otherwise, if the next seven characters are an exact match for
-    "[CDATA[", then consume those characters and switch to the <a>CDATA
-    state</a>.
+    If the next few characters are:
 
-    Otherwise, if the next seven characters are an exact match for "DOCTYPE",
-    then this consume those characters and switch to the <a>DOCTYPE state</a>.
+    <dl class="switch">
+      <dt>Two U+002D HYPEN-MINUS characters (<code>-</code>)</dt>
+      <dd>Consume those two characters, create a comment token whose data is the empty string and switch to <a>comment
+      start state</a>.</dd>
 
-    Otherwise, this is a <a>parse error</a>. Switch to the <a>bogus
-    comment state</a>.
+      <dt>ASCII case-insensitive match for word "DOCTYPE"</dt>
+      <dd>Consume those characters and switch to <a>Doctype state</a></dd>
+
+      <dt>Exact match for word "[CDATA[" with a (the five uppercase letters "CDATA" with a U+005B LEFT SQUARE BRACKET
+        character before and after)</dt>
+      <dd>Consume those characters and switch to <a>CDATA state</a></dd>
+
+      <dt>Anything else</dt>
+      <dd>Emit an error. Create a comment token whose data is an empty string. Switch to <a>bogus comment state</a>
+      (don't consume any characters)</dd>
+    </dl>
   </dd>
 
   <h4 class="heading" id="comment_state">
@@ -359,7 +372,7 @@ state to consume the next character. Some states have more complicated behavior
 
   <dd>
 
-    Consume the next input character:
+    Consume the <a>next input character</a>:
 
     <dl class="switch">
       <dt>U+003C LESS-THAN SIGN (<code>&lt;</code>)</dt>
@@ -385,7 +398,7 @@ state to consume the next character. Some states have more complicated behavior
 
   <dd>
 
-    Consume the next input character:
+    Consume the <a>next input character</a>:
 
     <dl class="switch">
       <dt>U+0021 EXCLAMATION-MARK (<code>!</code>)</dt>
@@ -407,7 +420,7 @@ state to consume the next character. Some states have more complicated behavior
 
   <dd>
 
-    Consume the next input character:
+    Consume the <a>next input character</a>:
 
     <dl class="switch">
       <dt>U+002D HYPHEN-MINUS (<code>-</code>)</dt>
@@ -424,7 +437,7 @@ state to consume the next character. Some states have more complicated behavior
 
   <dd>
 
-    Consume the next input character:
+    Consume the <a>next input character</a>:
 
     <dl class="switch">
       <dt>U+002D HYPHEN-MINUS (<code>-</code>)</dt>
@@ -442,7 +455,7 @@ state to consume the next character. Some states have more complicated behavior
 
   <dd>
 
-    Consume the next input character:
+    Consume the <a>next input character</a>:
 
     <dl class="switch">
       <dt>U+003E GREATER-THAN-SIGN (<code>&gt;</code>)</dt>
@@ -461,7 +474,7 @@ state to consume the next character. Some states have more complicated behavior
 
   <dd>
 
-    Consume the next input character:
+    Consume the <a>next input character</a>:
 
     <dl class="switch">
       <dt>U+002D HYPHEN-MINUS (<code>-</code>)</dt>
@@ -482,7 +495,7 @@ state to consume the next character. Some states have more complicated behavior
 
   <dd>
 
-    Consume the next input character:
+    Consume the <a>next input character</a>:
 
     <dl class="switch">
       <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
@@ -512,7 +525,7 @@ state to consume the next character. Some states have more complicated behavior
 
   <dd>
 
-    Consume the next input character:
+    Consume the <a>next input character</a>:
 
     <dl class="switch">
       <dt>U+002D HYPHEN-MINUS (<code>-</code>)</dt>
@@ -536,7 +549,7 @@ state to consume the next character. Some states have more complicated behavior
 
   <dd>
 
-    Consume the next input character:
+    Consume the <a>next input character</a>:
 
     <dl class="switch">
       <dt>U+005D RIGHT SQUARE BRACKET (<code>]</code>)</dt>
@@ -558,7 +571,7 @@ state to consume the next character. Some states have more complicated behavior
 
   <dd>
 
-    Consume the next input character:
+    Consume the <a>next input character</a>:
 
     <dl class="switch">
       <dt>U+005D RIGHT SQUARE BRACKET (<code>]</code>)</dt>
@@ -581,7 +594,7 @@ state to consume the next character. Some states have more complicated behavior
 
   <dd>
 
-    Consume the next input character:
+    Consume the <a>next input character</a>:
 
     <dl class="switch">
       <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
@@ -609,7 +622,7 @@ state to consume the next character. Some states have more complicated behavior
 
   <dd>
 
-    Consume the next input character:
+    Consume the <a>next input character</a>:
 
     <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
@@ -618,7 +631,7 @@ state to consume the next character. Some states have more complicated behavior
       <dd>Switch to the <a>tag attribute name before state</a>.</dd>
 
       <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
-      <dd>Emit the current token and then switch to the <a>data state</a>.</dd>
+      <dd>Emit the start tag token and then switch to the <a>data state</a>.</dd>
 
       <dt>EOF</dt>
       <dd><a>Parse error</a>. Emit the current token and then reprocess the
@@ -640,7 +653,7 @@ state to consume the next character. Some states have more complicated behavior
 
   <dd>
 
-    Consume the next input character:
+    Consume the <a>next input character</a>:
 
     <dl class="switch">
       <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
@@ -660,7 +673,7 @@ state to consume the next character. Some states have more complicated behavior
 
   <dd>
 
-    Consume the next input character:
+    Consume the <a>next input character</a>:
 
     <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
@@ -696,7 +709,7 @@ state to consume the next character. Some states have more complicated behavior
 
   <dd>
 
-    Consume the next input character:
+    Consume the <a>next input character</a>:
 
     <dl class="switch">
       <dt>U+003D EQUALS SIGN (<code>=</code>)</dt>
@@ -740,7 +753,7 @@ state to consume the next character. Some states have more complicated behavior
 
   <dd>
 
-    Consume the next input character:
+    Consume the <a>next input character</a>:
 
     <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
@@ -775,7 +788,7 @@ state to consume the next character. Some states have more complicated behavior
 
   <dd>
 
-    Consume the next input character:
+    Consume the <a>next input character</a>:
 
     <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
@@ -813,7 +826,7 @@ state to consume the next character. Some states have more complicated behavior
 
   <dd>
 
-    Consume the next input character:
+    Consume the <a>next input character</a>:
 
     <dl class="switch">
       <dt>U+0022 QUOTATION MARK (<code>"</code>)</dt>
@@ -841,7 +854,7 @@ state to consume the next character. Some states have more complicated behavior
 
   <dd>
 
-    Consume the next input character:
+    Consume the <a>next input character</a>:
 
     <dl class="switch">
       <dt>U+0022 APOSTROPHE (<code>'</code>)</dt>
@@ -869,7 +882,7 @@ state to consume the next character. Some states have more complicated behavior
 
   <dd>
 
-    Consume the next input character:
+    Consume the <a>next input character</a>:
 
       <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
@@ -1012,7 +1025,7 @@ state to consume the next character. Some states have more complicated behavior
   </h4>
   <dd>
 
-    Consume the next input character:
+    Consume the <a>next input character</a>:
 
       <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
@@ -1036,7 +1049,7 @@ state to consume the next character. Some states have more complicated behavior
 
   <dd>
 
-    Consume the next input character:
+    Consume the <a>next input character</a>:
 
       <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
@@ -1064,7 +1077,7 @@ state to consume the next character. Some states have more complicated behavior
   </h4>
 
   <dd>
-    Consume the next input character:
+    Consume the <a>next input character</a>:
 
     <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
@@ -1094,7 +1107,7 @@ state to consume the next character. Some states have more complicated behavior
   </h4>
 
   <dd>
-    Consume the next input character:
+    Consume the <a>next input character</a>:
 
     <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
@@ -1123,7 +1136,7 @@ state to consume the next character. Some states have more complicated behavior
     <span class="content"><dfn>After DOCTYPE public keyword state</dfn></span>
   </h4>
   <dd>
-    Consume the next input character:
+    Consume the <a>next input character</a>:
     <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
@@ -1152,7 +1165,7 @@ state to consume the next character. Some states have more complicated behavior
     <span class="content"><dfn>After DOCTYPE system keyword state</dfn></span>
   </h4>
   <dd>
-    Consume the next input character:
+    Consume the <a>next input character</a>:
     <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
@@ -1182,7 +1195,7 @@ state to consume the next character. Some states have more complicated behavior
     <span class="content"><dfn>Before DOCTYPE system identifier state</dfn></span>
   </h4>
   <dd>
-    Consume the next input character:
+    Consume the <a>next input character</a>:
     <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
@@ -1211,7 +1224,7 @@ state to consume the next character. Some states have more complicated behavior
     <span class="content"><dfn>Before DOCTYPE public identifier state</dfn></span>
   </h4>
   <dd>
-    Consume the next input character:
+    Consume the <a>next input character</a>:
     <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
@@ -1240,7 +1253,7 @@ state to consume the next character. Some states have more complicated behavior
     <span class="content"><dfn>DOCTYPE public identifier (single-quoted) state</dfn></span>
   </h4>
   <dd>
-    Consume the next input character:
+    Consume the <a>next input character</a>:
     <dl class="switch">
       <dt>U+0027 APOSTROPHE(<code>'</code>)</dt>
       <dd>Switch to the <a>after DOCTYPE public identifier state</a>.</dd>
@@ -1261,7 +1274,7 @@ state to consume the next character. Some states have more complicated behavior
     <span class="content"><dfn>DOCTYPE public identifier (double-quoted) state</dfn></span>
   </h4>
   <dd>
-    Consume the next input character:
+    Consume the <a>next input character</a>:
     <dl class="switch">
       <dt>U+0022 QUOTATION MARK(<code>&quot;</code>)</dt>
       <dd>Switch to the <a>after DOCTYPE public identifier state</a>.</dd>
@@ -1281,7 +1294,7 @@ state to consume the next character. Some states have more complicated behavior
     <span class="content"><dfn>After DOCTYPE public identifier state</dfn></span>
   </h4>
   <dd>
-    Consume the next input character:
+    Consume the <a>next input character</a>:
     <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
@@ -1310,7 +1323,7 @@ state to consume the next character. Some states have more complicated behavior
     <span class="content"><dfn>Between DOCTYPE public and system identifiers state</dfn></span>
   </h4>
   <dd>
-    Consume the next input character:
+    Consume the <a>next input character</a>:
     <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
@@ -1339,7 +1352,7 @@ state to consume the next character. Some states have more complicated behavior
     <span class="content"><dfn>DOCTYPE system identifier (single-quoted) state</dfn></span>
   </h4>
   <dd>
-    Consume the next input character:
+    Consume the <a>next input character</a>:
     <dl class="switch">
       <dt>U+0027 APOSTROPHE(<code>'</code>)</dt>
       <dd>Switch to the <a>after DOCTYPE system identifiers state</a>.</dd>
@@ -1359,7 +1372,7 @@ state to consume the next character. Some states have more complicated behavior
     <span class="content"><dfn>DOCTYPE system identifier (double-quoted) state</dfn></span>
   </h4>
   <dd>
-    Consume the next input character:
+    Consume the <a>next input character</a>:
     <dl class="switch">
       <dt>U+0022 QUOTATION MARK(<code>&quot;</code>)</dt>
       <dd>Switch to the <a>after DOCTYPE system identifiers state</a>.</dd>
@@ -1379,7 +1392,7 @@ state to consume the next character. Some states have more complicated behavior
     <span class="content"><dfn>After DOCTYPE system identifiers state</dfn></span>
   </h4>
   <dd>
-    Consume the next input character:
+    Consume the <a>next input character</a>:
     <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
@@ -1402,7 +1415,7 @@ state to consume the next character. Some states have more complicated behavior
     <span class="content"><dfn>Bogus DOCTYPE state</dfn></span>
   </h4>
   <dd>
-    Consume the next input character:
+    Consume the <a>next input character</a>:
     <dl class="switch">
       <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
       <dd>Switch to <a>data state</a>. Emit DOCTYPE token.</dd>
