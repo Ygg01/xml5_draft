@@ -11,35 +11,117 @@ Editor: Daniel Fath, Unaffiliated,  < daniel.fath7@gmail.com >
 Group: WGORWHATEVER
 </pre>
 <style>
-  switch { padding-left: 2em; }
-  switch dt {text-indent: -1.5em; }
-  switch dt:before {content: '\21AA'; padding: 0 0.5em 0 0; display: inline-block;}
-  .non-print {
+    switch {
+        padding-left: 2em;
+    }
+
+    switch dt {
+        text-indent: -1.5em;
+    }
+
+    switch dt:before {
+        content: '\21AA';
+        padding: 0 0.5em 0 0;
+        display: inline-block;
+    }
+
+    .non-print {
         background-color: #040404;
         border-radius: 0.3em;
         border-style: outset;
         border-color: #546464;
-        font-family: Lucida Console,ui-monospace;
+        font-family: Lucida Console, ui-monospace;
         color: #e2e6e6;
-  }
+    }
+
+    code {
+        color: salmon;
+    }
+
+    table {
+        border-collapse: collapse;
+        border-style: hidden hidden none hidden;
+    }
+
+    table thead, table tbody {
+        border-bottom: solid;
+    }
+
+    table tbody th {
+        text-align: left;
+    }
+
+    table tbody th:first-child {
+        border-left: solid;
+    }
+
+    table td, table th {
+        border-left: solid;
+        border-right: solid;
+        border-bottom: solid thin;
+        vertical-align: top;
+        padding: 0.2em;
+    }
 </style>
 
 <h2 class="heading" data-level="1" id="parsing">
-  <span class="content">Parsing XML documents</span>
+    <span class="content">Parsing XML documents</span>
 </h2>
 
 This section and its subsection define the <dfn>XML parser</dfn>.
 
-<p>This specification defines the parsing rules for XML documents, whether they are syntactically correct or not. Certain points in the parsing algorithm are said to be <dfn lt="parse error">parse errors</dfn>. The handling for parse errors is well-defined: user agents must either act as described below when encountering such problems, or must terminate processing at the first error that they encounter for which they do not wish to apply the rules described below.</p>
+<p>This specification defines the parsing rules for XML documents, whether they are syntactically correct or not.
+    Certain points in the parsing algorithm are said to be <dfn lt="parse error">parse errors</dfn>. The handling for
+    parse errors is well-defined: user agents must either act as described below when encountering such problems, or
+    must terminate processing at the first error that they encounter for which they do not wish to apply the rules
+    described below.</p>
 
 <h3 class="heading" data-level="1" id="parsing-overview">
-  <span class="content">Overview</span>
+    <span class="content">Overview</span>
 </h3>
 
 The input to the XML parsing process consists of a stream of octets which is converted to a stream of code points, which in turn are tokenized, and finally those tokens are used to construct a tree.
 
+<h3 class="heading" data-level="1" id="parse errors">
+    <span class="content">Parse Errors</span>
+</h3>
+
+This specification defines the parsing rules for XML5 documents, whether they are syntactically correct or not.
+Certain points in the parsing algorithm are said to be parse errors.
+The error handling for parse errors is well-defined (that's the processing rules described throughout this specification),
+but user agents, while parsing an HTML document, may abort the parser at the first parse error that they encounter for
+which they do not wish to apply the rules described in this specification.
+
+<table class="parse-error-table">
+    <thead>
+    <tr>
+        <th>
+            Code
+        </th>
+        <th>
+            Description
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><dfn>abrupt-closing-of-empty-comment</dfn></td>
+        <td>This error occurs if the parser encounters an empty comment that is abruptly closed by a U+003E (&gt;) code
+            point (i.e., <code>&lt;!--&gt;</code> or <code>&lt;!---&gt;</code>). The parser behaves as if the comment is
+            closed correctly.
+        </td>
+    </tr>
+    <tr>
+        <td><dfn>incorrectly-opened-comment</dfn></td>
+        <td>This error occurs if the parser encounters the <code>&lt;!</code> code point sequence that is not immediately
+            followed by two U+002D (<code>-</code>) code points and that is not the start of a DOCTYPE or a CDATA
+            section.
+    </tr>
+    </tbody>
+</table>
+
 <h3 class="heading" data-level="1" id="input-stream">
-  <span class="content">Input stream</span>
+    <span class="content">Input stream</span>
 </h3>
 
 The stream of Unicode characters that consists the input to the tokenization stage will be initially seen by the user agent as a stream of octets (typically coming over the network or from the local file system). The octets encode Unicode code points according to a particular encoding, which the user agent must use to decode the octets into code points.
@@ -49,7 +131,7 @@ The stream of Unicode characters that consists the input to the tokenization sta
 
 
 <h3 class="heading" data-level="1" id="tokenization-overview">
-  <span class="content"><dfn>Tokenization</dfn></span>
+    <span class="content"><dfn>Tokenization</dfn></span>
 </h3>
 
 Implementations must act as if they used the following state machine to tokenise
@@ -58,1579 +140,1724 @@ single character, which may have various side-effects, and either switches the
 state machine to a new state to reconsume the current input character, or
 switches it to a new state to consume the next character, or stays in the same
 state to consume the next character. Some states have more complicated behavior
- and can consume several characters before switching to another state. In some
- cases, the tokenizer state is also changed by the tree construction stage.
+and can consume several characters before switching to another state. In some
+cases, the tokenizer state is also changed by the tree construction stage.
 
- When a state says to <dfn>reconsume</dfn> a matched character in a specified state, that
- means to switch to that state, but when it attempts to consume the next input
- character, provide it with the current input character instead.
+When a state says to <dfn>reconsume</dfn> a matched character in a specified state, that
+means to switch to that state, but when it attempts to consume the next input
+character, provide it with the current input character instead.
 
- The <dfn>next input character</dfn> is the first character in the input stream that has
- not yet been consumed or explicitly ignored by the requirements in this
- section. Initially, the next input character is the first character in the
- input. The <dfn>current input character</dfn> is the last character to have been consumed.
+The <dfn>next input character</dfn> is the first character in the input stream that has
+not yet been consumed or explicitly ignored by the requirements in this
+section. Initially, the next input character is the first character in the
+input. The <dfn>current input character</dfn> is the last character to have been consumed.
 
 <p class="warning">Decide how to deal with namespaces</p>
 
 <dl>
-  <h4 class="heading" id="data_state">
-    <span class="content"><dfn>Data state</dfn></span>
-  </h4>
+    <h4 class="heading" id="data_state">
+        <span class="content"><dfn>Data state</dfn></span>
+    </h4>
 
-  <dd>
+    <dd>
 
-    Consume the <a>next input character</a>:
-
-    <dl class="switch">
-      <dt>U+0026 AMPERSAND (<code>&amp;</code>)
-      <dd>Switch to <a>character reference in data state</a>.</dd>
-
-      <dt>U+003C LESSER-THAN SIGN (<code>&lt;</code>)</dt>
-      <dd>Switch to the <a>tag open state</a>.</dd>
-
-      <dt>EOF</dt>
-      <dd>Emit an end-of-file token.</dd>
-
-      <dt>Anything else</dt>
-      <dd>Emit the <a>current input character</a> as character. Stay in this state.</dd>
-    </dl>
-  </dd>
-
-  <h4 class="heading" id="charref_data_head">
-    <span class="content"><dfn>Character reference in data state</dfn></span>
-  </h4>
-
-  <dd>
-    Switch to the <a>data state</a>.
-
-    Attempt to <a>consume a character reference</a>.
-
-    If nothing is returned emit a U+0026 AMPERSAND character (&amp;) token.
-
-    Otherwise, emit character tokens that were returned.
-  </dd>
-
-  <h4 class="heading" id="tag_open_state">
-    <span class="content"><dfn>Tag open state</dfn></span>
-  </h4>
-
-  <dd>
-
-    Consume the <a>next input character</a>:
-
-    <dl class="switch">
-      <dt>U+002F SOLIDUS (<code>/</code>)</dt>
-      <dd>Switch to the <a>end tag open state</a>.</dd>
-
-      <dt>U+003F QUESTION MARK(<code>?</code>)</dt>
-
-      <dd>Switch to the <a>pi state</a>.</dd>
-
-      <dt>U+0021 (<code>!</code>)</dt>
-      <dd>Switch to the <a>markup declaration state</a>.</dd>
-
-      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-      <dt>U+003A (<code>:</code>)</dt>
-      <dt>U+003C LESSER-THAN SIGN (<code>&lt;</code>)</dt>
-      <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
-      <dt>EOF</dt>
-
-      <dd><a>Parse error</a>. Emit a U+003C LESSER-THAN SIGN (<code>&lt;</code>) character.
-      Reconsume the current input character in the <a>data state</a>.</dd>
-
-      <dt>Anything else</dt>
-
-      <dd>Create a new tag token and set its name to the input character, then
-         switch to the <a>tag name state</a>.</dd>
-    </dl>
-  </dd>
-
-  <h4 class="heading" id="end_tag_open_state">
-    <span class="content"><dfn>End tag open state</dfn></span>
-  </h4>
-
-  <dd>
-
-  Consume the <a>next input character</a>:
-  <dl class="switch">
-  <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
-
-  <dd>Emit a short end tag token and then switch to the <a>data
-  state</a>.</dd>
-  <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-  <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-  <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-  <dt>U+003C LESSER-THAN SIGN (<code>&lt;</code>)</dt>
-  <dt>U+003A (<code>:</code>)</dt>
-  <dt>EOF</dt>
-
-  <dd><a>Parse error</a>. Emit a U+003C LESSER-THAN SIGN (<code>&lt;</code>) character
-   token and a U+002F SOLIDUS (<code>/</code>) character token. Reconsume the current
-   input character in the <a>data state</a>.</dd>
-
-  <dt>Anything else</dt>
-
-  <dd>Create an end tag token and set its name to the input character, then
-   switch to the <a>end tag name state</a>.</dd>
-  </dl>
-  </dd>
-
-  <h4 class="heading" id="end_stag_name_state">
-    <span class="content"><dfn>End tag name state</dfn></span>
-  </h4>
-
-  <dd>
-
-    Consume the <a>next input character</a>:
-    <dl class="switch">
-      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-      <dd>Switch to the <a>end tag name after state</a>.</dd>
-
-      <dt>U+002F SOLIDUS (<code>/</code>)</dt>
-      <dd><a>Parse error</a>. Switch to the <a>end tag name after state</a>.</dd>
-
-      <dt>EOF</dt>
-      <dd><a>Parse error</a>. Emit the start tag token and then reprocess the
-       current input character in the <a>data state</a>.</dd>
-
-      <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
-      <dd>Emit the current token and then switch to the <a>data
-      state</a>.</dd>
-      <dt>Anything else</dt>
-      <dd>Append  the current input character to the tag name and stay in the
-      current state.</dd>
-    </dl>
-  </dd>
-
-  <h4 class="heading" id="end_tag_name_after_state">
-    <span class="content"><dfn>End tag name after state</dfn></span>
-  </h4>
-
-  <dd>
-
-    Consume the <a>next input character</a>:
-    <dl class="switch">
-      <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
-      <dd>Emit the current token and then switch to the <a>data state</a>.</dd>
-
-      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-      <dd>Stay in the current state.</dd>
-
-      <dt>EOF</dt>
-      <dd><a>Parse error</a>. Emit the current token and then reprocess the
-     current input character in the <a>data state</a>.</dd>
-
-      <dt>Anything else</dt>
-      <dd><a>Parse error</a>. Stay in the current state.</dd>
-    </dl>
-  </dd>
-
-  <h4 class="heading" id="pi_state">
-    <span class="content"><dfn>Pi state</dfn></span>
-  </h4>
-
-  <dd>
-
-    Consume the <a>next input character</a>:
-    <dl class="switch">
-      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-      <dt>EOF</dt>
-      <dd><a>Parse error</a>. Reprocess the current input character in the
-      <a>bogus comment state</a>.</dd>
-
-      <dt>Anything else</dt>
-      <dd>Create a new processing instruction token. Set target to the current
-     input character and data to the empty string. Then switch to the <a>pi
-     target state</a>.</dd>
-    </dl>
-  </dd>
-
-  <h4 class="heading" id="pi_target_state">
-    <span class="content"><dfn>Pi target state</dfn></span>
-  </h4>
-
-  <dd>
-
-    Consume the <a>next input character</a>:
-    <dl class="switch">
-      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-      <dd>Switch to the <a>pi target after state</a>.</dd>
-
-      <dt>EOF</dt>
-      <dd><a>Parse error</a>. Emit the current processing instruction token and then reprocess the
-     current input character in the <a>data state</a>.</dd>
-
-      <dt>U+003F QUESTION MARK(<code>?</code>)</dt>
-      <dd>Switch to the <a>pi after state</a>.</dd>
-
-      <dt>Anything else</dt>
-      <dd>Append the current input character to the processing instruction target and stay in the
-      current state.</dd>
-    </dl>
-  </dd>
-
-  <h4 class="heading" id="pi_target_after_state">
-    <span class="content"><dfn>Pi target after state</dfn></span>
-  </h4>
-
-  <dd>
-
-    Consume the <a>next input character</a>:
-    <dl class="switch">
-      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-      <dd>Stay in the current state.</dd>
-
-      <dt>Anything else</dt>
-      <dd>Reprocess the current input character in the <a>pi data
-     state</a>.</dd>
-    </dl>
-   </dd>
-
-  <h4 class="heading" id="pi_data_state">
-    <span class="content"><dfn>Pi data state</dfn></span>
-  </h4>
-
-  <dd>
-
-    Consume the <a>next input character</a>:
-    <dl class="switch">
-      <dt>U+003F QUESTION MARK(<code>?</code>)</dt>
-      <dd>Switch to the <a>pi after state</a>.</dd>
-
-      <dt>EOF</dt>
-      <dd><a>Parse error</a>. Emit the current processing instruction token and then reprocess the
-     current input character in the <a>data state</a>.</dd>
-
-      <dt>Anything else</dt>
-      <dd>Append the current input character to the pi's data and stay in the
-     current state.</dd>
-    </dl>
-   </dd>
-
-  <h4 class="heading" id="pi_after_state">
-    <span class="content"><dfn>Pi after state</dfn></span>
-  </h4>
-
-  <dd>
-
-    Consume the <a>next input character</a>:
-    <dl class="switch">
-      <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
-      <dd>Emit the current token and then switch to the <a>data state</a>.</dd>
-
-      <dt>U+003F QUESTION MARK(<code>?</code>)</dt>
-      <dd>Append the current input character to the PI's data and stay in the
-     current state.</dd>
-
-      <dt>Anything else</dt>
-      <dd>Reprocess the current input character in the <a>pi data
-     state</a>.</dd>
-    </dl>
-   </dd>
-
-  <h4 class="heading" id="markup_decl">
-    <span class="content"><dfn>Markup declaration state</dfn></span>
-  </h4>
-
-  <dd>
-
-    If the next few characters are:
-
-    <dl class="switch">
-      <dt>Two U+002D HYPEN-MINUS characters (<code>-</code>)</dt>
-      <dd>Consume those two characters, create a comment token whose data is the empty string and switch to <a>comment
-      start state</a>.</dd>
-
-      <dt>ASCII case-insensitive match for word "DOCTYPE"</dt>
-      <dd>Consume those characters and switch to <a>Doctype state</a></dd>
-
-      <dt>Exact match for word "[CDATA[" with a (the five uppercase letters "CDATA" with a U+005B LEFT SQUARE BRACKET
-        character before and after)</dt>
-      <dd>Consume those characters and switch to <a>CDATA state</a></dd>
-
-      <dt>Anything else</dt>
-      <dd>Emit an error. Create a comment token whose data is an empty string. Switch to <a>bogus comment state</a>
-      (don't consume any characters)</dd>
-    </dl>
-  </dd>
-
-  <h4 class="heading" id="comment_state">
-    <span class="content"><dfn>Comment state</dfn></span>
-  </h4>
-
-  <dd>
-
-    Consume the <a>next input character</a>:
-
-    <dl class="switch">
-      <dt>U+003C LESS-THAN SIGN (<code>&lt;</code>)</dt>
-      <dd>Append the <a>current input character</a> to the comment tokens' date.
-         Switch to the <a>comment less-than sign state</a>.</dd>
-
-      <dt>U+002D HYPHEN-MINUS (<code>-</code>)</dt>
-      <dd>Switch to the <a>comment end dash state</a>.</dd>
-
-      <dt>EOF</dt>
-      <dd><a>Parse error</a>. Emit the comment token. Emit an end-of-file
-        token.</dd>
-
-      <dt>Anything else</dt>
-      <dd>Append the current character to the comment data.</dd>
-    </dl>
-  </dd>
-
-
-  <h4 class="heading" id="comment_less_than_sign_state">
-    <span class="content"><dfn>Comment less-than sign state</dfn></span>
-  </h4>
-
-  <dd>
-
-    Consume the <a>next input character</a>:
-
-    <dl class="switch">
-      <dt>U+0021 EXCLAMATION-MARK (<code>!</code>)</dt>
-      <dd>Append the <a>current input character</a> to the comment token's data.
-         Switch to the <a>comment less-than sign state</a>.</dd>
-
-      <dt>U+003C LESS-THAN SIGN (<code>&lt;</code>)</dt>
-      <dd>Append the <a>current input character</a> to the comment token's data.
-      </dd>
-
-      <dt>Anything else</dt>
-      <dd><a>Reconsume</a> in the <a>comment state</a>.</dd>
-    </dl>
-  </dd>
-
-  <h4 class="heading" id="comment_less_than_sign_bang_state">
-    <span class="content"><dfn>Comment less-than sign bang state</dfn></span>
-  </h4>
-
-  <dd>
-
-    Consume the <a>next input character</a>:
-
-    <dl class="switch">
-      <dt>U+002D HYPHEN-MINUS (<code>-</code>)</dt>
-      <dd>Switch to the <a>comment less-than sign bang dash state</a>.</dd>
-
-      <dt>Anything else</dt>
-      <dd><a>Reconsume</a> in the <a>comment state</a>.</dd>
-    </dl>
-  </dd>
-
-  <h4 class="heading" id="comment_less_than_sign_bang_dash_state">
-    <span class="content"><dfn>Comment less-than sign bang dash state</dfn></span>
-  </h4>
-
-  <dd>
-
-    Consume the <a>next input character</a>:
-
-    <dl class="switch">
-      <dt>U+002D HYPHEN-MINUS (<code>-</code>)</dt>
-      <dd>Switch to the <a>comment less-than sign bang dash dash state</a>.</dd>
-
-      <dt>Anything else</dt>
-      <dd><a>Reconsume</a> in the <a>comment end dash state</a>.</dd>
-    </dl>
-  </dd>
-
-  <h4 class="heading" id="comment_less_than_sign_bang_dash_dash_state">
-    <span class="content"><dfn>Comment less-than sign bang dash dash state</dfn>
-    </span>
-  </h4>
-
-  <dd>
-
-    Consume the <a>next input character</a>:
-
-    <dl class="switch">
-      <dt>U+003E GREATER-THAN-SIGN (<code>&gt;</code>)</dt>
-      <dt>EOF</dt>
-      <dd><a>Reconsume</a> in the <a>comment end state</a>.</dd>
-
-      <dt>Anything else</dt>
-      <dd><a>Parse error</a>.<a>Reconsume</a> in the <a>comment end state</a>.
-      </dd>
-    </dl>
-  </dd>
-
-  <h4 class="heading" id="comment_end_dash_state">
-    <span class="content"><dfn>Comment end dash state</dfn></span>
-  </h4>
-
-  <dd>
-
-    Consume the <a>next input character</a>:
-
-    <dl class="switch">
-      <dt>U+002D HYPHEN-MINUS (<code>-</code>)</dt>
-      <dd>Switch to the <a>comment end state</a>.</dd>
-
-      <dt>EOF</dt>
-      <dd><a>Parse error</a>. Emit the comment token. Emit end-of-file token.</dd>
-
-      <dt>Anything else</dt>
-      <dd>Append a U+002D HYPHEN-MINUS (<code>-</code>) to the comment's token
-        data. <a>Reconsume</a> in the <a>comment state</a>.</dd>
-    </dl>
-  </dd>
-
-  <h4 class="heading" id="comment_end_state">
-    <span class="content"><dfn>Comment end state</dfn></span>
-  </h4>
-
-  <dd>
-
-    Consume the <a>next input character</a>:
-
-    <dl class="switch">
-      <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
-      <dd>Switch to the <a>data state</a>.Emit the comment token.</dd>
-
-      <dt>U+0021 EXCLAMATION MARK(<code>!</code>)</dt>
-      <dd>Switch to the <a>comment end bang state</a>.</dd>
-
-      <dt>U+002D HYPHEN-MINUS (<code>-</code>)</dt>
-      <dd>Append a U+002D HYPHEN-MINUS character (<code>-</code>) to the comment
-         token's data.</dd>
-
-      <dt>EOF</dt>
-      <dd><a>Parse error</a>. Emit the comment token. Emit an end-of-file token.
-      </dd>
-
-      <dt>Anything else</dt>
-      <dd>Append two U+002D (<code>-</code>) characters and the current input
-        character to the comment token's data. <a>Reconsume</a> in the <a>comment
-        state</a>.</dd>
-    </dl>
-  </dd>
-
-  <h4 class="heading" id="comment_end_bang_state">
-    <span class="content"><dfn>Comment end bang state</dfn></span>
-  </h4>
-
-  <dd>
-
-    Consume the <a>next input character</a>:
-
-    <dl class="switch">
-      <dt>U+002D HYPHEN-MINUS (<code>-</code>)</dt>
-      <dd>Append a U+002D HYPHEN-MINUS character (<code>-</code>) and U+0021 EXCLAMATION MARK character(<code>!</code>) to the comment token's data. Switch to the <a>comment end dash state</a>.</dd>
-
-      <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
-      <dd><a>Parse error</a>. Switch to the <a>data state</a>.Emit the comment token.</dd>
-
-      <dt>EOF</dt>
-      <dd><a>Parse error</a>. Emit the comment token. Emit an end-of-file token.</dd>
-
-      <dt>Anything else</dt>
-      <dd>Append two U+002D (<code>-</code>) characters and  U+0021 EXCLAMATION MARK character(<code>!</code>) to the comment token's data. <a>Reconsume</a> in the <a>comment
-     state</a>.</dd>
-    </dl>
-  </dd>
-
-  <h4 class="heading" id="cdata_state">
-    <span class="content"><dfn>CDATA state</dfn></span>
-  </h4>
-
-  <dd>
-
-    Consume the <a>next input character</a>:
-
-    <dl class="switch">
-      <dt>U+005D RIGHT SQUARE BRACKET (<code>]</code>)</dt>
-      <dd>Switch to the <a>CDATA bracket state</a>.</dd>
-
-      <dt>EOF</dt>
-      <dd><a>Parse error</a>. Reprocess the current input character in the
-      <a>data state</a>.</dd>
-
-      <dt>Anything else</dt>
-      <dd>Emit the current input character as character token. Stay in the
-     current state.</dd>
-    </dl>
-  </dd>
-
-  <h4 class="heading" id="cdata_bracket_state">
-    <span class="content"><dfn>CDATA bracket state</dfn></span>
-  </h4>
-
-  <dd>
-
-    Consume the <a>next input character</a>:
-
-    <dl class="switch">
-      <dt>U+005D RIGHT SQUARE BRACKET (<code>]</code>)</dt>
-      <dd>Switch to the <a>CDATA end state</a>.</dd>
-
-      <dt>EOF</dt>
-      <dd><a>Parse error</a>. Reprocess the current input character in the
-      <a>data state</a>.</dd>
-
-      <dt>Anything else</dt>
-      <dd>Emit a U+005D RIGHT SQUARE BRACKET (<code>]</code>) character as character token and also
-     emit the current input character as character token. Switch to <a>CDATA bracket state</a>.</dd>
-    </dl>
-  </dd>
-
-
-  <h4 class="heading" id="cdata_end_state">
-    <span class="content"><dfn>CDATA end state</dfn></span>
-  </h4>
-
-  <dd>
-
-    Consume the <a>next input character</a>:
-
-    <dl class="switch">
-      <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
-      <dd>Switch to the <a>data state</a>.</dd>
-
-      <dt>U+005D RIGHT SQUARE BRACKET (<code>]</code>)</dt>
-      <dd>Emit the current input character as character token. Stay in the
-     current state.</dd>
-
-      <dt>EOF</dt>
-      <dd><a>Parse error</a>. Reconsume the current input character in the
-      <a>data state</a>.</dd>
-
-      <dt>Anything else</dt>
-      <dd>Emit two U+005D RIGHT SQUARE BRACKET (<code>]</code>) characters as character tokens and
-     also emit the current input character as character token. Switch to the
-      <a>CDATA state</a>.</dd>
-    </dl>
-  </dd>
-
-
-  <h4 class="heading" id="tag_name_state">
-    <span class="content"><dfn>Tag name state</dfn></span>
-  </h4>
-
-  <dd>
-
-    Consume the <a>next input character</a>:
-
-    <dl class="switch">
-      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-      <dd>Switch to the <a>tag attribute name before state</a>.</dd>
-
-      <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
-      <dd>Emit the start tag token and then switch to the <a>data state</a>.</dd>
-
-      <dt>EOF</dt>
-      <dd><a>Parse error</a>. Emit the current token and then reprocess the
-     current input character in the <a>data state</a>.</dd>
-
-      <dt>U+002F SOLIDUS (<code>/</code>)</dt>
-      <dd>Set current tag to empty tag. Switch to the <a>empty tag state</a>.</dd>
-
-      <dt>Anything else</dt>
-      <dd>Append  the current input character to the tag name and stay in the
-     current state.</dd>
-    </dl>
-  </dd>
-
-
-  <h4 class="heading" id="empty_tag_state">
-    <span class="content"><dfn>Empty tag state</dfn></span>
-  </h4>
-
-  <dd>
-
-    Consume the <a>next input character</a>:
-
-    <dl class="switch">
-      <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
-      <dd>Emit the current tag token as empty tag token and then switch to the
-      <a>data state</a>.</dd>
-
-      <dt>Anything else</dt>
-      <dd><a>Parse error</a>. Reprocess the current input character in the
-      <a>tag attribute name before state</a>.</dd>
-    </dl>
-   </dd>
-
-
-  <h4 class="heading" id="tag_attr_name_before_state">
-    <span class="content"><dfn>Tag attribute name before state</dfn></span>
-  </h4>
-
-  <dd>
-
-    Consume the <a>next input character</a>:
-
-    <dl class="switch">
-      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-
-      <dd>Stay in the current state.</dd>
-
-      <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
-      <dd>Emit the current token and then switch to the <a>data state</a>.</dd>
-
-      <dt>U+002F SOLIDUS (<code>/</code>)</dt>
-      <dd>Set current tag to empty tag. Switch to the <a>empty tag state</a>.</dd>
-
-      <dt>U+003A COLON (<code>:</code>)</dt>
-      <dd><a>Parse error</a>. Stay in the current state.</dd>
-
-      <dt>EOF</dt>
-      <dd><a>Parse error</a>. Emit the current token and then reprocess the
-     current input character in the <a>data state</a>.</dd>
-
-      <dt>Anything else</dt>
-      <dd>Start a new attribute in the current tag token. Set that attribute's
-     name to the current input character and its value to the empty string and
-     then switch to the <a>tag attribute name state</a>.</dd>
-    </dl>
-  </dd>
-
-
-  <h4 class="heading" id="tag_attr_name_state">
-    <span class="content"><dfn>Tag attribute name state</dfn></span>
-  </h4>
-
-  <dd>
-
-    Consume the <a>next input character</a>:
-
-    <dl class="switch">
-      <dt>U+003D EQUALS SIGN (<code>=</code>)</dt>
-      <dd>Switch to the <a>tag attribute value before state</a>.</dd>
-
-      <dt>U+003E GREATER-THEN SIGN (<code>&gt;</code>)</dt>
-      <dd>Emit the current token as start tag token. Switch to the <a>data
-     state</a>.</dd>
-
-      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-      <dd>Switch to the <a>tag attribute name after state</a>.</dd>
-
-      <dt>U+002F SOLIDUS (<code>/</code>)</dt>
-      <dd>Set current tag to empty tag. Switch to the <a>empty tag state</a>.</dd>
-
-      <dt>EOF</dt>
-      <dd><a>Parse error</a>. Emit the current token as start tag token and
-     then reprocess the current input character in the <a>data
-     state</a>.</dd>
-
-      <dt>Anything else</dt>
-      <dd>Append the current input character to the current attribute's name.
-     Stay in the current state.</dd>
-    </dl>
-
-    When the user agent leaves this state (and before emitting the tag token,
-    if appropriate), the complete attribute's name <em class="ct">must</em> be
-    compared to the other attributes on the same token; if there is already an
-    attribute on the token with the exact same name, then this is a parse error
-    and the new attribute <em class="ct">must</em> be dropped, along with the
-    value that gets associated with it (if any).
-
-  </dd>
-
-
-  <h4 class="heading" id="tag_attr_name_after_state">
-    <span class="content"><dfn>Tag attribute name after state</dfn></span>
-  </h4>
-
-  <dd>
-
-    Consume the <a>next input character</a>:
-
-    <dl class="switch">
-      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-      <dd>Stay in the current state.</dd>
-
-      <dt>U+003D EQUALS SIGN(<code>=</code>)</dt>
-      <dd>Switch to the <a>tag attribute value before state</a>.</dd>
-
-      <dt>U+003E GREATER-THEN SIGN(<code>&gt;</code>)</dt>
-      <dd>Emit the current token and then switch to the <a>data state</a>.</dd>
-
-      <dt>U+002F SOLIDUS (<code>/</code>)</dt>
-      <dd>Set current tag to empty tag. Switch to the <a>empty tag state</a>.</dd>
-
-      <dt>EOF</dt>
-      <dd><a>Parse error</a>. Emit the current token and then reprocess the
-     current input character in the <a>data state</a>.</dd>
-
-      <dt>Anything else</dt>
-      <dd>Start a new attribute in the current tag token. Set that attribute's
-     name to the current input character and its value to the empty string and
-     then switch to the <a>tag attribute name state</a>.</dd>
-    </dl>
-  </dd>
-
-
-  <h4 class="heading" id="tag_attr_value_before_state">
-    <span class="content"><dfn>Tag attribute value before state</dfn></span>
-  </h4>
-
-  <dd>
-
-    Consume the <a>next input character</a>:
-
-    <dl class="switch">
-      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-      <dd>Stay in the current state.</dd>
-
-      <dt>U+0022 QUOTATION MARK (<code>"</code>)</dt>
-      <dd>Switch to the <a>tag attribute value double quoted state</a>.</dd>
-
-      <dt>U+0027 APOSTROPHE (<code>'</code>)</dt>
-      <dd>Switch to the <a>tag attribute value single quoted state</a>.</dd>
-
-      <dt>U+0026 AMPERSAND (<code>&amp;</code>):
-      <dd>Reprocess the input character in the <a>tag attribute value unquoted
-     state</a>.</dd>
-
-      <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
-      <dd>Emit the current token and then switch to the <a>data state</a>.</dd>
-
-      <dt>EOF</dt>
-      <dd><a>Parse error</a>. Emit the current token and then reprocess the
-     current input character in the <a>data state</a>.</dd>
-
-      <dt>Anything else</dt>
-      <dd>Append the current input character to the current attribute's value and
-     then switch to the <a>tag attribute value unquoted state</a>.</dd>
-    </dl>
-  </dd>
-
-
-  <h4 class="heading" id="tag_attr_value_double_quote_state">
-    <span class="content"><dfn>Tag attribute value double quoted state</dfn></span>
-  </h4>
-
-  <dd>
-
-    Consume the <a>next input character</a>:
-
-    <dl class="switch">
-      <dt>U+0022 QUOTATION MARK (<code>"</code>)</dt>
-      <dd>Switch to the <a>tag attribute name before state</a>.</dd>
-
-      <dt>U+0026 AMPERSAND (<code>&amp;</code>)</dt>
-      <dd>Switch to <a>character reference in attribute value state</a>, with the
-        <a>additional allowed character</a> being U+0022 QUOTATION MARK(<code>"</code>).
-      </dd>
-
-      <dt>EOF</dt>
-      <dd><a>Parse error</a>. Emit the current token and then reprocess the
-     current input character in the <a>data state</a>.</dd>
-
-      <dt>Anything else</dt>
-      <dd>Append the input character to the current attribute's value. Stay in
-     the current state.</dd>
-    </dl>
-  </dd>
-
-
-  <h4 class="heading" id="tag_attr_value_single_quote_state">
-    <span class="content"><dfn>Tag attribute value single quoted state</dfn></span>
-  </h4>
-
-  <dd>
-
-    Consume the <a>next input character</a>:
-
-    <dl class="switch">
-      <dt>U+0022 APOSTROPHE (<code>'</code>)</dt>
-      <dd>Switch to the <a>tag attribute name before state</a>.</dd>
-
-      <dt>U+0026 AMPERSAND (<code>&amp;</code>)</dt>
-      <dd>Switch to <a>character reference in attribute value state</a>, with the
-        <a>additional allowed character</a> being APOSTROPHE (<code>'</code>).
-      </dd>
-
-      <dt>EOF</dt>
-      <dd><a>Parse error</a>. Emit the current token and then reprocess the
-     current input character in the <a>data state</a>.</dd>
-
-      <dt>Anything else</dt>
-      <dd>Append the input character to the current attribute's value. Stay in
-     the current state.</dd>
-    </dl>
-  </dd>
-
-
-  <h4 class="heading" id="tag_attr_value_unquote_state">
-    <span class="content"><dfn>Tag attribute value unquoted state</dfn></span>
-  </h4>
-
-  <dd>
-
-    Consume the <a>next input character</a>:
-
-      <dl class="switch">
-      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-      <dd>Switch to the <a>tag attribute name before state</a>.</dd>
-
-      <dt>U+0026 AMPERSAND (<code>&amp;</code>):
-      <dd>
-        Switch to <a>character reference in attribute value state</a>, with the
-        <a>additional allowed character</a> being U+003E GREATER-THAN SIGN(<code>&gt;</code>).
-      </dd>
-
-      <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
-      <dd>Emit the current token as start tag token and then switch to the
-      <a>data state</a>.</dd>
-
-      <dt>EOF</dt>
-      <dd><a>Parse error</a>. Emit the current token as start tag token and
-     then reprocess the current input character in the
-      <a>data state</a>.</dd>
-
-      <dt>Anything else</dt>
-      <dd>Append the input character to the current attribute's value. Stay in
-     the current state.</dd>
-    </dl>
-  </dd>
-
-  <h4 class="heading" id="charref_attr_state">
-    <span class="content"><dfn>Character reference in attribute value state</dfn></span>
-  </h4>
-
-  <dd>
-
-    Attempt to <a>consume a character reference</a>.
-
-    If nothing is returned, append a U+0026 AMPERSAND (&amp;) character to current attribute's value.
-
-    Otherwise append returned character tokens to current attribute's value.
-
-    Finally, switch back to attribute value state that switched to this state.
-  </dd>
-
-
-  <h4 class="heading" id="bogus_comment_state">
-    <span class="content"><dfn>Bogus comment state</dfn></span>
-  </h4>
-
-  <dd>
-  Consume every character up to the first U+003E GREATER-THAN SIGN (<code>&gt;</code>) or EOF, whichever comes first. Emit a comment token whose data is the concatenation of all those consumed characters. Then consume the next input character and switch to the <a>data state</a> reprocessing the EOF character if that was the character consumed.
-   </dd>
-
-
-  <h4 class="heading" id="tokenizing_character_ref">
-    <span class="content"><dfn>Tokenizing character references</dfn></span>
-  </h4>
-
-  <dd>
-
-    This section defines how to <dfn>consume a character reference</dfn>, optionally with an <dfn>additional allowed character</dfn>, which, if specified where the algorithm is invoked, adds a character to the list of characters that cause there to not be a character reference.
-
-    This definition is used when parsing character <a href="Data state">in text</a> and in <a href= "Character reference in attribute value state">attributes</a>.
-
-    The behavior depends on identity of next character (the one immediately after the U+0026 AMPERSAND character), as follows:
-
-    <dl class="switch">
-      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-      <dt>U+000C FORM FEED (<code class="non-print">FF</code>)</dt>
-      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-      <dt>U+003C LESS-THAN SIGN (<code>&lt;</code>)</dt>
-      <dt>U+0025 PERCENT SIGN (<code>%</code>)</dt>
-      <dt>U+0026 AMPERSAND (<code>&amp;</code>)</dt>
-      <dt>EOF</dt>
-      <dt>The <a>additional allowed character</a> if there is one</dt>
-      <dd>Not a character reference. No characters are consumed and nothing is returned (This is not an error, either).</dd>
-      <dt>U+0023 NUMBER SIGN (<code>#</code>)
-      <dd>
-
-        Consume the U+0023 NUMBER SIGN.
-
-        The behaviour further depends on the character after the U+0023 NUMBER SIGN.
+        Consume the <a>next input character</a>:
 
         <dl class="switch">
-          <dt>U+0078 LATIN SMALL LETTER X</dt>
-          <dt>U+0078 LATIN CAPITAL LETTER X</dt>
-          <dd>
-            <p>Consume the X.</p>
-            <p>Follow the steps below, but using <a>ASCII hex digits</a>.</p>
-            <p>When it comes to interpreting the number, interpret it as a hexadecimal number.</p>
-          </dd>
-          <dt>Anything else</dt>
-          <dd>
-            Follow the steps below, but using <a>ASCII digits</a>.
+            <dt>U+0026 AMPERSAND (<code>&amp;</code>)
+            <dd>Switch to <a>character reference in data state</a>.</dd>
 
-            When it comes to interpreting the number, interpret it as a decimal number.
-          </dd>
+            <dt>U+003C LESSER-THAN SIGN (<code>&lt;</code>)</dt>
+            <dd>Switch to the <a>tag open state</a>.</dd>
+
+            <dt>EOF</dt>
+            <dd>Emit an end-of-file token.</dd>
+
+            <dt>Anything else</dt>
+            <dd>Emit the <a>current input character</a> as character. Stay in this state.</dd>
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="charref_data_head">
+        <span class="content"><dfn>Character reference in data state</dfn></span>
+    </h4>
+
+    <dd>
+        Switch to the <a>data state</a>.
+
+        Attempt to <a>consume a character reference</a>.
+
+        If nothing is returned emit a U+0026 AMPERSAND character (&amp;) token.
+
+        Otherwise, emit character tokens that were returned.
+    </dd>
+
+    <h4 class="heading" id="tag_open_state">
+        <span class="content"><dfn>Tag open state</dfn></span>
+    </h4>
+
+    <dd>
+
+        Consume the <a>next input character</a>:
+
+        <dl class="switch">
+            <dt>U+002F SOLIDUS (<code>/</code>)</dt>
+            <dd>Switch to the <a>end tag open state</a>.</dd>
+
+            <dt>U+003F QUESTION MARK(<code>?</code>)</dt>
+
+            <dd>Switch to the <a>pi state</a>.</dd>
+
+            <dt>U+0021 (<code>!</code>)</dt>
+            <dd>Switch to the <a>markup declaration state</a>.</dd>
+
+            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+            <dt>U+003A (<code>:</code>)</dt>
+            <dt>U+003C LESSER-THAN SIGN (<code>&lt;</code>)</dt>
+            <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
+            <dt>EOF</dt>
+
+            <dd><a>Parse error</a>. Emit a U+003C LESSER-THAN SIGN (<code>&lt;</code>) character.
+                Reconsume the current input character in the <a>data state</a>.
+            </dd>
+
+            <dt>Anything else</dt>
+
+            <dd>Create a new tag token and set its name to the input character, then
+                switch to the <a>tag name state</a>.
+            </dd>
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="end_tag_open_state">
+        <span class="content"><dfn>End tag open state</dfn></span>
+    </h4>
+
+    <dd>
+
+        Consume the <a>next input character</a>:
+        <dl class="switch">
+            <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
+
+            <dd>Emit a short end tag token and then switch to the <a>data
+                state</a>.
+            </dd>
+            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+            <dt>U+003C LESSER-THAN SIGN (<code>&lt;</code>)</dt>
+            <dt>U+003A (<code>:</code>)</dt>
+            <dt>EOF</dt>
+
+            <dd><a>Parse error</a>. Emit a U+003C LESSER-THAN SIGN (<code>&lt;</code>) character
+                token and a U+002F SOLIDUS (<code>/</code>) character token. Reconsume the current
+                input character in the <a>data state</a>.
+            </dd>
+
+            <dt>Anything else</dt>
+
+            <dd>Create an end tag token and set its name to the input character, then
+                switch to the <a>end tag name state</a>.
+            </dd>
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="end_stag_name_state">
+        <span class="content"><dfn>End tag name state</dfn></span>
+    </h4>
+
+    <dd>
+
+        Consume the <a>next input character</a>:
+        <dl class="switch">
+            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+            <dd>Switch to the <a>end tag name after state</a>.</dd>
+
+            <dt>U+002F SOLIDUS (<code>/</code>)</dt>
+            <dd><a>Parse error</a>. Switch to the <a>end tag name after state</a>.</dd>
+
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Emit the start tag token and then reprocess the
+                current input character in the <a>data state</a>.
+            </dd>
+
+            <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
+            <dd>Emit the current token and then switch to the <a>data
+                state</a>.
+            </dd>
+            <dt>Anything else</dt>
+            <dd>Append the current input character to the tag name and stay in the
+                current state.
+            </dd>
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="end_tag_name_after_state">
+        <span class="content"><dfn>End tag name after state</dfn></span>
+    </h4>
+
+    <dd>
+
+        Consume the <a>next input character</a>:
+        <dl class="switch">
+            <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
+            <dd>Emit the current token and then switch to the <a>data state</a>.</dd>
+
+            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+            <dd>Stay in the current state.</dd>
+
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Emit the current token and then reprocess the
+                current input character in the <a>data state</a>.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd><a>Parse error</a>. Stay in the current state.</dd>
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="pi_state">
+        <span class="content"><dfn>Pi state</dfn></span>
+    </h4>
+
+    <dd>
+
+        Consume the <a>next input character</a>:
+        <dl class="switch">
+            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Reprocess the current input character in the
+                <a>bogus comment state</a>.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd>Create a new processing instruction token. Set target to the current
+                input character and data to the empty string. Then switch to the <a>pi
+                    target state</a>.
+            </dd>
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="pi_target_state">
+        <span class="content"><dfn>Pi target state</dfn></span>
+    </h4>
+
+    <dd>
+
+        Consume the <a>next input character</a>:
+        <dl class="switch">
+            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+            <dd>Switch to the <a>pi target after state</a>.</dd>
+
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Emit the current processing instruction token and then reprocess the
+                current input character in the <a>data state</a>.
+            </dd>
+
+            <dt>U+003F QUESTION MARK(<code>?</code>)</dt>
+            <dd>Switch to the <a>pi after state</a>.</dd>
+
+            <dt>Anything else</dt>
+            <dd>Append the current input character to the processing instruction target and stay in the
+                current state.
+            </dd>
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="pi_target_after_state">
+        <span class="content"><dfn>Pi target after state</dfn></span>
+    </h4>
+
+    <dd>
+
+        Consume the <a>next input character</a>:
+        <dl class="switch">
+            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+            <dd>Stay in the current state.</dd>
+
+            <dt>Anything else</dt>
+            <dd>Reprocess the current input character in the <a>pi data
+                state</a>.
+            </dd>
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="pi_data_state">
+        <span class="content"><dfn>Pi data state</dfn></span>
+    </h4>
+
+    <dd>
+
+        Consume the <a>next input character</a>:
+        <dl class="switch">
+            <dt>U+003F QUESTION MARK(<code>?</code>)</dt>
+            <dd>Switch to the <a>pi after state</a>.</dd>
+
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Emit the current processing instruction token and then reprocess the
+                current input character in the <a>data state</a>.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd>Append the current input character to the pi's data and stay in the
+                current state.
+            </dd>
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="pi_after_state">
+        <span class="content"><dfn>Pi after state</dfn></span>
+    </h4>
+
+    <dd>
+
+        Consume the <a>next input character</a>:
+        <dl class="switch">
+            <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
+            <dd>Emit the current token and then switch to the <a>data state</a>.</dd>
+
+            <dt>U+003F QUESTION MARK(<code>?</code>)</dt>
+            <dd>Append the current input character to the PI's data and stay in the
+                current state.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd>Reprocess the current input character in the <a>pi data
+                state</a>.
+            </dd>
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="markup_decl">
+        <span class="content"><dfn>Markup declaration state</dfn></span>
+    </h4>
+
+    <dd>
+
+        If the next few characters are:
+
+        <dl class="switch">
+            <dt>Two U+002D HYPEN-MINUS characters (<code>-</code>)</dt>
+            <dd>Consume those two characters, create a comment token whose data is the empty string and switch to <a>comment
+                start state</a>.
+            </dd>
+
+            <dt>ASCII case-insensitive match for word "DOCTYPE"</dt>
+            <dd>Consume those characters and switch to <a>Doctype state</a></dd>
+
+            <dt>Exact match for word "[CDATA[" with a (the five uppercase letters "CDATA" with a U+005B LEFT SQUARE
+                BRACKET
+                character before and after)
+            </dt>
+            <dd>Consume those characters and switch to <a>CDATA state</a></dd>
+
+            <dt>Anything else</dt>
+            <dd>Emit an <a>incorrectly-opened-comment</a> error. Create a comment token whose data is an empty string.
+                Switch to <a>bogus comment state</a>
+                (don't consume any characters)
+            </dd>
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="comment_state">
+        <span class="content"><dfn>Comment state</dfn></span>
+    </h4>
+
+    <dd>
+
+        Consume the <a>next input character</a>:
+
+        <dl class="switch">
+            <dt>U+003C LESS-THAN SIGN (<code>&lt;</code>)</dt>
+            <dd>Append the <a>current input character</a> to the comment tokens' date.
+                Switch to the <a>comment less-than sign state</a>.
+            </dd>
+
+            <dt>U+002D HYPHEN-MINUS (<code>-</code>)</dt>
+            <dd>Switch to the <a>comment end dash state</a>.</dd>
+
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Emit the comment token. Emit an end-of-file
+                token.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd>Append the current character to the comment data.</dd>
+        </dl>
+    </dd>
+
+
+    <h4 class="heading" id="comment_less_than_sign_state">
+        <span class="content"><dfn>Comment less-than sign state</dfn></span>
+    </h4>
+
+    <dd>
+
+        Consume the <a>next input character</a>:
+
+        <dl class="switch">
+            <dt>U+0021 EXCLAMATION-MARK (<code>!</code>)</dt>
+            <dd>Append the <a>current input character</a> to the comment token's data.
+                Switch to the <a>comment less-than sign state</a>.
+            </dd>
+
+            <dt>U+003C LESS-THAN SIGN (<code>&lt;</code>)</dt>
+            <dd>Append the <a>current input character</a> to the comment token's data.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd><a>Reconsume</a> in the <a>comment state</a>.</dd>
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="comment_less_than_sign_bang_state">
+        <span class="content"><dfn>Comment less-than sign bang state</dfn></span>
+    </h4>
+
+    <dd>
+
+        Consume the <a>next input character</a>:
+
+        <dl class="switch">
+            <dt>U+002D HYPHEN-MINUS (<code>-</code>)</dt>
+            <dd>Switch to the <a>comment less-than sign bang dash state</a>.</dd>
+
+            <dt>Anything else</dt>
+            <dd><a>Reconsume</a> in the <a>comment state</a>.</dd>
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="comment_less_than_sign_bang_dash_state">
+        <span class="content"><dfn>Comment less-than sign bang dash state</dfn></span>
+    </h4>
+
+    <dd>
+
+        Consume the <a>next input character</a>:
+
+        <dl class="switch">
+            <dt>U+002D HYPHEN-MINUS (<code>-</code>)</dt>
+            <dd>Switch to the <a>comment less-than sign bang dash dash state</a>.</dd>
+
+            <dt>Anything else</dt>
+            <dd><a>Reconsume</a> in the <a>comment end dash state</a>.</dd>
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="comment_less_than_sign_bang_dash_dash_state">
+    <span class="content"><dfn>Comment less-than sign bang dash dash state</dfn>
+    </span>
+    </h4>
+
+    <dd>
+
+        Consume the <a>next input character</a>:
+
+        <dl class="switch">
+            <dt>U+003E GREATER-THAN-SIGN (<code>&gt;</code>)</dt>
+            <dt>EOF</dt>
+            <dd><a>Reconsume</a> in the <a>comment end state</a>.</dd>
+
+            <dt>Anything else</dt>
+            <dd><a>Parse error</a>.<a>Reconsume</a> in the <a>comment end state</a>.
+            </dd>
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="comment_end_dash_state">
+        <span class="content"><dfn>Comment end dash state</dfn></span>
+    </h4>
+
+    <dd>
+
+        Consume the <a>next input character</a>:
+
+        <dl class="switch">
+            <dt>U+002D HYPHEN-MINUS (<code>-</code>)</dt>
+            <dd>Switch to the <a>comment end state</a>.</dd>
+
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Emit the comment token. Emit end-of-file token.</dd>
+
+            <dt>Anything else</dt>
+            <dd>Append a U+002D HYPHEN-MINUS (<code>-</code>) to the comment's token
+                data. <a>Reconsume</a> in the <a>comment state</a>.
+            </dd>
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="comment_end_state">
+        <span class="content"><dfn>Comment end state</dfn></span>
+    </h4>
+
+    <dd>
+
+        Consume the <a>next input character</a>:
+
+        <dl class="switch">
+            <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
+            <dd>Switch to the <a>data state</a>.Emit the comment token.</dd>
+
+            <dt>U+0021 EXCLAMATION MARK(<code>!</code>)</dt>
+            <dd>Switch to the <a>comment end bang state</a>.</dd>
+
+            <dt>U+002D HYPHEN-MINUS (<code>-</code>)</dt>
+            <dd>Append a U+002D HYPHEN-MINUS character (<code>-</code>) to the comment
+                token's data.
+            </dd>
+
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Emit the comment token. Emit an end-of-file token.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd>Append two U+002D (<code>-</code>) characters and the current input
+                character to the comment token's data. <a>Reconsume</a> in the <a>comment
+                    state</a>.
+            </dd>
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="comment_end_bang_state">
+        <span class="content"><dfn>Comment end bang state</dfn></span>
+    </h4>
+
+    <dd>
+
+        Consume the <a>next input character</a>:
+
+        <dl class="switch">
+            <dt>U+002D HYPHEN-MINUS (<code>-</code>)</dt>
+            <dd>Append a U+002D HYPHEN-MINUS character (<code>-</code>) and U+0021 EXCLAMATION MARK
+                character(<code>!</code>) to the comment token's data. Switch to the <a>comment end dash state</a>.
+            </dd>
+
+            <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
+            <dd><a>Parse error</a>. Switch to the <a>data state</a>.Emit the comment token.</dd>
+
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Emit the comment token. Emit an end-of-file token.</dd>
+
+            <dt>Anything else</dt>
+            <dd>Append two U+002D (<code>-</code>) characters and U+0021 EXCLAMATION MARK character(<code>!</code>) to
+                the comment token's data. <a>Reconsume</a> in the <a>comment
+                    state</a>.
+            </dd>
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="cdata_state">
+        <span class="content"><dfn>CDATA state</dfn></span>
+    </h4>
+
+    <dd>
+
+        Consume the <a>next input character</a>:
+
+        <dl class="switch">
+            <dt>U+005D RIGHT SQUARE BRACKET (<code>]</code>)</dt>
+            <dd>Switch to the <a>CDATA bracket state</a>.</dd>
+
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Reprocess the current input character in the
+                <a>data state</a>.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd>Emit the current input character as character token. Stay in the
+                current state.
+            </dd>
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="cdata_bracket_state">
+        <span class="content"><dfn>CDATA bracket state</dfn></span>
+    </h4>
+
+    <dd>
+
+        Consume the <a>next input character</a>:
+
+        <dl class="switch">
+            <dt>U+005D RIGHT SQUARE BRACKET (<code>]</code>)</dt>
+            <dd>Switch to the <a>CDATA end state</a>.</dd>
+
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Reprocess the current input character in the
+                <a>data state</a>.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd>Emit a U+005D RIGHT SQUARE BRACKET (<code>]</code>) character as character token and also
+                emit the current input character as character token. Switch to <a>CDATA bracket state</a>.
+            </dd>
+        </dl>
+    </dd>
+
+
+    <h4 class="heading" id="cdata_end_state">
+        <span class="content"><dfn>CDATA end state</dfn></span>
+    </h4>
+
+    <dd>
+
+        Consume the <a>next input character</a>:
+
+        <dl class="switch">
+            <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
+            <dd>Switch to the <a>data state</a>.</dd>
+
+            <dt>U+005D RIGHT SQUARE BRACKET (<code>]</code>)</dt>
+            <dd>Emit the current input character as character token. Stay in the
+                current state.
+            </dd>
+
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Reconsume the current input character in the
+                <a>data state</a>.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd>Emit two U+005D RIGHT SQUARE BRACKET (<code>]</code>) characters as character tokens and
+                also emit the current input character as character token. Switch to the
+                <a>CDATA state</a>.
+            </dd>
+        </dl>
+    </dd>
+
+
+    <h4 class="heading" id="tag_name_state">
+        <span class="content"><dfn>Tag name state</dfn></span>
+    </h4>
+
+    <dd>
+
+        Consume the <a>next input character</a>:
+
+        <dl class="switch">
+            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+            <dd>Switch to the <a>tag attribute name before state</a>.</dd>
+
+            <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
+            <dd>Emit the start tag token and then switch to the <a>data state</a>.</dd>
+
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Emit the current token and then reprocess the
+                current input character in the <a>data state</a>.
+            </dd>
+
+            <dt>U+002F SOLIDUS (<code>/</code>)</dt>
+            <dd>Set current tag to empty tag. Switch to the <a>empty tag state</a>.</dd>
+
+            <dt>Anything else</dt>
+            <dd>Append the current input character to the tag name and stay in the
+                current state.
+            </dd>
+        </dl>
+    </dd>
+
+
+    <h4 class="heading" id="empty_tag_state">
+        <span class="content"><dfn>Empty tag state</dfn></span>
+    </h4>
+
+    <dd>
+
+        Consume the <a>next input character</a>:
+
+        <dl class="switch">
+            <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
+            <dd>Emit the current tag token as empty tag token and then switch to the
+                <a>data state</a>.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd><a>Parse error</a>. Reprocess the current input character in the
+                <a>tag attribute name before state</a>.
+            </dd>
+        </dl>
+    </dd>
+
+
+    <h4 class="heading" id="tag_attr_name_before_state">
+        <span class="content"><dfn>Tag attribute name before state</dfn></span>
+    </h4>
+
+    <dd>
+
+        Consume the <a>next input character</a>:
+
+        <dl class="switch">
+            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+
+            <dd>Stay in the current state.</dd>
+
+            <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
+            <dd>Emit the current token and then switch to the <a>data state</a>.</dd>
+
+            <dt>U+002F SOLIDUS (<code>/</code>)</dt>
+            <dd>Set current tag to empty tag. Switch to the <a>empty tag state</a>.</dd>
+
+            <dt>U+003A COLON (<code>:</code>)</dt>
+            <dd><a>Parse error</a>. Stay in the current state.</dd>
+
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Emit the current token and then reprocess the
+                current input character in the <a>data state</a>.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd>Start a new attribute in the current tag token. Set that attribute's
+                name to the current input character and its value to the empty string and
+                then switch to the <a>tag attribute name state</a>.
+            </dd>
+        </dl>
+    </dd>
+
+
+    <h4 class="heading" id="tag_attr_name_state">
+        <span class="content"><dfn>Tag attribute name state</dfn></span>
+    </h4>
+
+    <dd>
+
+        Consume the <a>next input character</a>:
+
+        <dl class="switch">
+            <dt>U+003D EQUALS SIGN (<code>=</code>)</dt>
+            <dd>Switch to the <a>tag attribute value before state</a>.</dd>
+
+            <dt>U+003E GREATER-THEN SIGN (<code>&gt;</code>)</dt>
+            <dd>Emit the current token as start tag token. Switch to the <a>data
+                state</a>.
+            </dd>
+
+            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+            <dd>Switch to the <a>tag attribute name after state</a>.</dd>
+
+            <dt>U+002F SOLIDUS (<code>/</code>)</dt>
+            <dd>Set current tag to empty tag. Switch to the <a>empty tag state</a>.</dd>
+
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Emit the current token as start tag token and
+                then reprocess the current input character in the <a>data
+                    state</a>.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd>Append the current input character to the current attribute's name.
+                Stay in the current state.
+            </dd>
         </dl>
 
-        Consume as many characters as match the range of characters given above (<a>ASCII hex digits</a> or <a>ASCII digits</a>).
+        When the user agent leaves this state (and before emitting the tag token,
+        if appropriate), the complete attribute's name <em class="ct">must</em> be
+        compared to the other attributes on the same token; if there is already an
+        attribute on the token with the exact same name, then this is a parse error
+        and the new attribute <em class="ct">must</em> be dropped, along with the
+        value that gets associated with it (if any).
 
-        If no characters match the range, then don't consume any characters. This is a <a>parse error</a>; return the U+0023 NUMBER SIGN character and if appropriate X character as string of text.
+    </dd>
 
-        Otherwise, if the next character is a U+003B SEMICOLON, consume that too. If it isn't, there is a <a>parse error</a>.
 
-        If one or more characters match the range, then take them all and interpret the string of characters as a number (either hexadecimal or decimal as appropriate).
+    <h4 class="heading" id="tag_attr_name_after_state">
+        <span class="content"><dfn>Tag attribute name after state</dfn></span>
+    </h4>
 
-        <p class="warning">Should we do HTML like replacement? At least for null?</p>
+    <dd>
 
-        Otherwise, if the number is in the range 0xD800 to 0xDFFF or is greater than 0x10FFFF, then this is a <a>parse error</a>. Return a U+FFFD REPLACEMENT CHARACTER character token.
+        Consume the <a>next input character</a>:
 
-        <div class="warning">Should we refuse Unicode from ranges listed (0x0001 to 0x0008, 0x000D to 0x001F, 0x007F to 0x009F, 0xFDD0 to 0xFDEF, or is one of 0x000B, 0xFFFE, 0xFFFF, 0x1FFFE, 0x1FFFF, 0x2FFFE, 0x2FFFF, 0x3FFFE, 0x3FFFF, 0x4FFFE, 0x4FFFF, 0x5FFFE, 0x5FFFF, 0x6FFFE, 0x6FFFF, 0x7FFFE, 0x7FFFF, 0x8FFFE, 0x8FFFF, 0x9FFFE, 0x9FFFF, 0xAFFFE, 0xAFFFF, 0xBFFFE, 0xBFFFF, 0xCFFFE, 0xCFFFF, 0xDFFFE, 0xDFFFF, 0xEFFFE, 0xEFFFF, 0xFFFFE, 0xFFFFF, 0x10FFFE, or 0x10FFFF)?<br/>
+        <dl class="switch">
+            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+            <dd>Stay in the current state.</dd>
 
-        I've noted that Javascript implementation of XML5 is having to go around some characters in its version.</div>
-      </dd>
-      <dt>Anything else</dt>
-      <dd>
+            <dt>U+003D EQUALS SIGN(<code>=</code>)</dt>
+            <dd>Switch to the <a>tag attribute value before state</a>.</dd>
 
-        Consume characters until you reach a U+003B SEMICOLON character (<code>;</code>).
+            <dt>U+003E GREATER-THEN SIGN(<code>&gt;</code>)</dt>
+            <dd>Emit the current token and then switch to the <a>data state</a>.</dd>
 
-        <p class="warning">What happens if there is no semicolon? Does it read rest of the file? Maybe better solution is to read all characters that are part of name char according to <a href="http://www.w3.org/TR/xml11/#NT-Name">XML 1.1. spec.</a></p>
+            <dt>U+002F SOLIDUS (<code>/</code>)</dt>
+            <dd>Set current tag to empty tag. Switch to the <a>empty tag state</a>.</dd>
 
-        Otherwise, a character reference is parsed. If the last character matched is not a U+003B SEMICOLON character (<code>;</code>), there is a <a>parse error</a>.
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Emit the current token and then reprocess the
+                current input character in the <a>data state</a>.
+            </dd>
 
-        If there was a parse error the consumed characters are interperted as part of a string and are returned.
+            <dt>Anything else</dt>
+            <dd>Start a new attribute in the current tag token. Set that attribute's
+                name to the current input character and its value to the empty string and
+                then switch to the <a>tag attribute name state</a>.
+            </dd>
+        </dl>
+    </dd>
 
-        If there wasn't a parse error return a reference with name equal to consumed characters, omitting the U+003B SEMICOLON character (<code>;</code>).
 
-        <div class="example" id="ref_tokenizer_example">
-          If the markup contains following attribute <code>This is a &amp;ref;</code>, character tokenizer should return this as a reference named ref. However if the attribute defined is defined as <code>This is &amp;notref</code>, then the tokenizer will interpret this as a text <code>This is &amp;notref</code>, while emitting a <a>parse error</a>.
-        </div>
+    <h4 class="heading" id="tag_attr_value_before_state">
+        <span class="content"><dfn>Tag attribute value before state</dfn></span>
+    </h4>
 
-      </dd>
-    </dl>
-  </dd>
+    <dd>
 
+        Consume the <a>next input character</a>:
 
-  <h4 class="heading" id="doctype_state">
-    <span class="content"><dfn>DOCTYPE state</dfn></span>
-  </h4>
-  <dd>
+        <dl class="switch">
+            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+            <dd>Stay in the current state.</dd>
 
-    Consume the <a>next input character</a>:
+            <dt>U+0022 QUOTATION MARK (<code>"</code>)</dt>
+            <dd>Switch to the <a>tag attribute value double quoted state</a>.</dd>
 
-      <dl class="switch">
-      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-      <dt>U+000C FORM FEED (<code class="non-print">FF</code>)</dt>
-      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-      <dd>Switch to the <a>before DOCTYPE name state</a>.</dd>
+            <dt>U+0027 APOSTROPHE (<code>'</code>)</dt>
+            <dd>Switch to the <a>tag attribute value single quoted state</a>.</dd>
 
-      <dt>EOF</dt>
-      <dd><a>Parse error</a>. Switch to <a>data state</a>.</dd> Create new Doctype token. Emit Doctype token. Reconsume the EOF character.
+            <dt>U+0026 AMPERSAND (<code>&amp;</code>):
+            <dd>Reprocess the input character in the <a>tag attribute value unquoted
+                state</a>.
+            </dd>
 
-      <dt>Anything else</dt>
-      <dd><a>Parse error</a>. Switch to <a>before DOCTYPE name state</a>. Reconsume the character.
-      </dd>
-    </dl>
-  </dd>
+            <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
+            <dd>Emit the current token and then switch to the <a>data state</a>.</dd>
 
-  <h4 class="heading" id="before_doctype_name_state">
-    <span class="content"><dfn>Before DOCTYPE name state</dfn></span>
-  </h4>
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Emit the current token and then reprocess the
+                current input character in the <a>data state</a>.
+            </dd>
 
-  <dd>
+            <dt>Anything else</dt>
+            <dd>Append the current input character to the current attribute's value and
+                then switch to the <a>tag attribute value unquoted state</a>.
+            </dd>
+        </dl>
+    </dd>
 
-    Consume the <a>next input character</a>:
 
-      <dl class="switch">
-      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-      <dt>U+000C FORM FEED (<code class="non-print">FF</code>)</dt>
-      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-      <dd>Ignore the character.</dd>
+    <h4 class="heading" id="tag_attr_value_double_quote_state">
+        <span class="content"><dfn>Tag attribute value double quoted state</dfn></span>
+    </h4>
 
-      <dt><a>Uppercase ASCII letter</a></dt>
-      <dd>Create a new DOCTYPE token. Set the token name to lowercase version of the current input character. Switch to the DOCTYPE name state.</dd>
+    <dd>
 
-      <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
-      <dd><a>Parse error</a> Create a new DOCTYPE token. Emit token. Switch to <a>data state</a>.</dd>
+        Consume the <a>next input character</a>:
 
-      <dt>EOF</dt>
-      <dd><a>Parse error</a>. Switch to <a>data state</a>.</dd> Create new Doctype token. Emit Doctype token. Reconsume the EOF character.
+        <dl class="switch">
+            <dt>U+0022 QUOTATION MARK (<code>"</code>)</dt>
+            <dd>Switch to the <a>tag attribute name before state</a>.</dd>
 
-      <dt>Anything else</dt>
-      <dd>Create new DOCTYPE token. Set the token's name to current input character. Switch to <a>DOCTYPE name state</a>.</dd>
-    </dl>
-  </dd>
+            <dt>U+0026 AMPERSAND (<code>&amp;</code>)</dt>
+            <dd>Switch to <a>character reference in attribute value state</a>, with the
+                <a>additional allowed character</a> being U+0022 QUOTATION MARK(<code>"</code>).
+            </dd>
 
-  <h4 class="heading" id="doctype_name_state">
-    <span class="content"><dfn>DOCTYPE name state</dfn></span>
-  </h4>
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Emit the current token and then reprocess the
+                current input character in the <a>data state</a>.
+            </dd>
 
-  <dd>
-    Consume the <a>next input character</a>:
+            <dt>Anything else</dt>
+            <dd>Append the input character to the current attribute's value. Stay in
+                the current state.
+            </dd>
+        </dl>
+    </dd>
 
-    <dl class="switch">
-      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-      <dt>U+000C FORM FEED (<code class="non-print">FF</code>)</dt>
-      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-      <dd>Switch to the <a>after DOCTYPE name state</a>.</dd>
-
-      <dt><a>Uppercase ASCII letter</a></dt>
-      <dd>Append the lowercase version of current input character to current doctype token.</dd>
-
-      <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
-      <dd> Create a new DOCTYPE token. Emit token. Switch to <a>data state</a>.</dd>
-
-      <dt>EOF</dt>
-      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token.
-      Reconsume the EOF character.</dd>
-
-      <dt>Anything else</dt>
-      <dd>Append the current input character to the current DOCTYPE token's name.
-      Reconsume the EOF character.</dd>
-    </dl>
-  </dd>
-
-  <h4 class="heading" id="after_doctype_name_state">
-    <span class="content"><dfn>After DOCTYPE name state</dfn></span>
-  </h4>
-
-  <dd>
-    Consume the <a>next input character</a>:
-
-    <dl class="switch">
-      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-      <dt>U+000C FORM FEED (<code class="non-print">FF</code>)</dt>
-      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-      <dd>Ignore the character.</dd>
-
-      <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
-      <dd> Switch to data state. Emit current DOCTYPE token.</dd>
-
-      <dt>EOF</dt>
-      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token.
-      Reconsume the EOF character.</dd>
-
-      <dt>Anything else</dt>
-      <dd>If the six characters starting from the current input character are an <a>ASCII case-insensitive</a> match for word "PUBLIC", then consume those characters and switch to the <a>after DOCTYPE public keyword state</a>.
-
-      Otherwise, if the six characters starting from the current input character are an <a>ASCII case-insensitive</a> match for word "SYSTEM", then consume those charactes and switch to the <a>after DOCTYPE system keyword state</a>.
-
-      Otherwise, this is a <a>parse error</a>. Switch to <a>bogus DOCTYPE state</a>.
-    </dl>
-  </dd>
-
-  <h4 class="heading" id="after_doctype_public_keyword_state">
-    <span class="content"><dfn>After DOCTYPE public keyword state</dfn></span>
-  </h4>
-  <dd>
-    Consume the <a>next input character</a>:
-    <dl class="switch">
-      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-      <dt>U+000C FORM FEED (<code class="non-print">FF</code>)</dt>
-      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-      <dd>Switch to the <a>before DOCTYPE public identifier state</a>.</dd>
-
-      <dt>U+0022 QUOTATION MARK(<code>&quot;</code>)</dt>
-      <dd><a>Parse error</a>. Set the DOCTYPE token's public identifier current DOCTYPE token to the empty string (not missing), then switch to the <a>DOCTYPE public identifier (double-quoted) state</a>.</dd>
-
-      <dt>U+0027 APOSTROPHE(<code>'</code>)</dt>
-      <dd><a>Parse error</a>. Set the DOCTYPE token's public identifier current DOCTYPE token to the empty string (not missing), then switch to the <a>DOCTYPE public identifier (single-quoted) state</a>.</dd>
-
-      <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
-      <dd><a>Parse error</a>. Set the DOCTYPE token's public identifier current DOCTYPE token to the empty string (not missing), then switch to the <a>DOCTYPE public identifier (single-quoted) state</a>.</dd>
-
-      <dt>EOF</dt>
-      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit that DOCTYPE token. Reconsume the EOF character.</dd>
-
-      <dt>Anything else</dt>
-      <dd><a>Parse error</a>. Switch to the <a>bogus DOCTYPE state</a>. Emit that DOCTYPE token. Reconsume the EOF character.</dd>
-    </dl>
-  </dd>
-
-  <h4 class="heading" id="after_doctype_system_keyword_state">
-    <span class="content"><dfn>After DOCTYPE system keyword state</dfn></span>
-  </h4>
-  <dd>
-    Consume the <a>next input character</a>:
-    <dl class="switch">
-      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-      <dt>U+000C FORM FEED (<code class="non-print">FF</code>)</dt>
-      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-      <dd>Switch to the <a>before DOCTYPE system identifier state</a>.</dd>
-
-      <dt>U+0022 QUOTATION MARK(<code>&quot;</code>)</dt>
-      <dd><a>Parse error</a>. Set the DOCTYPE token's public identifier current DOCTYPE token to the empty string (not missing), then switch to the <a>DOCTYPE system identifier (double-quoted) state</a>.</dd>
-
-      <dt>U+0027 APOSTROPHE(<code>'</code>)</dt>
-      <dd><a>Parse error</a>. Set the DOCTYPE token's public identifier current DOCTYPE token to the empty string (not missing), then switch to the <a>DOCTYPE system identifier (single-quoted) state</a>.</dd>
-
-      <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
-      <dd><a>Parse error</a>. Set the DOCTYPE token's public identifier current DOCTYPE token to the empty string (not missing), then switch to the <a>DOCTYPE system identifier (single-quoted) state</a>.</dd>
-
-      <dt>EOF</dt>
-      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit that DOCTYPE token. Reconsume the EOF character.</dd>
-
-      <dt>Anything else</dt>
-      <dd><a>Parse error</a>. Switch to the <a>bogus DOCTYPE state</a>.</dd>
-    </dl>
-  </dd>
-
-
-  <h4 class="heading" id="before_doctype_system_identifier_state">
-    <span class="content"><dfn>Before DOCTYPE system identifier state</dfn></span>
-  </h4>
-  <dd>
-    Consume the <a>next input character</a>:
-    <dl class="switch">
-      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-      <dt>U+000C FORM FEED (<code class="non-print">FF</code>)</dt>
-      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-      <dd>Ignore the character.</dd>
-
-      <dt>U+0022 QUOTATION MARK(<code>&quot;</code>)</dt>
-      <dd>Set the DOCTYPE token's system identifier current DOCTYPE token to the empty string (not missing), then switch to the <a>DOCTYPE system identifier (double-quoted) state</a>.</dd>
-
-      <dt>U+0027 APOSTROPHE(<code>'</code>)</dt>
-      <dd><a>Parse error</a>. Set the DOCTYPE token's system identifier current DOCTYPE token to the empty string (not missing), then switch to the <a>DOCTYPE system identifier (single-quoted) state</a>.</dd>
-
-      <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
-      <dd><a>Parse error</a>. Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
-
-      <dt>EOF</dt>
-      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token. Reconsume the EOF character.</dd>
-
-      <dt>Anything else</dt>
-      <dd><a>Parse error</a>. Switch to the <a>bogus DOCTYPE state</a>.</dd>
-    </dl>
-  </dd>
-
-  <h4 class="heading" id="before_doctype_public_identifier_state">
-    <span class="content"><dfn>Before DOCTYPE public identifier state</dfn></span>
-  </h4>
-  <dd>
-    Consume the <a>next input character</a>:
-    <dl class="switch">
-      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-      <dt>U+000C FORM FEED (<code class="non-print">FF</code>)</dt>
-      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-      <dd>Ignore the character.</dd>
-
-      <dt>U+0022 QUOTATION MARK(<code>&quot;</code>)</dt>
-      <dd><a>Parse error</a>. Set the DOCTYPE token's public identifier current DOCTYPE token to the empty string (not missing), then switch to the <a>DOCTYPE public identifier (double-quoted) state</a>.</dd>
-
-      <dt>U+0027 APOSTROPHE(<code>'</code>)</dt>
-      <dd><a>Parse error</a>. Set the DOCTYPE token's public identifier current DOCTYPE token to the empty string (not missing), then switch to the <a>DOCTYPE public identifier (single-quoted) state</a>.</dd>
-
-      <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
-      <dd><a>Parse error</a>. Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
-
-      <dt>EOF</dt>
-      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token. Reconsume the EOF character.</dd>
-
-      <dt>Anything else</dt>
-      <dd><a>Parse error</a>. Switch to the <a>bogus DOCTYPE state</a>.</dd>
-    </dl>
-  </dd>
-
-  <h4 class="heading" id="doctype_public_identifier_single_quoted_state">
-    <span class="content"><dfn>DOCTYPE public identifier (single-quoted) state</dfn></span>
-  </h4>
-  <dd>
-    Consume the <a>next input character</a>:
-    <dl class="switch">
-      <dt>U+0027 APOSTROPHE(<code>'</code>)</dt>
-      <dd>Switch to the <a>after DOCTYPE public identifier state</a>.</dd>
-
-      <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
-      <dd><a>Parse error</a>. Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
-
-      <dt>EOF</dt>
-      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token. Reconsume the EOF character.</dd>
-
-      <dt>Anything else</dt>
-      <dd>Append the current input character to the current DOCTYPE token's public identifier.</dd>
-    </dl>
-  </dd>
-
-
-  <h4 class="heading" id="doctype_public_identifier_double_quoted_state">
-    <span class="content"><dfn>DOCTYPE public identifier (double-quoted) state</dfn></span>
-  </h4>
-  <dd>
-    Consume the <a>next input character</a>:
-    <dl class="switch">
-      <dt>U+0022 QUOTATION MARK(<code>&quot;</code>)</dt>
-      <dd>Switch to the <a>after DOCTYPE public identifier state</a>.</dd>
-
-      <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
-      <dd><a>Parse error</a>. Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
-
-      <dt>EOF</dt>
-      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token. Reconsume the EOF character.</dd>
-
-      <dt>Anything else</dt>
-      <dd>Append the current input character to the current DOCTYPE token's public identifier.</dd>
-    </dl>
-  </dd>
-
-  <h4 class="heading" id="after_doctype_public_identifier_state">
-    <span class="content"><dfn>After DOCTYPE public identifier state</dfn></span>
-  </h4>
-  <dd>
-    Consume the <a>next input character</a>:
-    <dl class="switch">
-      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-      <dt>U+000C FORM FEED (<code class="non-print">FF</code>)</dt>
-      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-      <dd>Switch to the <a>between DOCTYPE public and system identifiers state</a>.</dd>
-
-      <dt>U+0027 APOSTROPHE(<code>'</code>)</dt>
-      <dd><a>Parse error</a>. Set the DOCTYPE token's system identifier to the empty string (not missing) then switch to the <a>DOCTYPE system identifier (single-quoted) state</a>.</dd>
-
-      <dt>U+0022 QUOTATION MARK(<code>&quot;</code>)</dt>
-      <dd><a>Parse error</a>. Set the DOCTYPE token's system identifier to the empty string (not missing) then switch to the <a>DOCTYPE system identifier (double-quoted) state</a>.</dd>
-
-      <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
-      <dd>Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
-
-      <dt>EOF</dt>
-      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token. Reconsume the EOF character.</dd>
-
-      <dt>Anything else</dt>
-      <dd><a>Parse error</a>. Switch to <a>bogus DOCTYPE state</a>.</dd>
-    </dl>
-  </dd>
-
-  <h4 class="heading" id="between_doctype_public_and_system_identifier_state">
-    <span class="content"><dfn>Between DOCTYPE public and system identifiers state</dfn></span>
-  </h4>
-  <dd>
-    Consume the <a>next input character</a>:
-    <dl class="switch">
-      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-      <dt>U+000C FORM FEED (<code class="non-print">FF</code>)</dt>
-      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-      <dd>Ignore the character.</dd>
-
-      <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
-      <dd>Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
-
-      <dt>U+0027 APOSTROPHE(<code>'</code>)</dt>
-      <dd>Set the DOCTYPE token's system identifier to the empty string (not missing) then switch to the <a>DOCTYPE system identifier (single-quoted) state</a>.</dd>
-
-      <dt>U+0022 QUOTATION MARK(<code>&quot;</code>)</dt>
-      <dd>Set the DOCTYPE token's system identifier to the empty string (not missing) then switch to the <a>DOCTYPE system identifier (double-quoted) state</a>.</dd>
-
-      <dt>EOF</dt>
-      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token. Reconsume the EOF character.</dd>
-
-      <dt>Anything else</dt>
-      <dd><a>Parse error</a>. Switch to <a>Bogus DOCTYPE state</a>.</dd>
-    </dl>
-  </dd>
-
-  <h4 class="heading" id="doctype_system_identifier_single_quote_state">
-    <span class="content"><dfn>DOCTYPE system identifier (single-quoted) state</dfn></span>
-  </h4>
-  <dd>
-    Consume the <a>next input character</a>:
-    <dl class="switch">
-      <dt>U+0027 APOSTROPHE(<code>'</code>)</dt>
-      <dd>Switch to the <a>after DOCTYPE system identifiers state</a>.</dd>
-
-      <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
-      <dd><a>Parse error</a>. Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
-
-      <dt>EOF</dt>
-      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token. Reconsume the EOF character.</dd>
-
-      <dt>Anything else</dt>
-      <dd>Append the current input character to the current DOCTYPE token's system identifier.</dd>
-    </dl>
-  </dd>
-
-  <h4 class="heading" id="doctype_system_identifier_double_quote_state">
-    <span class="content"><dfn>DOCTYPE system identifier (double-quoted) state</dfn></span>
-  </h4>
-  <dd>
-    Consume the <a>next input character</a>:
-    <dl class="switch">
-      <dt>U+0022 QUOTATION MARK(<code>&quot;</code>)</dt>
-      <dd>Switch to the <a>after DOCTYPE system identifiers state</a>.</dd>
-
-      <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
-      <dd><a>Parse error</a>. Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
-
-      <dt>EOF</dt>
-      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token. Reconsume the EOF character.</dd>
-
-      <dt>Anything else</dt>
-      <dd>Append the current input character to the current DOCTYPE token's system identifier.</dd>
-    </dl>
-  </dd>
-
-  <h4 class="heading" id="after_doctype_system_identifier_state">
-    <span class="content"><dfn>After DOCTYPE system identifiers state</dfn></span>
-  </h4>
-  <dd>
-    Consume the <a>next input character</a>:
-    <dl class="switch">
-      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-      <dt>U+000C FORM FEED (<code class="non-print">FF</code>)</dt>
-      <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-      <dd>Ignore the character.</dd>
-
-      <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
-      <dd>Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
-
-      <dt>EOF</dt>
-      <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token. Reconsume the EOF character.</dd>
-
-      <dt>Anything else</dt>
-      <dd><a>Parse error</a>. Switch to <a>Bogus DOCTYPE state</a>.</dd>
-    </dl>
-  </dd>
-
-  <h4 class="heading" id="bogus_doctype_state">
-    <span class="content"><dfn>Bogus DOCTYPE state</dfn></span>
-  </h4>
-  <dd>
-    Consume the <a>next input character</a>:
-    <dl class="switch">
-      <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
-      <dd>Switch to <a>data state</a>. Emit DOCTYPE token.</dd>
-
-      <dt>EOF</dt>
-      <dd>Switch to the <a>data state</a>. Emit DOCTYPE token. Reconsume the EOF character.</dd>
-
-      <dt>Anything else</dt>
-      <dd>Ignore character.</dd>
-    </dl>
-  </dd>
+
+    <h4 class="heading" id="tag_attr_value_single_quote_state">
+        <span class="content"><dfn>Tag attribute value single quoted state</dfn></span>
+    </h4>
+
+    <dd>
+
+        Consume the <a>next input character</a>:
+
+        <dl class="switch">
+            <dt>U+0022 APOSTROPHE (<code>'</code>)</dt>
+            <dd>Switch to the <a>tag attribute name before state</a>.</dd>
+
+            <dt>U+0026 AMPERSAND (<code>&amp;</code>)</dt>
+            <dd>Switch to <a>character reference in attribute value state</a>, with the
+                <a>additional allowed character</a> being APOSTROPHE (<code>'</code>).
+            </dd>
+
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Emit the current token and then reprocess the
+                current input character in the <a>data state</a>.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd>Append the input character to the current attribute's value. Stay in
+                the current state.
+            </dd>
+        </dl>
+    </dd>
+
+
+    <h4 class="heading" id="tag_attr_value_unquote_state">
+        <span class="content"><dfn>Tag attribute value unquoted state</dfn></span>
+    </h4>
+
+    <dd>
+
+        Consume the <a>next input character</a>:
+
+        <dl class="switch">
+            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+            <dd>Switch to the <a>tag attribute name before state</a>.</dd>
+
+            <dt>U+0026 AMPERSAND (<code>&amp;</code>):
+            <dd>
+                Switch to <a>character reference in attribute value state</a>, with the
+                <a>additional allowed character</a> being U+003E GREATER-THAN SIGN(<code>&gt;</code>).
+            </dd>
+
+            <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
+            <dd>Emit the current token as start tag token and then switch to the
+                <a>data state</a>.
+            </dd>
+
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Emit the current token as start tag token and
+                then reprocess the current input character in the
+                <a>data state</a>.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd>Append the input character to the current attribute's value. Stay in
+                the current state.
+            </dd>
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="charref_attr_state">
+        <span class="content"><dfn>Character reference in attribute value state</dfn></span>
+    </h4>
+
+    <dd>
+
+        Attempt to <a>consume a character reference</a>.
+
+        If nothing is returned, append a U+0026 AMPERSAND (&amp;) character to current attribute's value.
+
+        Otherwise append returned character tokens to current attribute's value.
+
+        Finally, switch back to attribute value state that switched to this state.
+    </dd>
+
+
+    <h4 class="heading" id="bogus_comment_state">
+        <span class="content"><dfn>Bogus comment state</dfn></span>
+    </h4>
+
+    <dd>
+        Consume every character up to the first U+003E GREATER-THAN SIGN (<code>&gt;</code>) or EOF, whichever comes
+        first. Emit a comment token whose data is the concatenation of all those consumed characters. Then consume the
+        next input character and switch to the <a>data state</a> reprocessing the EOF character if that was the
+        character consumed.
+    </dd>
+
+
+    <h4 class="heading" id="tokenizing_character_ref">
+        <span class="content"><dfn>Tokenizing character references</dfn></span>
+    </h4>
+
+    <dd>
+
+        This section defines how to <dfn>consume a character reference</dfn>, optionally with an <dfn>additional allowed
+        character</dfn>, which, if specified where the algorithm is invoked, adds a character to the list of characters
+        that cause there to not be a character reference.
+
+        This definition is used when parsing character <a href="Data state">in text</a> and in <a
+            href="Character reference in attribute value state">attributes</a>.
+
+        The behavior depends on identity of next character (the one immediately after the U+0026 AMPERSAND character),
+        as follows:
+
+        <dl class="switch">
+            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+            <dt>U+000C FORM FEED (<code class="non-print">FF</code>)</dt>
+            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+            <dt>U+003C LESS-THAN SIGN (<code>&lt;</code>)</dt>
+            <dt>U+0025 PERCENT SIGN (<code>%</code>)</dt>
+            <dt>U+0026 AMPERSAND (<code>&amp;</code>)</dt>
+            <dt>EOF</dt>
+            <dt>The <a>additional allowed character</a> if there is one</dt>
+            <dd>Not a character reference. No characters are consumed and nothing is returned (This is not an error,
+                either).
+            </dd>
+            <dt>U+0023 NUMBER SIGN (<code>#</code>)
+            <dd>
+
+                Consume the U+0023 NUMBER SIGN.
+
+                The behaviour further depends on the character after the U+0023 NUMBER SIGN.
+
+                <dl class="switch">
+                    <dt>U+0078 LATIN SMALL LETTER X</dt>
+                    <dt>U+0078 LATIN CAPITAL LETTER X</dt>
+                    <dd>
+                        <p>Consume the X.</p>
+                        <p>Follow the steps below, but using <a>ASCII hex digits</a>.</p>
+                        <p>When it comes to interpreting the number, interpret it as a hexadecimal number.</p>
+                    </dd>
+                    <dt>Anything else</dt>
+                    <dd>
+                        Follow the steps below, but using <a>ASCII digits</a>.
+
+                        When it comes to interpreting the number, interpret it as a decimal number.
+                    </dd>
+                </dl>
+
+                Consume as many characters as match the range of characters given above (<a>ASCII hex digits</a> or <a>ASCII
+                digits</a>).
+
+                If no characters match the range, then don't consume any characters. This is a <a>parse error</a>;
+                return the U+0023 NUMBER SIGN character and if appropriate X character as string of text.
+
+                Otherwise, if the next character is a U+003B SEMICOLON, consume that too. If it isn't, there is a <a>parse
+                error</a>.
+
+                If one or more characters match the range, then take them all and interpret the string of characters as
+                a number (either hexadecimal or decimal as appropriate).
+
+                <p class="warning">Should we do HTML like replacement? At least for null?</p>
+
+                Otherwise, if the number is in the range 0xD800 to 0xDFFF or is greater than 0x10FFFF, then this is a
+                <a>parse error</a>. Return a U+FFFD REPLACEMENT CHARACTER character token.
+
+                <div class="warning">Should we refuse Unicode from ranges listed (0x0001 to 0x0008, 0x000D to 0x001F,
+                    0x007F to 0x009F, 0xFDD0 to 0xFDEF, or is one of 0x000B, 0xFFFE, 0xFFFF, 0x1FFFE, 0x1FFFF, 0x2FFFE,
+                    0x2FFFF, 0x3FFFE, 0x3FFFF, 0x4FFFE, 0x4FFFF, 0x5FFFE, 0x5FFFF, 0x6FFFE, 0x6FFFF, 0x7FFFE, 0x7FFFF,
+                    0x8FFFE, 0x8FFFF, 0x9FFFE, 0x9FFFF, 0xAFFFE, 0xAFFFF, 0xBFFFE, 0xBFFFF, 0xCFFFE, 0xCFFFF, 0xDFFFE,
+                    0xDFFFF, 0xEFFFE, 0xEFFFF, 0xFFFFE, 0xFFFFF, 0x10FFFE, or 0x10FFFF)?<br/>
+
+                    I've noted that Javascript implementation of XML5 is having to go around some characters in its
+                    version.
+                </div>
+            </dd>
+            <dt>Anything else</dt>
+            <dd>
+
+                Consume characters until you reach a U+003B SEMICOLON character (<code>;</code>).
+
+                <p class="warning">What happens if there is no semicolon? Does it read rest of the file? Maybe better
+                    solution is to read all characters that are part of name char according to <a
+                            href="http://www.w3.org/TR/xml11/#NT-Name">XML 1.1. spec.</a></p>
+
+                Otherwise, a character reference is parsed. If the last character matched is not a U+003B SEMICOLON
+                character (<code>;</code>), there is a <a>parse error</a>.
+
+                If there was a parse error the consumed characters are interperted as part of a string and are returned.
+
+                If there wasn't a parse error return a reference with name equal to consumed characters, omitting the
+                U+003B SEMICOLON character (<code>;</code>).
+
+                <div class="example" id="ref_tokenizer_example">
+                    If the markup contains following attribute <code>This is a &amp;ref;</code>, character tokenizer
+                    should return this as a reference named ref. However if the attribute defined is defined as <code>This
+                    is &amp;notref</code>, then the tokenizer will interpret this as a text <code>This is
+                    &amp;notref</code>, while emitting a <a>parse error</a>.
+                </div>
+
+            </dd>
+        </dl>
+    </dd>
+
+
+    <h4 class="heading" id="doctype_state">
+        <span class="content"><dfn>DOCTYPE state</dfn></span>
+    </h4>
+    <dd>
+
+        Consume the <a>next input character</a>:
+
+        <dl class="switch">
+            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+            <dt>U+000C FORM FEED (<code class="non-print">FF</code>)</dt>
+            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+            <dd>Switch to the <a>before DOCTYPE name state</a>.</dd>
+
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Switch to <a>data state</a>.</dd>
+            Create new Doctype token. Emit Doctype token. Reconsume the EOF character.
+
+            <dt>Anything else</dt>
+            <dd><a>Parse error</a>. Switch to <a>before DOCTYPE name state</a>. Reconsume the character.
+            </dd>
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="before_doctype_name_state">
+        <span class="content"><dfn>Before DOCTYPE name state</dfn></span>
+    </h4>
+
+    <dd>
+
+        Consume the <a>next input character</a>:
+
+        <dl class="switch">
+            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+            <dt>U+000C FORM FEED (<code class="non-print">FF</code>)</dt>
+            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+            <dd>Ignore the character.</dd>
+
+            <dt><a>Uppercase ASCII letter</a></dt>
+            <dd>Create a new DOCTYPE token. Set the token name to lowercase version of the current input character.
+                Switch to the DOCTYPE name state.
+            </dd>
+
+            <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
+            <dd><a>Parse error</a> Create a new DOCTYPE token. Emit token. Switch to <a>data state</a>.</dd>
+
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Switch to <a>data state</a>.</dd>
+            Create new Doctype token. Emit Doctype token. Reconsume the EOF character.
+
+            <dt>Anything else</dt>
+            <dd>Create new DOCTYPE token. Set the token's name to current input character. Switch to <a>DOCTYPE name
+                state</a>.
+            </dd>
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="doctype_name_state">
+        <span class="content"><dfn>DOCTYPE name state</dfn></span>
+    </h4>
+
+    <dd>
+        Consume the <a>next input character</a>:
+
+        <dl class="switch">
+            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+            <dt>U+000C FORM FEED (<code class="non-print">FF</code>)</dt>
+            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+            <dd>Switch to the <a>after DOCTYPE name state</a>.</dd>
+
+            <dt><a>Uppercase ASCII letter</a></dt>
+            <dd>Append the lowercase version of current input character to current doctype token.</dd>
+
+            <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
+            <dd> Create a new DOCTYPE token. Emit token. Switch to <a>data state</a>.</dd>
+
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token.
+                Reconsume the EOF character.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd>Append the current input character to the current DOCTYPE token's name.
+                Reconsume the EOF character.
+            </dd>
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="after_doctype_name_state">
+        <span class="content"><dfn>After DOCTYPE name state</dfn></span>
+    </h4>
+
+    <dd>
+        Consume the <a>next input character</a>:
+
+        <dl class="switch">
+            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+            <dt>U+000C FORM FEED (<code class="non-print">FF</code>)</dt>
+            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+            <dd>Ignore the character.</dd>
+
+            <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
+            <dd> Switch to data state. Emit current DOCTYPE token.</dd>
+
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token.
+                Reconsume the EOF character.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd>If the six characters starting from the current input character are an <a>ASCII case-insensitive</a>
+                match for word "PUBLIC", then consume those characters and switch to the <a>after DOCTYPE public keyword
+                    state</a>.
+
+                Otherwise, if the six characters starting from the current input character are an <a>ASCII
+                    case-insensitive</a> match for word "SYSTEM", then consume those charactes and switch to the <a>after
+                    DOCTYPE system keyword state</a>.
+
+                Otherwise, this is a <a>parse error</a>. Switch to <a>bogus DOCTYPE state</a>.
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="after_doctype_public_keyword_state">
+        <span class="content"><dfn>After DOCTYPE public keyword state</dfn></span>
+    </h4>
+    <dd>
+        Consume the <a>next input character</a>:
+        <dl class="switch">
+            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+            <dt>U+000C FORM FEED (<code class="non-print">FF</code>)</dt>
+            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+            <dd>Switch to the <a>before DOCTYPE public identifier state</a>.</dd>
+
+            <dt>U+0022 QUOTATION MARK(<code>&quot;</code>)</dt>
+            <dd><a>Parse error</a>. Set the DOCTYPE token's public identifier current DOCTYPE token to the empty string
+                (not missing), then switch to the <a>DOCTYPE public identifier (double-quoted) state</a>.
+            </dd>
+
+            <dt>U+0027 APOSTROPHE(<code>'</code>)</dt>
+            <dd><a>Parse error</a>. Set the DOCTYPE token's public identifier current DOCTYPE token to the empty string
+                (not missing), then switch to the <a>DOCTYPE public identifier (single-quoted) state</a>.
+            </dd>
+
+            <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
+            <dd><a>Parse error</a>. Set the DOCTYPE token's public identifier current DOCTYPE token to the empty string
+                (not missing), then switch to the <a>DOCTYPE public identifier (single-quoted) state</a>.
+            </dd>
+
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit that DOCTYPE token. Reconsume the EOF
+                character.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd><a>Parse error</a>. Switch to the <a>bogus DOCTYPE state</a>. Emit that DOCTYPE token. Reconsume the EOF
+                character.
+            </dd>
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="after_doctype_system_keyword_state">
+        <span class="content"><dfn>After DOCTYPE system keyword state</dfn></span>
+    </h4>
+    <dd>
+        Consume the <a>next input character</a>:
+        <dl class="switch">
+            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+            <dt>U+000C FORM FEED (<code class="non-print">FF</code>)</dt>
+            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+            <dd>Switch to the <a>before DOCTYPE system identifier state</a>.</dd>
+
+            <dt>U+0022 QUOTATION MARK(<code>&quot;</code>)</dt>
+            <dd><a>Parse error</a>. Set the DOCTYPE token's public identifier current DOCTYPE token to the empty string
+                (not missing), then switch to the <a>DOCTYPE system identifier (double-quoted) state</a>.
+            </dd>
+
+            <dt>U+0027 APOSTROPHE(<code>'</code>)</dt>
+            <dd><a>Parse error</a>. Set the DOCTYPE token's public identifier current DOCTYPE token to the empty string
+                (not missing), then switch to the <a>DOCTYPE system identifier (single-quoted) state</a>.
+            </dd>
+
+            <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
+            <dd><a>Parse error</a>. Set the DOCTYPE token's public identifier current DOCTYPE token to the empty string
+                (not missing), then switch to the <a>DOCTYPE system identifier (single-quoted) state</a>.
+            </dd>
+
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit that DOCTYPE token. Reconsume the EOF
+                character.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd><a>Parse error</a>. Switch to the <a>bogus DOCTYPE state</a>.</dd>
+        </dl>
+    </dd>
+
+
+    <h4 class="heading" id="before_doctype_system_identifier_state">
+        <span class="content"><dfn>Before DOCTYPE system identifier state</dfn></span>
+    </h4>
+    <dd>
+        Consume the <a>next input character</a>:
+        <dl class="switch">
+            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+            <dt>U+000C FORM FEED (<code class="non-print">FF</code>)</dt>
+            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+            <dd>Ignore the character.</dd>
+
+            <dt>U+0022 QUOTATION MARK(<code>&quot;</code>)</dt>
+            <dd>Set the DOCTYPE token's system identifier current DOCTYPE token to the empty string (not missing), then
+                switch to the <a>DOCTYPE system identifier (double-quoted) state</a>.
+            </dd>
+
+            <dt>U+0027 APOSTROPHE(<code>'</code>)</dt>
+            <dd><a>Parse error</a>. Set the DOCTYPE token's system identifier current DOCTYPE token to the empty string
+                (not missing), then switch to the <a>DOCTYPE system identifier (single-quoted) state</a>.
+            </dd>
+
+            <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
+            <dd><a>Parse error</a>. Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
+
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token. Reconsume the EOF character.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd><a>Parse error</a>. Switch to the <a>bogus DOCTYPE state</a>.</dd>
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="before_doctype_public_identifier_state">
+        <span class="content"><dfn>Before DOCTYPE public identifier state</dfn></span>
+    </h4>
+    <dd>
+        Consume the <a>next input character</a>:
+        <dl class="switch">
+            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+            <dt>U+000C FORM FEED (<code class="non-print">FF</code>)</dt>
+            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+            <dd>Ignore the character.</dd>
+
+            <dt>U+0022 QUOTATION MARK(<code>&quot;</code>)</dt>
+            <dd><a>Parse error</a>. Set the DOCTYPE token's public identifier current DOCTYPE token to the empty string
+                (not missing), then switch to the <a>DOCTYPE public identifier (double-quoted) state</a>.
+            </dd>
+
+            <dt>U+0027 APOSTROPHE(<code>'</code>)</dt>
+            <dd><a>Parse error</a>. Set the DOCTYPE token's public identifier current DOCTYPE token to the empty string
+                (not missing), then switch to the <a>DOCTYPE public identifier (single-quoted) state</a>.
+            </dd>
+
+            <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
+            <dd><a>Parse error</a>. Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
+
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token. Reconsume the EOF character.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd><a>Parse error</a>. Switch to the <a>bogus DOCTYPE state</a>.</dd>
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="doctype_public_identifier_single_quoted_state">
+        <span class="content"><dfn>DOCTYPE public identifier (single-quoted) state</dfn></span>
+    </h4>
+    <dd>
+        Consume the <a>next input character</a>:
+        <dl class="switch">
+            <dt>U+0027 APOSTROPHE(<code>'</code>)</dt>
+            <dd>Switch to the <a>after DOCTYPE public identifier state</a>.</dd>
+
+            <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
+            <dd><a>Parse error</a>. Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
+
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token. Reconsume the EOF character.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd>Append the current input character to the current DOCTYPE token's public identifier.</dd>
+        </dl>
+    </dd>
+
+
+    <h4 class="heading" id="doctype_public_identifier_double_quoted_state">
+        <span class="content"><dfn>DOCTYPE public identifier (double-quoted) state</dfn></span>
+    </h4>
+    <dd>
+        Consume the <a>next input character</a>:
+        <dl class="switch">
+            <dt>U+0022 QUOTATION MARK(<code>&quot;</code>)</dt>
+            <dd>Switch to the <a>after DOCTYPE public identifier state</a>.</dd>
+
+            <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
+            <dd><a>Parse error</a>. Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
+
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token. Reconsume the EOF character.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd>Append the current input character to the current DOCTYPE token's public identifier.</dd>
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="after_doctype_public_identifier_state">
+        <span class="content"><dfn>After DOCTYPE public identifier state</dfn></span>
+    </h4>
+    <dd>
+        Consume the <a>next input character</a>:
+        <dl class="switch">
+            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+            <dt>U+000C FORM FEED (<code class="non-print">FF</code>)</dt>
+            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+            <dd>Switch to the <a>between DOCTYPE public and system identifiers state</a>.</dd>
+
+            <dt>U+0027 APOSTROPHE(<code>'</code>)</dt>
+            <dd><a>Parse error</a>. Set the DOCTYPE token's system identifier to the empty string (not missing) then
+                switch to the <a>DOCTYPE system identifier (single-quoted) state</a>.
+            </dd>
+
+            <dt>U+0022 QUOTATION MARK(<code>&quot;</code>)</dt>
+            <dd><a>Parse error</a>. Set the DOCTYPE token's system identifier to the empty string (not missing) then
+                switch to the <a>DOCTYPE system identifier (double-quoted) state</a>.
+            </dd>
+
+            <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
+            <dd>Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
+
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token. Reconsume the EOF character.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd><a>Parse error</a>. Switch to <a>bogus DOCTYPE state</a>.</dd>
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="between_doctype_public_and_system_identifier_state">
+        <span class="content"><dfn>Between DOCTYPE public and system identifiers state</dfn></span>
+    </h4>
+    <dd>
+        Consume the <a>next input character</a>:
+        <dl class="switch">
+            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+            <dt>U+000C FORM FEED (<code class="non-print">FF</code>)</dt>
+            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+            <dd>Ignore the character.</dd>
+
+            <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
+            <dd>Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
+
+            <dt>U+0027 APOSTROPHE(<code>'</code>)</dt>
+            <dd>Set the DOCTYPE token's system identifier to the empty string (not missing) then switch to the <a>DOCTYPE
+                system identifier (single-quoted) state</a>.
+            </dd>
+
+            <dt>U+0022 QUOTATION MARK(<code>&quot;</code>)</dt>
+            <dd>Set the DOCTYPE token's system identifier to the empty string (not missing) then switch to the <a>DOCTYPE
+                system identifier (double-quoted) state</a>.
+            </dd>
+
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token. Reconsume the EOF character.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd><a>Parse error</a>. Switch to <a>Bogus DOCTYPE state</a>.</dd>
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="doctype_system_identifier_single_quote_state">
+        <span class="content"><dfn>DOCTYPE system identifier (single-quoted) state</dfn></span>
+    </h4>
+    <dd>
+        Consume the <a>next input character</a>:
+        <dl class="switch">
+            <dt>U+0027 APOSTROPHE(<code>'</code>)</dt>
+            <dd>Switch to the <a>after DOCTYPE system identifiers state</a>.</dd>
+
+            <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
+            <dd><a>Parse error</a>. Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
+
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token. Reconsume the EOF character.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd>Append the current input character to the current DOCTYPE token's system identifier.</dd>
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="doctype_system_identifier_double_quote_state">
+        <span class="content"><dfn>DOCTYPE system identifier (double-quoted) state</dfn></span>
+    </h4>
+    <dd>
+        Consume the <a>next input character</a>:
+        <dl class="switch">
+            <dt>U+0022 QUOTATION MARK(<code>&quot;</code>)</dt>
+            <dd>Switch to the <a>after DOCTYPE system identifiers state</a>.</dd>
+
+            <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
+            <dd><a>Parse error</a>. Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
+
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token. Reconsume the EOF character.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd>Append the current input character to the current DOCTYPE token's system identifier.</dd>
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="after_doctype_system_identifier_state">
+        <span class="content"><dfn>After DOCTYPE system identifiers state</dfn></span>
+    </h4>
+    <dd>
+        Consume the <a>next input character</a>:
+        <dl class="switch">
+            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+            <dt>U+000C FORM FEED (<code class="non-print">FF</code>)</dt>
+            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+            <dd>Ignore the character.</dd>
+
+            <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
+            <dd>Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
+
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token. Reconsume the EOF character.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd><a>Parse error</a>. Switch to <a>Bogus DOCTYPE state</a>.</dd>
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="bogus_doctype_state">
+        <span class="content"><dfn>Bogus DOCTYPE state</dfn></span>
+    </h4>
+    <dd>
+        Consume the <a>next input character</a>:
+        <dl class="switch">
+            <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
+            <dd>Switch to <a>data state</a>. Emit DOCTYPE token.</dd>
+
+            <dt>EOF</dt>
+            <dd>Switch to the <a>data state</a>. Emit DOCTYPE token. Reconsume the EOF character.</dd>
+
+            <dt>Anything else</dt>
+            <dd>Ignore character.</dd>
+        </dl>
+    </dd>
 </dl>
 
 <h3 class="heading" data-level="1" id="tree-construction">
-  <span class="content">Tree construction</span>
+    <span class="content">Tree construction</span>
 </h3>
 
-  The input to the tree construction stage is a sequence of tokens from the
-  <a>tokenization</a> stage. The output of this stage is a tree model
-  represented by a <code>Document</code> object.
+The input to the tree construction stage is a sequence of tokens from the
+<a>tokenization</a> stage. The output of this stage is a tree model
+represented by a <code>Document</code> object.
 
-  The tree construction stage passes through several phases. The initial
-  phase is the <a>start phase</a>.
+The tree construction stage passes through several phases. The initial
+phase is the <a>start phase</a>.
 
-  The <dfn>stack of open elements</dfn> contains all elements of which the
-  closing tag has not yet been encountered. Once the first start tag token in
-  the <a>start phase</a> is encountered it will contain one open element.
-  The rest of the elements are added during the <a>main phase</a>.
+The <dfn>stack of open elements</dfn> contains all elements of which the
+closing tag has not yet been encountered. Once the first start tag token in
+the <a>start phase</a> is encountered it will contain one open element.
+The rest of the elements are added during the <a>main phase</a>.
 
-  The <dfn>current element</dfn> is the bottommost node in this stack.
+The <dfn>current element</dfn> is the bottommost node in this stack.
 
-  The <a>stack of open elements</a> is said to have an <dfn>element in
-  scope</dfn> if the target element is in the stack of open elements.
+The <a>stack of open elements</a> is said to have an <dfn>element in
+    scope</dfn> if the target element is in the stack of open elements.
 
-  When the steps below require the user agent to <dfn>append a
-  character</dfn> to a node, the user agent <em class="ct">must</em> collect it
-  and all subsequent consecutive characters that would be appended to that node
-  and insert one <code>Text</code> node whose data is the concatenation of all
-  those characters.
+When the steps below require the user agent to <dfn>append a
+    character</dfn> to a node, the user agent <em class="ct">must</em> collect it
+and all subsequent consecutive characters that would be appended to that node
+and insert one <code>Text</code> node whose data is the concatenation of all
+those characters.
 
-  <span class="warning">Need to define <dfn>create an element for the token</dfn>...</span>
+<span class="warning">Need to define <dfn>create an element for the token</dfn>...</span>
 
-  When the steps below require the user agent to <dfn>insert an element</dfn>
-  for a token the user agent <em class="ct">must</em> <a>create an element
-  for the token</a> and then append it to the <a>current element</a>
-  and push it into the <a>stack of open elements</a> so
-  that it becomes the new <a>current element</a>.
+When the steps below require the user agent to <dfn>insert an element</dfn>
+for a token the user agent <em class="ct">must</em> <a>create an element
+    for the token</a> and then append it to the <a>current element</a>
+and push it into the <a>stack of open elements</a> so
+that it becomes the new <a>current element</a>.
 
 <dl>
 
-<dt><dfn>Start phase</dfn></dt>
+    <dt><dfn>Start phase</dfn></dt>
 
-<dd><p>
-  Each token emitted from the tokenization stage <em class="ct">must</em> be
-  processed as follows until the algorithm below switches to a different
-  phase:
+    <dd><p>
+        Each token emitted from the tokenization stage <em class="ct">must</em> be
+        processed as follows until the algorithm below switches to a different
+        phase:
 
-<dl class="switch">
-  <dt>A start tag token</dt>
-  <dd>
+        <dl class="switch">
+            <dt>A start tag token</dt>
+            <dd>
 
-    <a>Create an element for the token</a> and then append it to the
-    <code>Document</code> node and push it into the <a>stack of open elements</a>.
+                <a>Create an element for the token</a> and then append it to the
+                <code>Document</code> node and push it into the <a>stack of open elements</a>.
 
-    This element is the root element and the first <a>current
-    element</a>. Then switch to the <a>main phase</a>.
-  </dd>
+                This element is the root element and the first <a>current
+                element</a>. Then switch to the <a>main phase</a>.
+            </dd>
 
-  <dt>An empty tag token</dt>
-  <dd>
+            <dt>An empty tag token</dt>
+            <dd>
 
-    <a>Create an element for the token</a> and append it to the
-    <code>Document</code> node. Then switch to the <a>end phase</a>.
+                <a>Create an element for the token</a> and append it to the
+                <code>Document</code> node. Then switch to the <a>end phase</a>.
 
-  </dd>
+            </dd>
 
-  <dt>A comment token</dt>
-  <dd>
+            <dt>A comment token</dt>
+            <dd>
 
-    Append a <code>Comment</code> node to the <code>Document</code> node
-    with the <code>data</code> attribute set to the data given in the
-    token.
+                Append a <code>Comment</code> node to the <code>Document</code> node
+                with the <code>data</code> attribute set to the data given in the
+                token.
 
-  </dd>
+            </dd>
 
-  <dt>A processing instruction token</dt>
-  <dd>
+            <dt>A processing instruction token</dt>
+            <dd>
 
-    Append a <code>ProcessingInstruction</code> node to the
-    <code>Document</code> node with the <code>target</code> and <code>data</code>
-    attributes set to the target and data given in the token.
+                Append a <code>ProcessingInstruction</code> node to the
+                <code>Document</code> node with the <code>target</code> and <code>data</code>
+                attributes set to the target and data given in the token.
 
-  </dd>
+            </dd>
 
-  <dt>An end-of-file token</dt>
-  <dd>
+            <dt>An end-of-file token</dt>
+            <dd>
 
-    <a>Parse error</a>. Reprocess the token in the <a>end
-    phase</a>.
+                <a>Parse error</a>. Reprocess the token in the <a>end
+                phase</a>.
 
-  </dd>
+            </dd>
 
-  <dt>Anything else</dt>
-  <dd>
-    <a>Parse error</a>. Ignore the token.
-  </dd>
-</dl>
+            <dt>Anything else</dt>
+            <dd>
+                <a>Parse error</a>. Ignore the token.
+            </dd>
+        </dl>
 
-<dt><dfn>Main phase</dfn></dt>
+    <dt><dfn>Main phase</dfn></dt>
 
-<dd><p>
-Once a start tag token has been encountered (as detailed in the previous
-phase) each token <em class="ct">must</em> be process using the following
-steps until further notice:
+    <dd><p>
+        Once a start tag token has been encountered (as detailed in the previous
+        phase) each token <em class="ct">must</em> be process using the following
+        steps until further notice:
 
-<dl class="switch">
-  <dt>A character token</dt>
-  <dd>
+        <dl class="switch">
+            <dt>A character token</dt>
+            <dd>
 
-    <a>Append a character</a> to the <a>current
-    element</a>.
+                <a>Append a character</a> to the <a>current
+                element</a>.
 
-  </dd>
+            </dd>
 
-  <dt>A start tag token</dt>
-  <dd><p><a>Insert an element</a> for the token.</p></dd>
+            <dt>A start tag token</dt>
+            <dd><p><a>Insert an element</a> for the token.</p></dd>
 
-  <dt>An empty tag token</dt>
-  <dd><p><a>Create an element for the token</a> and append it to the
-    <a>current element</a>.</p></dd>
+            <dt>An empty tag token</dt>
+            <dd><p><a>Create an element for the token</a> and append it to the
+                <a>current element</a>.</p></dd>
 
-  <dt>An end tag token</dt>
-  <dd>
+            <dt>An end tag token</dt>
+            <dd>
 
-    If the tag name of the <a href="current element">current node</a> does not match the tag
-    name of the end tag token this is a <a>parse error</a>.
+                If the tag name of the <a href="current element">current node</a> does not match the tag
+                name of the end tag token this is a <a>parse error</a>.
 
-    If there is an <a>element in scope</a> with the same tag name as
-    that of the token pop nodes from the <a>stack of open elements</a>
-    until the first such element has been popped from the stack.
+                If there is an <a>element in scope</a> with the same tag name as
+                that of the token pop nodes from the <a>stack of open elements</a>
+                until the first such element has been popped from the stack.
 
-    If there are no more elements on the stack of open elements at this point
-    switch to the <a>end phase</a>.
-  </dd>
+                If there are no more elements on the stack of open elements at this point
+                switch to the <a>end phase</a>.
+            </dd>
 
-  <dt>A short end tag token</dt>
-  <dd>
+            <dt>A short end tag token</dt>
+            <dd>
 
-    Pop an element from the <a>stack of open elements</a>. If there
-    are no more elements on the stack of open elements switch to the <a>end
-    phase</a>.
+                Pop an element from the <a>stack of open elements</a>. If there
+                are no more elements on the stack of open elements switch to the <a>end
+                phase</a>.
 
-  </dd>
+            </dd>
 
-  <dt>A comment token</dt>
-  <dd>
+            <dt>A comment token</dt>
+            <dd>
 
-    Append a <code>Comment</code> node to the <a>current element</a>
-    with the <code>data</code> attribute set to the data given in the
-    token.
+                Append a <code>Comment</code> node to the <a>current element</a>
+                with the <code>data</code> attribute set to the data given in the
+                token.
 
-  </dd>
+            </dd>
 
-  <dt>A processing instruction token</dt>
-  <dd>
-    Append a <code>ProcessingInstruction</code> node to the <a>current
-    element</a> with the <code>target</code> and <code>data</code> attributes
-    set to the target and data given in the token.
+            <dt>A processing instruction token</dt>
+            <dd>
+                Append a <code>ProcessingInstruction</code> node to the <a>current
+                element</a> with the <code>target</code> and <code>data</code> attributes
+                set to the target and data given in the token.
 
-  </dd>
+            </dd>
 
-  <dt>An end-of-file token</dt>
-  <dd>
-    <a>Parse error</a>. Reprocess the token in the <a>end phase</a>.
+            <dt>An end-of-file token</dt>
+            <dd>
+                <a>Parse error</a>. Reprocess the token in the <a>end phase</a>.
 
-  </dd>
-</dl>
+            </dd>
+        </dl>
 
-<dt><dfn>End phase</dfn></dt>before
-<dd><p>
-  Tokens in end phase <em class="ct">must</em> be handled as follows:
+    <dt><dfn>End phase</dfn></dt>
+    before
+    <dd><p>
+        Tokens in end phase <em class="ct">must</em> be handled as follows:
 
-<dl class="switch">
-  <dt>A comment token</dt>
-  <dd>Append a <code>Comment</code> node to the <code>Document</code> node
-    with the <code>data</code> attribute set to the data given in the
-    token.
-  </dd>
+        <dl class="switch">
+            <dt>A comment token</dt>
+            <dd>Append a <code>Comment</code> node to the <code>Document</code> node
+                with the <code>data</code> attribute set to the data given in the
+                token.
+            </dd>
 
-  <dt>A processing instruction token</dt>
-  <dd>
+            <dt>A processing instruction token</dt>
+            <dd>
 
-    Append a <code>ProcessingInstruction</code> node to the
-    <code>Document</code> node with the <code>target</code> and <code>data</code>
-    attributes set to the target and data given in the token.
+                Append a <code>ProcessingInstruction</code> node to the
+                <code>Document</code> node with the <code>target</code> and <code>data</code>
+                attributes set to the target and data given in the token.
 
-  </dd>
+            </dd>
 
-  <dt>An end-of-file token</dt>
-  <dd>
+            <dt>An end-of-file token</dt>
+            <dd>
 
-    <a>Stop parsing</a>.
-  </dd>
+                <a>Stop parsing</a>.
+            </dd>
 
-  <dt>Anything else</dt>
-  <dd>
+            <dt>Anything else</dt>
+            <dd>
 
-    <a>Parse error</a>. Ignore the token.
-  </dd>
-</dl>
+                <a>Parse error</a>. Ignore the token.
+            </dd>
+        </dl>
 
 </dl>
 
 <p>Once the user agent <dfn lt="stop parsing">stops parsing</dfn> the
-document, it <em class="ct">must</em> follow these steps:
+    document, it <em class="ct">must</em> follow these steps:
 
 <p class="warning">TODO</p>
 
@@ -1642,12 +1869,18 @@ document, it <em class="ct">must</em> follow these steps:
     <span class="content">Common parser idioms</span>
 </h2>
 
-The <dfn>ASCII digits</dfn> are the characters in the range U+0030 DIGIT ZERO (<code>0</code>) to U+0039 DIGIT NINE (<code>9</code>).
+The <dfn>ASCII digits</dfn> are the characters in the range U+0030 DIGIT ZERO (<code>0</code>) to U+0039 DIGIT NINE (
+<code>9</code>).
 
-The <dfn>ASCII hex digits</dfn>  are the characters in the ranges U+0030 DIGIT ZERO (<code>0</code>) to U+0039 DIGIT NINE (<code>9</code>), U+0041 LATIN CAPITAL LETTER A to U+0046 LATIN CAPITAL LETTER F, and U+0061 LATIN SMALL LETTER A to U+0066 LATIN SMALL LETTER F.
+The <dfn>ASCII hex digits</dfn>  are the characters in the ranges U+0030 DIGIT ZERO (
+<code>0</code>) to U+0039 DIGIT NINE (
+<code>9</code>), U+0041 LATIN CAPITAL LETTER A to U+0046 LATIN CAPITAL LETTER F, and U+0061 LATIN SMALL LETTER A to U+0066 LATIN SMALL LETTER F.
 
-The <dfn>lowercase ASCII letters</dfn> are characters in the range between  U+0061 LATIN SMALL LETTER A to U+007A LATIN SMALL LETTER Z.
+The <dfn>lowercase ASCII
+    letters</dfn> are characters in the range between  U+0061 LATIN SMALL LETTER A to U+007A LATIN SMALL LETTER Z.
 
-The <dfn>uppercase ASCII letters</dfn> are characters in the range between U+0041 LATIN CAPITAL LETTER A to U+005A LATIN CAPITAL LETTER Z.
+The <dfn>uppercase ASCII
+    letters</dfn> are characters in the range between U+0041 LATIN CAPITAL LETTER A to U+005A LATIN CAPITAL LETTER Z.
 
-Comparing two strings in an <dfn>ASCII case-insensitive</dfn> manner means comparing them exactly, code point for code point, except that the characters in the range U+0041 to U+005A (i.e. LATIN CAPITAL LETTER A to LATIN CAPITAL LETTER Z) and the corresponding characters in the range U+0061 to U+007A (i.e. LATIN SMALL LETTER A to LATIN SMALL LETTER Z) are considered to also match.
+Comparing two strings in an <dfn>ASCII
+    case-insensitive</dfn> manner means comparing them exactly, code point for code point, except that the characters in the range U+0041 to U+005A (i.e. LATIN CAPITAL LETTER A to LATIN CAPITAL LETTER Z) and the corresponding characters in the range U+0061 to U+007A (i.e. LATIN SMALL LETTER A to LATIN SMALL LETTER Z) are considered to also match.
