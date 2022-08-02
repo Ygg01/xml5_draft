@@ -106,16 +106,37 @@ which they do not wish to apply the rules described in this specification.
     <tbody>
     <tr>
         <td><dfn>abrupt-closing-of-empty-comment</dfn></td>
-        <td>This error occurs if the parser encounters an empty comment that is abruptly closed by a U+003E (&gt;) code
+        <td>This error occurs if the parser encounters an empty comment that is abruptly closed by a U+003E (<code>&gt;</code>) code
             point (i.e., <code>&lt;!--&gt;</code> or <code>&lt;!---&gt;</code>). The parser behaves as if the comment is
             closed correctly.
         </td>
     </tr>
     <tr>
+        <td><dfn>colon-before-attr</dfn></td>
+        <td>This error occurs if the parser encounters a U+003A COLON (<code>:</code>) in tag after name but before
+            attribute name (e.g. <code>&lt;tag :attr</code>). Attributes can have namespaces but U+003A COLON but
+            namespaces can't be empty.
+        </td>
+    </tr>
+    <tr>
         <td><dfn>eof-in-comment</dfn></td>
         <td>
-            This error occurs if the parser encounters the end of the <a>input stream</a> in a <a>comment</a>.
+            This error occurs if the parser encounters the end of the input stream in a comment.
             The parser treats such comments as if they are closed immediately before the end of the input stream.
+        </td>
+    </tr>
+    <tr>
+        <td><dfn>eof-in-cdata</dfn></td>
+        <td>
+            This error occurs if the parser encounters the end of the input stream in a CDATA section.
+            The parser treats such CDATA sections as if they are closed immediately before the end of the input stream..
+        </td>
+    </tr>
+    <tr>
+        <td><dfn>eof-in-tag</dfn></td>
+        <td>
+            This error occurs if the parser encounters the end of the input stream in a start tag or an end tag
+            (e.g.,<code>&lt;div id=</code>). Such a tag is ignored.
         </td>
     </tr>
     <tr>
@@ -125,6 +146,7 @@ which they do not wish to apply the rules described in this specification.
             followed by two U+002D (<code>-</code>) code points and that is not the start of a DOCTYPE or a CDATA
             section.
     </tr>
+
     </tbody>
 </table>
 
@@ -195,7 +217,7 @@ input. The <dfn>current input character</dfn> is the last character to have been
 
         Attempt to <a>consume a character reference</a>.
 
-        If nothing is returned emit a U+0026 AMPERSAND character (&amp;) token.
+        If nothing is returned emit a U+0026 AMPERSAND character (<code>&amp;</code>) token.
 
         Otherwise, emit character tokens that were returned.
     </dd>
@@ -205,9 +227,7 @@ input. The <dfn>current input character</dfn> is the last character to have been
     </h4>
 
     <dd>
-
         Consume the <a>next input character</a>:
-
         <dl class="switch">
             <dt>U+002F SOLIDUS (<code>/</code>)</dt>
             <dd>Switch to the <a>end tag open state</a>.</dd>
@@ -330,6 +350,319 @@ input. The <dfn>current input character</dfn> is the last character to have been
         </dl>
     </dd>
 
+    <h4 class="heading" id="tag_name_state">
+        <span class="content"><dfn>Tag name state</dfn></span>
+    </h4>
+
+    <dd>
+        Consume the <a>next input character</a>:
+        <dl class="switch">
+            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+            <dd>Switch to the <a>tag attribute name before state</a>.</dd>
+
+            <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
+            <dd>Emit the start tag token and then switch to the <a>data state</a>.</dd>
+
+            <dt>EOF</dt>
+            <dd>This an <a>eof-in-tag</a> <a>parse error</a>. Emit the current token and then reprocess the
+                current input character in the <a>data state</a>.
+            </dd>
+
+            <dt>U+002F SOLIDUS (<code>/</code>)</dt>
+            <dd>Set current tag to empty tag. Switch to the <a>empty tag state</a>.</dd>
+
+            <dt>Anything else</dt>
+            <dd>Append the current input character to the tag name and stay in the
+                current state.
+            </dd>
+        </dl>
+    </dd>
+
+
+    <h4 class="heading" id="empty_tag_state">
+        <span class="content"><dfn>Empty tag state</dfn></span>
+    </h4>
+
+    <dd>
+        Consume the <a>next input character</a>:
+
+        <dl class="switch">
+            <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
+            <dd>Emit the current tag token as empty tag token and then switch to the
+                <a>data state</a>.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd>Reconsume in <a>tag attribute value before state</a>.
+            </dd>
+        </dl>
+    </dd>
+
+
+    <h4 class="heading" id="tag_attr_name_before_state">
+        <span class="content"><dfn>Tag attribute name before state</dfn></span>
+    </h4>
+
+    <dd>
+
+        Consume the <a>next input character</a>:
+
+        <dl class="switch">
+            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+
+            <dd>Stay in the current state.</dd>
+
+            <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
+            <dd>Emit the current token and then switch to the <a>data state</a>.</dd>
+
+            <dt>U+002F SOLIDUS (<code>/</code>)</dt>
+            <dd>Set current tag to empty tag. Switch to the <a>empty tag state</a>.</dd>
+
+            <dt>U+003A COLON (<code>:</code>)</dt>
+            <dd>This is a <a>colon-before-attr</a> <a>parse error</a>. Stay in the current state.</dd>
+
+            <dt>EOF</dt>
+            <dd>This is an <a>eof-in-tag</a> <a>parse error</a>. Emit the current token and then reprocess the
+                current input character in the <a>data state</a>.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd>Start a new attribute in the current tag token. Set that attribute's
+                name to the current input character and its value to the empty string and
+                then switch to the <a>tag attribute name state</a>.
+            </dd>
+        </dl>
+    </dd>
+
+
+    <h4 class="heading" id="tag_attr_name_state">
+        <span class="content"><dfn>Tag attribute name state</dfn></span>
+    </h4>
+
+    <dd>
+
+        Consume the <a>next input character</a>:
+
+        <dl class="switch">
+            <dt>U+003D EQUALS SIGN (<code>=</code>)</dt>
+            <dd>Switch to the <a>tag attribute value before state</a>.</dd>
+
+            <dt>U+003E GREATER-THEN SIGN (<code>&gt;</code>)</dt>
+            <dd>Emit the current token as start tag token. Switch to the <a>data
+                state</a>.
+            </dd>
+
+            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+            <dd>Switch to the <a>tag attribute name after state</a>.</dd>
+
+            <dt>U+002F SOLIDUS (<code>/</code>)</dt>
+            <dd>Set current tag to empty tag. Switch to the <a>empty tag state</a>.</dd>
+
+            <dt>EOF</dt>
+            <dd>This is an <a>eof-in-tag</a> <a>parse error</a>. Emit the current token as start tag token and
+                then reprocess the current input character in the <a>data
+                    state</a>.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd>Append the current input character to the current attribute's name.
+                Stay in the current state.
+            </dd>
+        </dl>
+
+        When the user agent leaves this state (and before emitting the tag token,
+        if appropriate), the complete attribute's name <em class="ct">must</em> be
+        compared to the other attributes on the same token; if there is already an
+        attribute on the token with the exact same name, then this is a parse error
+        and the new attribute <em class="ct">must</em> be dropped, along with the
+        value that gets associated with it (if any).
+
+    </dd>
+
+
+    <h4 class="heading" id="tag_attr_name_after_state">
+        <span class="content"><dfn>Tag attribute name after state</dfn></span>
+    </h4>
+
+    <dd>
+
+        Consume the <a>next input character</a>:
+
+        <dl class="switch">
+            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+            <dd>Stay in the current state.</dd>
+
+            <dt>U+003D EQUALS SIGN(<code>=</code>)</dt>
+            <dd>Switch to the <a>tag attribute value before state</a>.</dd>
+
+            <dt>U+003E GREATER-THEN SIGN(<code>&gt;</code>)</dt>
+            <dd>Emit the current token and then switch to the <a>dacata state</a>.</dd>
+
+            <dt>U+002F SOLIDUS (<code>/</code>)</dt>
+            <dd>Set current tag to empty tag. Switch to the <a>empty tag state</a>.</dd>
+
+            <dt>EOF</dt>
+            <dd>This is an <a>eof-in-tag</a> <a>parse error</a>. Emit the current token and then reprocess the
+                current input character in the <a>data state</a>.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd>Start a new attribute in the current tag token. Set that attribute's
+                name to the current input character and its value to the empty string and
+                then switch to the <a>tag attribute name state</a>.
+            </dd>
+        </dl>
+    </dd>
+
+
+    <h4 class="heading" id="tag_attr_value_before_state">
+        <span class="content"><dfn>Tag attribute value before state</dfn></span>
+    </h4>
+
+    <dd>
+
+        Consume the <a>next input character</a>:
+
+        <dl class="switch">
+            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+            <dd>Stay in the current state.</dd>
+
+            <dt>U+0022 QUOTATION MARK (<code>"</code>)</dt>
+            <dd>Switch to the <a>tag attribute value double quoted state</a>.</dd>
+
+            <dt>U+0027 APOSTROPHE (<code>'</code>)</dt>
+            <dd>Switch to the <a>tag attribute value single quoted state</a>.</dd>
+
+            <dt>U+0026 AMPERSAND (<code>&amp;</code>):
+            <dd>Reprocess the input character in the <a>tag attribute value unquoted
+                state</a>.
+            </dd>
+
+            <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
+            <dd>Emit the current token and then switch to the <a>data state</a>.</dd>
+
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Emit the current token and then reprocess the
+                current input character in the <a>data state</a>.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd>Append the current input character to the current attribute's value and
+                then switch to the <a>tag attribute value unquoted state</a>.
+            </dd>
+        </dl>
+    </dd>
+
+
+    <h4 class="heading" id="tag_attr_value_double_quote_state">
+        <span class="content"><dfn>Tag attribute value double quoted state</dfn></span>
+    </h4>
+
+    <dd>
+
+        Consume the <a>next input character</a>:
+
+        <dl class="switch">
+            <dt>U+0022 QUOTATION MARK (<code>"</code>)</dt>
+            <dd>Switch to the <a>tag attribute name before state</a>.</dd>
+
+            <dt>U+0026 AMPERSAND (<code>&amp;</code>)</dt>
+            <dd>Switch to <a>character reference in attribute value state</a>, with the
+                <a>additional allowed character</a> being U+0022 QUOTATION MARK(<code>"</code>).
+            </dd>
+
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Emit the current token and then reprocess the
+                current input character in the <a>data state</a>.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd>Append the input character to the current attribute's value. Stay in
+                the current state.
+            </dd>
+        </dl>
+    </dd>
+
+
+    <h4 class="heading" id="tag_attr_value_single_quote_state">
+        <span class="content"><dfn>Tag attribute value single quoted state</dfn></span>
+    </h4>
+
+    <dd>
+
+        Consume the <a>next input character</a>:
+
+        <dl class="switch">
+            <dt>U+0022 APOSTROPHE (<code>'</code>)</dt>
+            <dd>Switch to the <a>tag attribute name before state</a>.</dd>
+
+            <dt>U+0026 AMPERSAND (<code>&amp;</code>)</dt>
+            <dd>Switch to <a>character reference in attribute value state</a>, with the
+                <a>additional allowed character</a> being APOSTROPHE (<code>'</code>).
+            </dd>
+
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Emit the current token and then reprocess the
+                current input character in the <a>data state</a>.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd>Append the input character to the current attribute's value. Stay in
+                the current state.
+            </dd>
+        </dl>
+    </dd>
+
+
+    <h4 class="heading" id="tag_attr_value_unquote_state">
+        <span class="content"><dfn>Tag attribute value unquoted state</dfn></span>
+    </h4>
+
+    <dd>
+
+        Consume the <a>next input character</a>:
+
+        <dl class="switch">
+            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+            <dd>Switch to the <a>tag attribute name before state</a>.</dd>
+
+            <dt>U+0026 AMPERSAND (<code>&amp;</code>):
+            <dd>
+                Switch to <a>character reference in attribute value state</a>, with the
+                <a>additional allowed character</a> being U+003E GREATER-THAN SIGN(<code>&gt;</code>).
+            </dd>
+
+            <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
+            <dd>Emit the current token as start tag token and then switch to the
+                <a>data state</a>.
+            </dd>
+
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. Emit the current token as start tag token and
+                then reprocess the current input character in the
+                <a>data state</a>.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd>Append the input character to the current attribute's value. Stay in
+                the current state.
+            </dd>
+        </dl>
+    </dd>
+
+
     <h4 class="heading" id="pi_state">
         <span class="content"><dfn>Pi state</dfn></span>
     </h4>
@@ -414,7 +747,7 @@ input. The <dfn>current input character</dfn> is the last character to have been
             <dd>Switch to the <a>pi after state</a>.</dd>
 
             <dt>EOF</dt>
-            <dd><a>Parse error</a>. Emit the current processing instruction token and then reprocess the
+            <dd>This is a <a>eof-in-cdata</a> <a>parse error</a>. Emit the current processing instruction token and then reprocess the
                 current input character in the <a>data state</a>.
             </dd>
 
@@ -567,7 +900,7 @@ input. The <dfn>current input character</dfn> is the last character to have been
         <dl class="switch">
             <dt>U+0021 EXCLAMATION-MARK (<code>!</code>)</dt>
             <dd>Append the <a>current input character</a> to the comment token's data.
-                Switch to the <a>comment less-than sign state</a>.
+                Switch to the <a>comment less-than sign bang state</a>.
             </dd>
 
             <dt>U+003C LESS-THAN SIGN (<code>&lt;</code>)</dt>
@@ -689,7 +1022,6 @@ input. The <dfn>current input character</dfn> is the last character to have been
     </h4>
 
     <dd>
-
         Consume the <a>next input character</a>:
 
         <dl class="switch">
@@ -787,323 +1119,6 @@ input. The <dfn>current input character</dfn> is the last character to have been
             <dd>Emit two U+005D RIGHT SQUARE BRACKET (<code>]</code>) characters as character tokens and
                 also emit the current input character as character token. Switch to the
                 <a>CDATA state</a>.
-            </dd>
-        </dl>
-    </dd>
-
-
-    <h4 class="heading" id="tag_name_state">
-        <span class="content"><dfn>Tag name state</dfn></span>
-    </h4>
-
-    <dd>
-
-        Consume the <a>next input character</a>:
-
-        <dl class="switch">
-            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-            <dd>Switch to the <a>tag attribute name before state</a>.</dd>
-
-            <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
-            <dd>Emit the start tag token and then switch to the <a>data state</a>.</dd>
-
-            <dt>EOF</dt>
-            <dd><a>Parse error</a>. Emit the current token and then reprocess the
-                current input character in the <a>data state</a>.
-            </dd>
-
-            <dt>U+002F SOLIDUS (<code>/</code>)</dt>
-            <dd>Set current tag to empty tag. Switch to the <a>empty tag state</a>.</dd>
-
-            <dt>Anything else</dt>
-            <dd>Append the current input character to the tag name and stay in the
-                current state.
-            </dd>
-        </dl>
-    </dd>
-
-
-    <h4 class="heading" id="empty_tag_state">
-        <span class="content"><dfn>Empty tag state</dfn></span>
-    </h4>
-
-    <dd>
-
-        Consume the <a>next input character</a>:
-
-        <dl class="switch">
-            <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
-            <dd>Emit the current tag token as empty tag token and then switch to the
-                <a>data state</a>.
-            </dd>
-
-            <dt>Anything else</dt>
-            <dd><a>Parse error</a>. Reprocess the current input character in the
-                <a>tag attribute name before state</a>.
-            </dd>
-        </dl>
-    </dd>
-
-
-    <h4 class="heading" id="tag_attr_name_before_state">
-        <span class="content"><dfn>Tag attribute name before state</dfn></span>
-    </h4>
-
-    <dd>
-
-        Consume the <a>next input character</a>:
-
-        <dl class="switch">
-            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-
-            <dd>Stay in the current state.</dd>
-
-            <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
-            <dd>Emit the current token and then switch to the <a>data state</a>.</dd>
-
-            <dt>U+002F SOLIDUS (<code>/</code>)</dt>
-            <dd>Set current tag to empty tag. Switch to the <a>empty tag state</a>.</dd>
-
-            <dt>U+003A COLON (<code>:</code>)</dt>
-            <dd><a>Parse error</a>. Stay in the current state.</dd>
-
-            <dt>EOF</dt>
-            <dd><a>Parse error</a>. Emit the current token and then reprocess the
-                current input character in the <a>data state</a>.
-            </dd>
-
-            <dt>Anything else</dt>
-            <dd>Start a new attribute in the current tag token. Set that attribute's
-                name to the current input character and its value to the empty string and
-                then switch to the <a>tag attribute name state</a>.
-            </dd>
-        </dl>
-    </dd>
-
-
-    <h4 class="heading" id="tag_attr_name_state">
-        <span class="content"><dfn>Tag attribute name state</dfn></span>
-    </h4>
-
-    <dd>
-
-        Consume the <a>next input character</a>:
-
-        <dl class="switch">
-            <dt>U+003D EQUALS SIGN (<code>=</code>)</dt>
-            <dd>Switch to the <a>tag attribute value before state</a>.</dd>
-
-            <dt>U+003E GREATER-THEN SIGN (<code>&gt;</code>)</dt>
-            <dd>Emit the current token as start tag token. Switch to the <a>data
-                state</a>.
-            </dd>
-
-            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-            <dd>Switch to the <a>tag attribute name after state</a>.</dd>
-
-            <dt>U+002F SOLIDUS (<code>/</code>)</dt>
-            <dd>Set current tag to empty tag. Switch to the <a>empty tag state</a>.</dd>
-
-            <dt>EOF</dt>
-            <dd><a>Parse error</a>. Emit the current token as start tag token and
-                then reprocess the current input character in the <a>data
-                    state</a>.
-            </dd>
-
-            <dt>Anything else</dt>
-            <dd>Append the current input character to the current attribute's name.
-                Stay in the current state.
-            </dd>
-        </dl>
-
-        When the user agent leaves this state (and before emitting the tag token,
-        if appropriate), the complete attribute's name <em class="ct">must</em> be
-        compared to the other attributes on the same token; if there is already an
-        attribute on the token with the exact same name, then this is a parse error
-        and the new attribute <em class="ct">must</em> be dropped, along with the
-        value that gets associated with it (if any).
-
-    </dd>
-
-
-    <h4 class="heading" id="tag_attr_name_after_state">
-        <span class="content"><dfn>Tag attribute name after state</dfn></span>
-    </h4>
-
-    <dd>
-
-        Consume the <a>next input character</a>:
-
-        <dl class="switch">
-            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-            <dd>Stay in the current state.</dd>
-
-            <dt>U+003D EQUALS SIGN(<code>=</code>)</dt>
-            <dd>Switch to the <a>tag attribute value before state</a>.</dd>
-
-            <dt>U+003E GREATER-THEN SIGN(<code>&gt;</code>)</dt>
-            <dd>Emit the current token and then switch to the <a>data state</a>.</dd>
-
-            <dt>U+002F SOLIDUS (<code>/</code>)</dt>
-            <dd>Set current tag to empty tag. Switch to the <a>empty tag state</a>.</dd>
-
-            <dt>EOF</dt>
-            <dd><a>Parse error</a>. Emit the current token and then reprocess the
-                current input character in the <a>data state</a>.
-            </dd>
-
-            <dt>Anything else</dt>
-            <dd>Start a new attribute in the current tag token. Set that attribute's
-                name to the current input character and its value to the empty string and
-                then switch to the <a>tag attribute name state</a>.
-            </dd>
-        </dl>
-    </dd>
-
-
-    <h4 class="heading" id="tag_attr_value_before_state">
-        <span class="content"><dfn>Tag attribute value before state</dfn></span>
-    </h4>
-
-    <dd>
-
-        Consume the <a>next input character</a>:
-
-        <dl class="switch">
-            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-            <dd>Stay in the current state.</dd>
-
-            <dt>U+0022 QUOTATION MARK (<code>"</code>)</dt>
-            <dd>Switch to the <a>tag attribute value double quoted state</a>.</dd>
-
-            <dt>U+0027 APOSTROPHE (<code>'</code>)</dt>
-            <dd>Switch to the <a>tag attribute value single quoted state</a>.</dd>
-
-            <dt>U+0026 AMPERSAND (<code>&amp;</code>):
-            <dd>Reprocess the input character in the <a>tag attribute value unquoted
-                state</a>.
-            </dd>
-
-            <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
-            <dd>Emit the current token and then switch to the <a>data state</a>.</dd>
-
-            <dt>EOF</dt>
-            <dd><a>Parse error</a>. Emit the current token and then reprocess the
-                current input character in the <a>data state</a>.
-            </dd>
-
-            <dt>Anything else</dt>
-            <dd>Append the current input character to the current attribute's value and
-                then switch to the <a>tag attribute value unquoted state</a>.
-            </dd>
-        </dl>
-    </dd>
-
-
-    <h4 class="heading" id="tag_attr_value_double_quote_state">
-        <span class="content"><dfn>Tag attribute value double quoted state</dfn></span>
-    </h4>
-
-    <dd>
-
-        Consume the <a>next input character</a>:
-
-        <dl class="switch">
-            <dt>U+0022 QUOTATION MARK (<code>"</code>)</dt>
-            <dd>Switch to the <a>tag attribute name before state</a>.</dd>
-
-            <dt>U+0026 AMPERSAND (<code>&amp;</code>)</dt>
-            <dd>Switch to <a>character reference in attribute value state</a>, with the
-                <a>additional allowed character</a> being U+0022 QUOTATION MARK(<code>"</code>).
-            </dd>
-
-            <dt>EOF</dt>
-            <dd><a>Parse error</a>. Emit the current token and then reprocess the
-                current input character in the <a>data state</a>.
-            </dd>
-
-            <dt>Anything else</dt>
-            <dd>Append the input character to the current attribute's value. Stay in
-                the current state.
-            </dd>
-        </dl>
-    </dd>
-
-
-    <h4 class="heading" id="tag_attr_value_single_quote_state">
-        <span class="content"><dfn>Tag attribute value single quoted state</dfn></span>
-    </h4>
-
-    <dd>
-
-        Consume the <a>next input character</a>:
-
-        <dl class="switch">
-            <dt>U+0022 APOSTROPHE (<code>'</code>)</dt>
-            <dd>Switch to the <a>tag attribute name before state</a>.</dd>
-
-            <dt>U+0026 AMPERSAND (<code>&amp;</code>)</dt>
-            <dd>Switch to <a>character reference in attribute value state</a>, with the
-                <a>additional allowed character</a> being APOSTROPHE (<code>'</code>).
-            </dd>
-
-            <dt>EOF</dt>
-            <dd><a>Parse error</a>. Emit the current token and then reprocess the
-                current input character in the <a>data state</a>.
-            </dd>
-
-            <dt>Anything else</dt>
-            <dd>Append the input character to the current attribute's value. Stay in
-                the current state.
-            </dd>
-        </dl>
-    </dd>
-
-
-    <h4 class="heading" id="tag_attr_value_unquote_state">
-        <span class="content"><dfn>Tag attribute value unquoted state</dfn></span>
-    </h4>
-
-    <dd>
-
-        Consume the <a>next input character</a>:
-
-        <dl class="switch">
-            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-            <dd>Switch to the <a>tag attribute name before state</a>.</dd>
-
-            <dt>U+0026 AMPERSAND (<code>&amp;</code>):
-            <dd>
-                Switch to <a>character reference in attribute value state</a>, with the
-                <a>additional allowed character</a> being U+003E GREATER-THAN SIGN(<code>&gt;</code>).
-            </dd>
-
-            <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
-            <dd>Emit the current token as start tag token and then switch to the
-                <a>data state</a>.
-            </dd>
-
-            <dt>EOF</dt>
-            <dd><a>Parse error</a>. Emit the current token as start tag token and
-                then reprocess the current input character in the
-                <a>data state</a>.
-            </dd>
-
-            <dt>Anything else</dt>
-            <dd>Append the input character to the current attribute's value. Stay in
-                the current state.
             </dd>
         </dl>
     </dd>
