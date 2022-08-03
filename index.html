@@ -1488,7 +1488,7 @@ Possible extra rowspan handling
 	}
 </style>
   <meta content="Bikeshed version dfbc2b297, updated Thu Nov 11 15:52:32 2021 -0800" name="generator">
-  <meta content="91adfacc3ee39b4105d5ebfba76f886df53d0638" name="document-revision">
+  <meta content="23430e0f18ee674fc8a4c4f44bcecc3d6e8e3bc0" name="document-revision">
 <style>
     switch {
         padding-left: 2em;
@@ -1980,7 +1980,7 @@ dfn > a.self-link::before      { content: "#"; }
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">XML5 Standard</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Living Standard, <time class="dt-updated" datetime="2022-08-02">2 August 2022</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Living Standard, <time class="dt-updated" datetime="2022-08-03">3 August 2022</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>Issue Tracking:
@@ -1993,7 +1993,7 @@ dfn > a.self-link::before      { content: "#"; }
    <div data-fill-with="warning"></div>
    <p class="copyright" data-fill-with="copyright"><a href="http://creativecommons.org/publicdomain/zero/1.0/" rel="license"><img alt="CC0" height="15" src="https://licensebuttons.net/p/zero/1.0/80x15.png" width="80"></a> To the extent possible under law, the editors have waived all copyright
 and related or neighboring rights to this work.
-In addition, as of 2 August 2022,
+In addition, as of 3 August 2022,
 the editors have made this specification available under the <a href="http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0" rel="license">Open Web Foundation Agreement Version 1.0</a>,
 which is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.
 Parts of this work may be from another specification document.  If so, those parts are instead covered by the license of that specification document. </p>
@@ -2115,18 +2115,25 @@ which they do not wish to apply the rules described in this specification.</p>
             point (i.e., <code>&lt;!--></code> or <code>&lt;!---></code>). The parser behaves as if the comment is
             closed correctly. 
      <tr>
+      <td><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="abrupt-doctype-identifier">abrupt-doctype-identifier</dfn>
+      <td> This error occurs if the parser encounters a U+003E (<code>></code>) code point in the DOCTYPE
+            public/system identifier (e.g., <code>&lt;!DOCTYPE html PUBLIC "foo></code>). 
+     <tr>
       <td><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="colon-before-attr">colon-before-attr</dfn>
       <td>This error occurs if the parser encounters a U+003A COLON (<code>:</code>) in tag after name but before
             attribute name (e.g. <code>&lt;tag :attr</code>). Attributes can have namespaces but U+003A COLON but
             namespaces can’t be empty. 
      <tr>
+      <td><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="eof-in-cdata">eof-in-cdata</dfn>
+      <td> This error occurs if the parser encounters the end of the input stream in a CDATA section.
+            The parser treats such CDATA sections as if they are closed immediately before the end of the input stream.. 
+     <tr>
       <td><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="eof-in-comment">eof-in-comment</dfn>
       <td> This error occurs if the parser encounters the end of the input stream in a comment.
             The parser treats such comments as if they are closed immediately before the end of the input stream. 
      <tr>
-      <td><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="eof-in-cdata">eof-in-cdata</dfn>
-      <td> This error occurs if the parser encounters the end of the input stream in a CDATA section.
-            The parser treats such CDATA sections as if they are closed immediately before the end of the input stream.. 
+      <td><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="eof-in-doctype">eof-in-doctype</dfn>
+      <td> This error occurs if the parser encounters the end of the input stream in a DOCTYPE section. 
      <tr>
       <td><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="eof-in-tag">eof-in-tag</dfn>
       <td> This error occurs if the parser encounters the end of the input stream in a start tag or an end tag
@@ -2137,6 +2144,35 @@ which they do not wish to apply the rules described in this specification.</p>
             immediately
             followed by two U+002D (<code>-</code>) code points and that is not the start of a DOCTYPE or a CDATA
             section. 
+     <tr>
+      <td><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="invalid-characters-after-doctype">invalid-characters-after-doctype</dfn>
+      <td>This error occurs if the parser encounters any code point sequence other than "<code>PUBLIC</code>"
+            and "<code>SYSTEM</code>" keywords after a DOCTYPE name. In such a case, the parser ignores any following
+            public or system identifiers
+     <tr>
+      <td><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="missing-doctype-identifier">missing-doctype-identifier</dfn>
+      <td> This error occurs if the parser encounters a U+003E (>) code point where start of the DOCTYPE system/public
+            identifier is expected (e.g., <code>&lt;!DOCTYPE html SYSTEM ></code>). 
+     <tr>
+      <td><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="missing-quote-before-identifier">missing-quote-before-identifier</dfn>
+      <td> This error occurs if the parser encounters the <code>DOCTYPE</code> public/system identifier
+            that is not preceded by a quote (e.g., <code>&lt;!DOCTYPE html PUBLIC -//W3C//DTD HTML 4.01//EN"></code>).
+            In such a case, the parser ignores the identifier. 
+     <tr>
+      <td><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="missing-whitespace-after-doctype-keyword">missing-whitespace-after-doctype-keyword</dfn>
+      <td> This error occurs if the parser encounters a DOCTYPE whose "<code>PUBLIC</code>"/"<code>SYSTEM</code>" keyword and public identifier
+            are not separated by ASCII whitespace. In this case the parser behaves as if ASCII whitespace is present. 
+     <tr>
+      <td><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="missing-whitespace-before-doctype-name-parse-error">missing-whitespace-before-doctype-name parse error</dfn>
+      <td>This error occurs if the parser encounters a DOCTYPE keyword and name are not separated by ASCII whitespace.
+            (e.g. <code>&lt;!DOCTYPE</code>) In this case the parser behaves as if ASCII whitespace is present.
+     <tr>
+      <td><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="missing-whitespace-between-doctype-public-and-system-identifier">missing-whitespace-between-doctype-public-and-system-identifier</dfn>
+      <td>This error occurs if the parser encounters a DOCTYPE whose public and system identifiers are not separated
+            by ASCII whitespace. In this case the parser behaves as if ASCII whitespace is present.
+     <tr>
+      <td><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="missing-doctype-name">missing-doctype-name</dfn>
+      <td>This error occurs if the parser encounters a DOCTYPE that is missing a name (e.g., <code>&lt;!DOCTYPE></code>). 
    </table>
    <h3 class="heading settled" data-level="1.3" id="input-stream"><span class="secno">1.3. </span><span class="content">Input stream</span><a class="self-link" href="#input-stream"></a></h3>
    <p>The stream of Unicode characters that consists the input to the tokenization stage will be initially seen by the user agent as a stream of octets (typically coming over the network or from the local file system). The octets encode Unicode code points according to a particular encoding, which the user agent must use to decode the octets into code points.</p>
@@ -2348,12 +2384,12 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
       <dt>U+003D EQUALS SIGN(<code>=</code>)
       <dd>Switch to the <a data-link-type="dfn" href="#tag-attribute-value-before-state" id="ref-for-tag-attribute-value-before-state②">tag attribute value before state</a>.
       <dt>U+003E GREATER-THEN SIGN(<code>></code>)
-      <dd>Emit the current token and then switch to the <a data-link-type="dfn">dacata state</a>.
+      <dd>Emit the current token and then switch to the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state①⑤">data state</a>.
       <dt>U+002F SOLIDUS (<code>/</code>)
       <dd>Set current tag to empty tag. Switch to the <a data-link-type="dfn" href="#empty-tag-state" id="ref-for-empty-tag-state③">empty tag state</a>.
       <dt>EOF
       <dd>This is an <a data-link-type="dfn" href="#eof-in-tag" id="ref-for-eof-in-tag③">eof-in-tag</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error①⓪">parse error</a>. Emit the current token and then reprocess the
-                current input character in the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state①⑤">data state</a>. 
+                current input character in the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state①⑥">data state</a>. 
       <dt>Anything else
       <dd>Start a new attribute in the current tag token. Set that attribute’s
                 name to the current input character and its value to the empty string and
@@ -2361,7 +2397,7 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
      </dl>
     <h4 class="heading settled" data-level="1.4.12" id="tag_attr_value_before_state"><span class="secno">1.4.12. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="tag-attribute-value-before-state">Tag attribute value before state</dfn></span><a class="self-link" href="#tag_attr_value_before_state"></a></h4>
     <dd>
-     <p>Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character①⓪">next input character</a>:</p>
+      Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character①⓪">next input character</a>: 
      <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)
@@ -2375,47 +2411,47 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
       <dd>Reprocess the input character in the <a data-link-type="dfn" href="#tag-attribute-value-unquoted-state" id="ref-for-tag-attribute-value-unquoted-state">tag attribute value unquoted
                 state</a>. 
       <dt>U+003E GREATER-THAN SIGN(<code>></code>)
-      <dd>Emit the current token and then switch to the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state①⑥">data state</a>.
+      <dd>Emit the current token and then switch to the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state①⑦">data state</a>.
       <dt>EOF
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error①①">Parse error</a>. Emit the current token and then reprocess the
-                current input character in the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state①⑦">data state</a>. 
+      <dd>This is an <a data-link-type="dfn" href="#eof-in-tag" id="ref-for-eof-in-tag④">eof-in-tag</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error①①">parse error</a>. Emit the current token and then reprocess the
+                current input character in the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state①⑧">data state</a>. 
       <dt>Anything else
       <dd>Append the current input character to the current attribute’s value and
                 then switch to the <a data-link-type="dfn" href="#tag-attribute-value-unquoted-state" id="ref-for-tag-attribute-value-unquoted-state①">tag attribute value unquoted state</a>. 
      </dl>
     <h4 class="heading settled" data-level="1.4.13" id="tag_attr_value_double_quote_state"><span class="secno">1.4.13. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="tag-attribute-value-double-quoted-state">Tag attribute value double quoted state</dfn></span><a class="self-link" href="#tag_attr_value_double_quote_state"></a></h4>
     <dd>
-     <p>Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character①①">next input character</a>:</p>
+      Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character①①">next input character</a>: 
      <dl class="switch">
       <dt>U+0022 QUOTATION MARK (<code>"</code>)
       <dd>Switch to the <a data-link-type="dfn" href="#tag-attribute-name-before-state" id="ref-for-tag-attribute-name-before-state①">tag attribute name before state</a>.
       <dt>U+0026 AMPERSAND (<code>&amp;</code>)
       <dd>Switch to <a data-link-type="dfn" href="#character-reference-in-attribute-value-state" id="ref-for-character-reference-in-attribute-value-state">character reference in attribute value state</a>, with the <a data-link-type="dfn" href="#additional-allowed-character" id="ref-for-additional-allowed-character">additional allowed character</a> being U+0022 QUOTATION MARK(<code>"</code>). 
       <dt>EOF
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error①②">Parse error</a>. Emit the current token and then reprocess the
-                current input character in the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state①⑧">data state</a>. 
+      <dd>This is an <a data-link-type="dfn" href="#eof-in-tag" id="ref-for-eof-in-tag⑤">eof-in-tag</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error①②">parse error</a>. Emit the current token and then reprocess the
+                current input character in the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state①⑨">data state</a>. 
       <dt>Anything else
       <dd>Append the input character to the current attribute’s value. Stay in
                 the current state. 
      </dl>
     <h4 class="heading settled" data-level="1.4.14" id="tag_attr_value_single_quote_state"><span class="secno">1.4.14. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="tag-attribute-value-single-quoted-state">Tag attribute value single quoted state</dfn></span><a class="self-link" href="#tag_attr_value_single_quote_state"></a></h4>
     <dd>
-     <p>Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character①②">next input character</a>:</p>
+      Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character①②">next input character</a>: 
      <dl class="switch">
       <dt>U+0022 APOSTROPHE (<code>'</code>)
       <dd>Switch to the <a data-link-type="dfn" href="#tag-attribute-name-before-state" id="ref-for-tag-attribute-name-before-state②">tag attribute name before state</a>.
       <dt>U+0026 AMPERSAND (<code>&amp;</code>)
       <dd>Switch to <a data-link-type="dfn" href="#character-reference-in-attribute-value-state" id="ref-for-character-reference-in-attribute-value-state①">character reference in attribute value state</a>, with the <a data-link-type="dfn" href="#additional-allowed-character" id="ref-for-additional-allowed-character①">additional allowed character</a> being APOSTROPHE (<code>'</code>). 
       <dt>EOF
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error①③">Parse error</a>. Emit the current token and then reprocess the
-                current input character in the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state①⑨">data state</a>. 
+      <dd>This is an <a data-link-type="dfn" href="#eof-in-tag" id="ref-for-eof-in-tag⑥">eof-in-tag</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error①③">parse error</a>. Emit the current token and then reprocess the
+                current input character in the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state②⓪">data state</a>. 
       <dt>Anything else
       <dd>Append the input character to the current attribute’s value. Stay in
                 the current state. 
      </dl>
     <h4 class="heading settled" data-level="1.4.15" id="tag_attr_value_unquote_state"><span class="secno">1.4.15. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="tag-attribute-value-unquoted-state">Tag attribute value unquoted state</dfn></span><a class="self-link" href="#tag_attr_value_unquote_state"></a></h4>
     <dd>
-     <p>Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character①③">next input character</a>:</p>
+      Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character①③">next input character</a>: 
      <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)
@@ -2424,10 +2460,10 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
       <dt>U+0026 AMPERSAND (<code>&amp;</code>): 
       <dd> Switch to <a data-link-type="dfn" href="#character-reference-in-attribute-value-state" id="ref-for-character-reference-in-attribute-value-state②">character reference in attribute value state</a>, with the <a data-link-type="dfn" href="#additional-allowed-character" id="ref-for-additional-allowed-character②">additional allowed character</a> being U+003E GREATER-THAN SIGN(<code>></code>). 
       <dt>U+003E GREATER-THAN SIGN (<code>></code>)
-      <dd>Emit the current token as start tag token and then switch to the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state②⓪">data state</a>. 
+      <dd>Emit the current token as start tag token and then switch to the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state②①">data state</a>. 
       <dt>EOF
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error①④">Parse error</a>. Emit the current token as start tag token and
-                then reprocess the current input character in the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state②①">data state</a>. 
+      <dd>This is an <a data-link-type="dfn" href="#eof-in-tag" id="ref-for-eof-in-tag⑦">eof-in-tag</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error①④">parse error</a>. Emit the current token as start tag token and
+                then reprocess the current input character in the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state②②">data state</a>. 
       <dt>Anything else
       <dd>Append the input character to the current attribute’s value. Stay in
                 the current state. 
@@ -2456,7 +2492,7 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
       <dd>Switch to the <a data-link-type="dfn" href="#pi-target-after-state" id="ref-for-pi-target-after-state">pi target after state</a>.
       <dt>EOF
       <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error①⑥">Parse error</a>. Emit the current processing instruction token and then reprocess the
-                current input character in the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state②②">data state</a>. 
+                current input character in the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state②③">data state</a>. 
       <dt>U+003F QUESTION MARK(<code>?</code>)
       <dd>Switch to the <a data-link-type="dfn" href="#pi-after-state" id="ref-for-pi-after-state">pi after state</a>.
       <dt>Anything else
@@ -2483,7 +2519,7 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
       <dd>Switch to the <a data-link-type="dfn" href="#pi-after-state" id="ref-for-pi-after-state①">pi after state</a>.
       <dt>EOF
       <dd>This is a <a data-link-type="dfn" href="#eof-in-cdata" id="ref-for-eof-in-cdata">eof-in-cdata</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error①⑦">parse error</a>. Emit the current processing instruction token and then reprocess the
-                current input character in the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state②③">data state</a>. 
+                current input character in the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state②④">data state</a>. 
       <dt>Anything else
       <dd>Append the current input character to the pi’s data and stay in the
                 current state. 
@@ -2493,7 +2529,7 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
      <p>Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character①⑧">next input character</a>:</p>
      <dl class="switch">
       <dt>U+003E GREATER-THAN SIGN (<code>></code>)
-      <dd>Emit the current token and then switch to the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state②④">data state</a>.
+      <dd>Emit the current token and then switch to the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state②⑤">data state</a>.
       <dt>U+003F QUESTION MARK(<code>?</code>)
       <dd>Append the current input character to the PI’s data and stay in the
                 current state. 
@@ -2515,7 +2551,7 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
                 character before and after) 
       <dd>Consume those characters and switch to <a data-link-type="dfn" href="#cdata-state" id="ref-for-cdata-state">CDATA state</a>
       <dt>Anything else
-      <dd>Emit an <a data-link-type="dfn" href="#incorrectly-opened-comment" id="ref-for-incorrectly-opened-comment">incorrectly-opened-comment</a> error. Create a comment token whose data is an empty string.
+      <dd>Emit an <a data-link-type="dfn" href="#incorrectly-opened-comment" id="ref-for-incorrectly-opened-comment">incorrectly-opened-comment</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error①⑧">parse error</a>. Create a comment token whose data is an empty string.
                 Switch to <a data-link-type="dfn" href="#bogus-comment-state" id="ref-for-bogus-comment-state①">bogus comment state</a> (don’t consume any characters) 
      </dl>
     <h4 class="heading settled" data-level="1.4.22" id="comment_start_state"><span class="secno">1.4.22. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="comment-start-state">Comment start state</dfn></span><a class="self-link" href="#comment_start_state"></a></h4>
@@ -2525,7 +2561,7 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
       <dt>U+002D HYPHEN-MINUS (<code>-</code>)
       <dd>Switch to <a data-link-type="dfn" href="#comment-start-dash-state" id="ref-for-comment-start-dash-state">comment start dash state</a>
       <dt>U+003E GREATER-THAN SIGN (<code>></code>)
-      <dd>This is an <a data-link-type="dfn" href="#abrupt-closing-of-empty-comment" id="ref-for-abrupt-closing-of-empty-comment">abrupt-closing-of-empty-comment</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error①⑧">parse error</a>. Switch to <a data-link-type="dfn" href="#data-state" id="ref-for-data-state②⑤">data state</a>.
+      <dd>This is an <a data-link-type="dfn" href="#abrupt-closing-of-empty-comment" id="ref-for-abrupt-closing-of-empty-comment">abrupt-closing-of-empty-comment</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error①⑨">parse error</a>. Switch to <a data-link-type="dfn" href="#data-state" id="ref-for-data-state②⑥">data state</a>.
                 Emit the current comment token. 
       <dt>Anything else
       <dd><a data-link-type="dfn" href="#reconsume" id="ref-for-reconsume">Reconsume</a> in the <a data-link-type="dfn" href="#comment-state" id="ref-for-comment-state">comment state</a>
@@ -2537,10 +2573,10 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
       <dt>U+002D HYPHEN-MINUS (<code>-</code>)
       <dd>Switch to <a data-link-type="dfn" href="#comment-end-state" id="ref-for-comment-end-state">comment end state</a>
       <dt>U+003E GREATER-THAN SIGN (<code>></code>)
-      <dd>This is an <a data-link-type="dfn" href="#abrupt-closing-of-empty-comment" id="ref-for-abrupt-closing-of-empty-comment①">abrupt-closing-of-empty-comment</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error①⑨">parse error</a>. Switch to <a data-link-type="dfn" href="#data-state" id="ref-for-data-state②⑥">data state</a>.
+      <dd>This is an <a data-link-type="dfn" href="#abrupt-closing-of-empty-comment" id="ref-for-abrupt-closing-of-empty-comment①">abrupt-closing-of-empty-comment</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error②⓪">parse error</a>. Switch to <a data-link-type="dfn" href="#data-state" id="ref-for-data-state②⑦">data state</a>.
                 Emit the current comment token. 
       <dt>EOF
-      <dd>This is an <a data-link-type="dfn" href="#eof-in-comment" id="ref-for-eof-in-comment">eof-in-comment</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error②⓪">parse error</a>. Emit the comment token. Emit an end-of-file-token. 
+      <dd>This is an <a data-link-type="dfn" href="#eof-in-comment" id="ref-for-eof-in-comment">eof-in-comment</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error②①">parse error</a>. Emit the comment token. Emit an end-of-file-token. 
       <dt>Anything else
       <dd>Append a U+002D HYPHEN-MINUS character (<code>-</code>) to the comment token’s data. <a data-link-type="dfn" href="#reconsume" id="ref-for-reconsume①">Reconsume</a> in the comment state. 
      </dl>
@@ -2554,7 +2590,7 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
       <dt>U+002D HYPHEN-MINUS (<code>-</code>)
       <dd>Switch to the <a data-link-type="dfn" href="#comment-end-dash-state" id="ref-for-comment-end-dash-state">comment end dash state</a>.
       <dt>EOF
-      <dd>This is an <a data-link-type="dfn" href="#eof-in-comment" id="ref-for-eof-in-comment①">eof-in-comment</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error②①">parse error</a>.. Emit the comment token. Emit an end-of-file
+      <dd>This is an <a data-link-type="dfn" href="#eof-in-comment" id="ref-for-eof-in-comment①">eof-in-comment</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error②②">parse error</a>.. Emit the comment token. Emit an end-of-file
                 token. 
       <dt>Anything else
       <dd>Append the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character②②">next input character</a> to the comment token’s data.
@@ -2597,7 +2633,7 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
       <dt>EOF
       <dd><a data-link-type="dfn" href="#reconsume" id="ref-for-reconsume⑤">Reconsume</a> in the <a data-link-type="dfn" href="#comment-end-state" id="ref-for-comment-end-state①">comment end state</a>.
       <dt>Anything else
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error②②">Parse error</a>.<a data-link-type="dfn" href="#reconsume" id="ref-for-reconsume⑥">Reconsume</a> in the <a data-link-type="dfn" href="#comment-end-state" id="ref-for-comment-end-state②">comment end state</a>. 
+      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error②③">Parse error</a>.<a data-link-type="dfn" href="#reconsume" id="ref-for-reconsume⑥">Reconsume</a> in the <a data-link-type="dfn" href="#comment-end-state" id="ref-for-comment-end-state②">comment end state</a>. 
      </dl>
     <h4 class="heading settled" data-level="1.4.29" id="comment_end_dash_state"><span class="secno">1.4.29. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="comment-end-dash-state">Comment end dash state</dfn></span><a class="self-link" href="#comment_end_dash_state"></a></h4>
     <dd>
@@ -2606,7 +2642,7 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
       <dt>U+002D HYPHEN-MINUS (<code>-</code>)
       <dd>Switch to the <a data-link-type="dfn" href="#comment-end-state" id="ref-for-comment-end-state③">comment end state</a>.
       <dt>EOF
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error②③">Parse error</a>. Emit the comment token. Emit end-of-file token.
+      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error②④">Parse error</a>. Emit the comment token. Emit an end-of-file token.
       <dt>Anything else
       <dd>Append a U+002D HYPHEN-MINUS (<code>-</code>) to the comment’s token
                 data. <a data-link-type="dfn" href="#reconsume" id="ref-for-reconsume⑦">Reconsume</a> in the <a data-link-type="dfn" href="#comment-state" id="ref-for-comment-state③">comment state</a>. 
@@ -2616,14 +2652,14 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
      <p>Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character②⑧">next input character</a>:</p>
      <dl class="switch">
       <dt>U+003E GREATER-THAN SIGN (<code>></code>)
-      <dd>Switch to the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state②⑦">data state</a>.Emit the comment token.
+      <dd>Switch to the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state②⑧">data state</a>.Emit the comment token.
       <dt>U+0021 EXCLAMATION MARK(<code>!</code>)
       <dd>Switch to the <a data-link-type="dfn" href="#comment-end-bang-state" id="ref-for-comment-end-bang-state">comment end bang state</a>.
       <dt>U+002D HYPHEN-MINUS (<code>-</code>)
       <dd>Append a U+002D HYPHEN-MINUS character (<code>-</code>) to the comment
                 token’s data. 
       <dt>EOF
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error②④">Parse error</a>. Emit the comment token. Emit an end-of-file token. 
+      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error②⑤">Parse error</a>. Emit the comment token. Emit an end-of-file token. 
       <dt>Anything else
       <dd>Append two U+002D (<code>-</code>) characters and the current input
                 character to the comment token’s data. <a data-link-type="dfn" href="#reconsume" id="ref-for-reconsume⑧">Reconsume</a> in the <a data-link-type="dfn" href="#comment-state" id="ref-for-comment-state④">comment
@@ -2637,9 +2673,9 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
       <dd>Append a U+002D HYPHEN-MINUS character (<code>-</code>) and U+0021 EXCLAMATION MARK
                 character(<code>!</code>) to the comment token’s data. Switch to the <a data-link-type="dfn" href="#comment-end-dash-state" id="ref-for-comment-end-dash-state②">comment end dash state</a>. 
       <dt>U+003E GREATER-THAN SIGN (<code>></code>)
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error②⑤">Parse error</a>. Switch to the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state②⑧">data state</a>.Emit the comment token.
+      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error②⑥">Parse error</a>. Switch to the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state②⑨">data state</a>.Emit the comment token.
       <dt>EOF
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error②⑥">Parse error</a>. Emit the comment token. Emit an end-of-file token.
+      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error②⑦">Parse error</a>. Emit the comment token. Emit an end-of-file token.
       <dt>Anything else
       <dd>Append two U+002D (<code>-</code>) characters and U+0021 EXCLAMATION MARK character(<code>!</code>) to
                 the comment token’s data. <a data-link-type="dfn" href="#reconsume" id="ref-for-reconsume⑨">Reconsume</a> in the <a data-link-type="dfn" href="#comment-state" id="ref-for-comment-state⑤">comment
@@ -2652,7 +2688,7 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
       <dt>U+005D RIGHT SQUARE BRACKET (<code>]</code>)
       <dd>Switch to the <a data-link-type="dfn" href="#cdata-bracket-state" id="ref-for-cdata-bracket-state">CDATA bracket state</a>.
       <dt>EOF
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error②⑦">Parse error</a>. Reprocess the current input character in the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state②⑨">data state</a>. 
+      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error②⑧">Parse error</a>. Reprocess the current input character in the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state③⓪">data state</a>. 
       <dt>Anything else
       <dd>Emit the current input character as character token. Stay in the
                 current state. 
@@ -2664,7 +2700,7 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
       <dt>U+005D RIGHT SQUARE BRACKET (<code>]</code>)
       <dd>Switch to the <a data-link-type="dfn" href="#cdata-end-state" id="ref-for-cdata-end-state">CDATA end state</a>.
       <dt>EOF
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error②⑧">Parse error</a>. Reprocess the current input character in the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state③⓪">data state</a>. 
+      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error②⑨">Parse error</a>. Reprocess the current input character in the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state③①">data state</a>. 
       <dt>Anything else
       <dd>Emit a U+005D RIGHT SQUARE BRACKET (<code>]</code>) character as character token and also
                 emit the current input character as character token. Switch to <a data-link-type="dfn" href="#cdata-bracket-state" id="ref-for-cdata-bracket-state①">CDATA bracket state</a>. 
@@ -2674,12 +2710,12 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
      <p>Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character③②">next input character</a>:</p>
      <dl class="switch">
       <dt>U+003E GREATER-THAN SIGN (<code>></code>)
-      <dd>Switch to the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state③①">data state</a>.
+      <dd>Switch to the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state③②">data state</a>.
       <dt>U+005D RIGHT SQUARE BRACKET (<code>]</code>)
       <dd>Emit the current input character as character token. Stay in the
                 current state. 
       <dt>EOF
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error②⑨">Parse error</a>. Reconsume the current input character in the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state③②">data state</a>. 
+      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error③⓪">Parse error</a>. Reconsume the current input character in the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state③③">data state</a>. 
       <dt>Anything else
       <dd>Emit two U+005D RIGHT SQUARE BRACKET (<code>]</code>) characters as character tokens and
                 also emit the current input character as character token. Switch to the <a data-link-type="dfn" href="#cdata-state" id="ref-for-cdata-state①">CDATA state</a>. 
@@ -2688,13 +2724,19 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
     <dd>
      <p>Attempt to <a data-link-type="dfn" href="#consume-a-character-reference" id="ref-for-consume-a-character-reference①">consume a character reference</a>.</p>
      <p>If nothing is returned, append a U+0026 AMPERSAND (&amp;) character to current attribute’s value.</p>
-     <p>Otherwise append returned character tokens to current attribute’s value.</p>
+     <p>Otherwise, append returned character tokens to current attribute’s value.</p>
      <p>Finally, switch back to attribute value state that switched to this state.</p>
     <h4 class="heading settled" data-level="1.4.36" id="bogus_comment_state"><span class="secno">1.4.36. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="bogus-comment-state">Bogus comment state</dfn></span><a class="self-link" href="#bogus_comment_state"></a></h4>
-    <dd> Consume every character up to the first U+003E GREATER-THAN SIGN (<code>></code>) or EOF, whichever comes
-        first. Emit a comment token whose data is the concatenation of all those consumed characters. Then consume the
-        next input character and switch to the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state③③">data state</a> reprocessing the EOF character if that was the
-        character consumed. 
+    <dd>
+      Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character③③">next input character</a>: 
+     <dl class="switch">
+      <dt>U+003E GREATER-THAN SIGN (<code>></code>)
+      <dd>Switch to the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state③④">data state</a>. Emit the current comment token.
+      <dt>EOF
+      <dd>Emit the comment. Emit an end-of-file token
+      <dt>Anything else
+      <dd> Append the <a data-link-type="dfn" href="#current-input-character" id="ref-for-current-input-character④">current input character</a> to the comment token’s data. 
+     </dl>
     <h4 class="heading settled" data-level="1.4.37" id="tokenizing_character_ref"><span class="secno">1.4.37. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport id="tokenizing-character-references">Tokenizing character references<a class="self-link" href="#tokenizing-character-references"></a></dfn></span><a class="self-link" href="#tokenizing_character_ref"></a></h4>
     <dd>
      <p>This section defines how to <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="consume-a-character-reference">consume a character reference</dfn>, optionally with an <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="additional allowed character" data-noexport id="additional-allowed-character">additional allowed
@@ -2706,7 +2748,6 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
      <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)
-      <dt>U+000C FORM FEED (<code class="non-print">FF</code>)
       <dt>U+0020 SPACE (<code class="non-print">Space</code>)
       <dt>U+003C LESS-THAN SIGN (<code>&lt;</code>)
       <dt>U+0025 PERCENT SIGN (<code>%</code>)
@@ -2733,14 +2774,14 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
        </dl>
        <p>Consume as many characters as match the range of characters given above (<a data-link-type="dfn" href="#ascii-hex-digits" id="ref-for-ascii-hex-digits①">ASCII hex digits</a> or <a data-link-type="dfn" href="#ascii-digits" id="ref-for-ascii-digits①">ASCII
                 digits</a>).</p>
-       <p>If no characters match the range, then don’t consume any characters. This is a <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error③⓪">parse error</a>;
+       <p>If no characters match the range, then don’t consume any characters. This is a <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error③①">parse error</a>;
                 return the U+0023 NUMBER SIGN character and if appropriate X character as string of text.</p>
-       <p>Otherwise, if the next character is a U+003B SEMICOLON, consume that too. If it isn’t, there is a <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error③①">parse
+       <p>Otherwise, if the next character is a U+003B SEMICOLON, consume that too. If it isn’t, there is a <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error③②">parse
                 error</a>.</p>
        <p>If one or more characters match the range, then take them all and interpret the string of characters as
                 a number (either hexadecimal or decimal as appropriate).</p>
        <p class="warning">Should we do HTML like replacement? At least for null?</p>
-       <p>Otherwise, if the number is in the range 0xD800 to 0xDFFF or is greater than 0x10FFFF, then this is a <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error③②">parse error</a>. Return a U+FFFD REPLACEMENT CHARACTER character token.</p>
+       <p>Otherwise, if the number is in the range 0xD800 to 0xDFFF or is greater than 0x10FFFF, then this is a <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error③③">parse error</a>. Return a U+FFFD REPLACEMENT CHARACTER character token.</p>
        <div class="warning">
         Should we refuse Unicode from ranges listed (0x0001 to 0x0008, 0x000D to 0x001F,
                     0x007F to 0x009F, 0xFDD0 to 0xFDEF, or is one of 0x000B, 0xFFFE, 0xFFFF, 0x1FFFE, 0x1FFFF, 0x2FFFE,
@@ -2756,85 +2797,83 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
        <p class="warning">What happens if there is no semicolon? Does it read rest of the file? Maybe better
                     solution is to read all characters that are part of name char according to <a href="http://www.w3.org/TR/xml11/#NT-Name">XML 1.1. spec.</a></p>
        <p>Otherwise, a character reference is parsed. If the last character matched is not a U+003B SEMICOLON
-                character (<code>;</code>), there is a <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error③③">parse error</a>.</p>
+                character (<code>;</code>), there is a <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error③④">parse error</a>.</p>
        <p>If there was a parse error the consumed characters are interperted as part of a string and are returned.</p>
        <p>If there wasn’t a parse error return a reference with name equal to consumed characters, omitting the
                 U+003B SEMICOLON character (<code>;</code>).</p>
        <div class="example" id="ref_tokenizer_example"><a class="self-link" href="#ref_tokenizer_example"></a> If the markup contains following attribute <code>This is a &amp;ref;</code>, character tokenizer
                     should return this as a reference named ref. However if the attribute defined is defined as <code>This
                     is &amp;notref</code>, then the tokenizer will interpret this as a text <code>This is
-                    &amp;notref</code>, while emitting a <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error③④">parse error</a>. </div>
+                    &amp;notref</code>, while emitting a <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error③⑤">parse error</a>. </div>
      </dl>
     <h4 class="heading settled" data-level="1.4.38" id="doctype_state"><span class="secno">1.4.38. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="doctype-state">DOCTYPE state</dfn></span><a class="self-link" href="#doctype_state"></a></h4>
     <dd>
-     <p>Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character③③">next input character</a>:</p>
+      Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character③④">next input character</a>: 
      <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)
-      <dt>U+000C FORM FEED (<code class="non-print">FF</code>)
       <dt>U+0020 SPACE (<code class="non-print">Space</code>)
       <dd>Switch to the <a data-link-type="dfn" href="#before-doctype-name-state" id="ref-for-before-doctype-name-state">before DOCTYPE name state</a>.
       <dt>EOF
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error③⑤">Parse error</a>. Switch to <a data-link-type="dfn" href="#data-state" id="ref-for-data-state③④">data state</a>.
-       Create new Doctype token. Emit Doctype token. Reconsume the EOF character. 
+      <dd>Emit an <a data-link-type="dfn" href="#eof-in-doctype" id="ref-for-eof-in-doctype">eof-in-doctype</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error③⑥">parse error</a>. Switch to <a data-link-type="dfn" href="#data-state" id="ref-for-data-state③⑤">data state</a>.
+       Create new DOCTYPE token. Emit DOCTYPE token. Emit an end-of-file token. 
       <dt>Anything else
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error③⑥">Parse error</a>. Switch to <a data-link-type="dfn" href="#before-doctype-name-state" id="ref-for-before-doctype-name-state①">before DOCTYPE name state</a>. Reconsume the character. 
+      <dd>Emit an <a data-link-type="dfn" href="#missing-whitespace-before-doctype-name-parse-error" id="ref-for-missing-whitespace-before-doctype-name-parse-error">missing-whitespace-before-doctype-name parse error</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error③⑦">parse error</a>.
+                Reconsume character in <a data-link-type="dfn" href="#before-doctype-name-state" id="ref-for-before-doctype-name-state①">before DOCTYPE name state</a>. 
      </dl>
     <h4 class="heading settled" data-level="1.4.39" id="before_doctype_name_state"><span class="secno">1.4.39. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="before-doctype-name-state">Before DOCTYPE name state</dfn></span><a class="self-link" href="#before_doctype_name_state"></a></h4>
     <dd>
-     <p>Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character③④">next input character</a>:</p>
+      Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character③⑤">next input character</a>: 
      <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)
-      <dt>U+000C FORM FEED (<code class="non-print">FF</code>)
       <dt>U+0020 SPACE (<code class="non-print">Space</code>)
       <dd>Ignore the character.
       <dt><a data-link-type="dfn" href="#uppercase-ascii-letters" id="ref-for-uppercase-ascii-letters">Uppercase ASCII letter</a>
       <dd>Create a new DOCTYPE token. Set the token name to lowercase version of the current input character.
                 Switch to the DOCTYPE name state. 
       <dt>U+003E GREATER-THAN SIGN(<code>></code>)
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error③⑦">Parse error</a> Create a new DOCTYPE token. Emit token. Switch to <a data-link-type="dfn" href="#data-state" id="ref-for-data-state③⑤">data state</a>.
+      <dd>This is a <a data-link-type="dfn" href="#missing-doctype-name" id="ref-for-missing-doctype-name">missing-doctype-name</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error③⑧">parse error</a>. Create a new DOCTYPE token.
+                Emit DOCTYPE token. Switch to <a data-link-type="dfn" href="#data-state" id="ref-for-data-state③⑥">data state</a>.
       <dt>EOF
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error③⑧">Parse error</a>. Switch to <a data-link-type="dfn" href="#data-state" id="ref-for-data-state③⑥">data state</a>.
-       Create new Doctype token. Emit Doctype token. Reconsume the EOF character. 
+      <dd>This is <a data-link-type="dfn" href="#eof-in-doctype" id="ref-for-eof-in-doctype①">eof-in-doctype</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error③⑨">parse error</a>. Switch to <a data-link-type="dfn" href="#data-state" id="ref-for-data-state③⑦">data state</a>.
+       Create new DOCTYPE token. Emit DOCTYPE token. Emit an end-of-file token. 
       <dt>Anything else
       <dd>Create new DOCTYPE token. Set the token’s name to current input character. Switch to <a data-link-type="dfn" href="#doctype-name-state" id="ref-for-doctype-name-state">DOCTYPE name
                 state</a>. 
      </dl>
     <h4 class="heading settled" data-level="1.4.40" id="doctype_name_state"><span class="secno">1.4.40. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="doctype-name-state">DOCTYPE name state</dfn></span><a class="self-link" href="#doctype_name_state"></a></h4>
     <dd>
-      Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character③⑤">next input character</a>: 
-     <dl class="switch">
-      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)
-      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)
-      <dt>U+000C FORM FEED (<code class="non-print">FF</code>)
-      <dt>U+0020 SPACE (<code class="non-print">Space</code>)
-      <dd>Switch to the <a data-link-type="dfn" href="#after-doctype-name-state" id="ref-for-after-doctype-name-state">after DOCTYPE name state</a>.
-      <dt><a data-link-type="dfn" href="#uppercase-ascii-letters" id="ref-for-uppercase-ascii-letters①">Uppercase ASCII letter</a>
-      <dd>Append the lowercase version of current input character to current doctype token.
-      <dt>U+003E GREATER-THAN SIGN(<code>></code>)
-      <dd> Create a new DOCTYPE token. Emit token. Switch to <a data-link-type="dfn" href="#data-state" id="ref-for-data-state③⑦">data state</a>.
-      <dt>EOF
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error③⑨">Parse error</a>. Switch to the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state③⑧">data state</a>. Emit DOCTYPE token.
-                Reconsume the EOF character. 
-      <dt>Anything else
-      <dd>Append the current input character to the current DOCTYPE token’s name.
-                Reconsume the EOF character. 
-     </dl>
-    <h4 class="heading settled" data-level="1.4.41" id="after_doctype_name_state"><span class="secno">1.4.41. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="after-doctype-name-state">After DOCTYPE name state</dfn></span><a class="self-link" href="#after_doctype_name_state"></a></h4>
-    <dd>
       Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character③⑥">next input character</a>: 
      <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)
-      <dt>U+000C FORM FEED (<code class="non-print">FF</code>)
+      <dt>U+0020 SPACE (<code class="non-print">Space</code>)
+      <dd>Switch to the <a data-link-type="dfn" href="#after-doctype-name-state" id="ref-for-after-doctype-name-state">after DOCTYPE name state</a>.
+      <dt><a data-link-type="dfn" href="#uppercase-ascii-letters" id="ref-for-uppercase-ascii-letters①">Uppercase ASCII letter</a>
+      <dd>Append the lowercase version of current input character to current DOCTYPE token.
+      <dt>U+003E GREATER-THAN SIGN(<code>></code>)
+      <dd>Create a new DOCTYPE token. Emit token. Switch to <a data-link-type="dfn" href="#data-state" id="ref-for-data-state③⑧">data state</a>.
+      <dt>EOF
+      <dd>This is <a data-link-type="dfn" href="#eof-in-doctype" id="ref-for-eof-in-doctype②">eof-in-doctype</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error④⓪">parse error</a>. Emit the current DOCTYPE token.
+                Emit an end-of-file token. 
+      <dt>Anything else
+      <dd>Append the <a data-link-type="dfn" href="#current-input-character" id="ref-for-current-input-character⑤">current input character</a> to the current DOCTYPE token’s name.
+                Reconsume the EOF character. 
+     </dl>
+    <h4 class="heading settled" data-level="1.4.41" id="after_doctype_name_state"><span class="secno">1.4.41. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="after-doctype-name-state">After DOCTYPE name state</dfn></span><a class="self-link" href="#after_doctype_name_state"></a></h4>
+    <dd>
+      Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character③⑦">next input character</a>: 
+     <dl class="switch">
+      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)
+      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)
       <dt>U+0020 SPACE (<code class="non-print">Space</code>)
       <dd>Ignore the character.
       <dt>U+003E GREATER-THAN SIGN(<code>></code>)
       <dd> Switch to data state. Emit current DOCTYPE token.
       <dt>EOF
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error④⓪">Parse error</a>. Switch to the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state③⑨">data state</a>. Emit DOCTYPE token.
-                Reconsume the EOF character. 
+      <dd>This is <a data-link-type="dfn" href="#eof-in-doctype" id="ref-for-eof-in-doctype③">eof-in-doctype</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error④①">parse error</a>. Switch to the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state③⑨">data state</a>. Emit DOCTYPE token.
+                Emit an end-of-file token. 
       <dt>Anything else
       <dd>
        If the six characters starting from the current input character are an <a data-link-type="dfn" href="#ascii-case-insensitive" id="ref-for-ascii-case-insensitive">ASCII case-insensitive</a> match for word "PUBLIC", then consume those characters and switch to the <a data-link-type="dfn" href="#after-doctype-public-keyword-state" id="ref-for-after-doctype-public-keyword-state">after DOCTYPE public keyword
@@ -2842,160 +2881,156 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
        <p>Otherwise, if the six characters starting from the current input character are an <a data-link-type="dfn" href="#ascii-case-insensitive" id="ref-for-ascii-case-insensitive①">ASCII
                     case-insensitive</a> match for word "SYSTEM", then consume those charactes and switch to the <a data-link-type="dfn" href="#after-doctype-system-keyword-state" id="ref-for-after-doctype-system-keyword-state">after
                     DOCTYPE system keyword state</a>.</p>
-       <p>Otherwise, this is a <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error④①">parse error</a>. Switch to <a data-link-type="dfn" href="#bogus-doctype-state" id="ref-for-bogus-doctype-state">bogus DOCTYPE state</a>.</p>
+       <p>Otherwise, this is a <a data-link-type="dfn" href="#invalid-characters-after-doctype" id="ref-for-invalid-characters-after-doctype">invalid-characters-after-doctype</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error④②">parse error</a>. Switch to <a data-link-type="dfn" href="#bogus-doctype-state" id="ref-for-bogus-doctype-state">bogus DOCTYPE state</a>.</p>
      </dl>
     <h4 class="heading settled" data-level="1.4.42" id="after_doctype_public_keyword_state"><span class="secno">1.4.42. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="after-doctype-public-keyword-state">After DOCTYPE public keyword state</dfn></span><a class="self-link" href="#after_doctype_public_keyword_state"></a></h4>
-    <dd>
-      Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character③⑦">next input character</a>: 
-     <dl class="switch">
-      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)
-      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)
-      <dt>U+000C FORM FEED (<code class="non-print">FF</code>)
-      <dt>U+0020 SPACE (<code class="non-print">Space</code>)
-      <dd>Switch to the <a data-link-type="dfn" href="#before-doctype-public-identifier-state" id="ref-for-before-doctype-public-identifier-state">before DOCTYPE public identifier state</a>.
-      <dt>U+0022 QUOTATION MARK(<code>"</code>)
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error④②">Parse error</a>. Set the DOCTYPE token’s public identifier current DOCTYPE token to the empty string
-                (not missing), then switch to the <a data-link-type="dfn" href="#doctype-public-identifier-double-quoted-state" id="ref-for-doctype-public-identifier-double-quoted-state">DOCTYPE public identifier (double-quoted) state</a>. 
-      <dt>U+0027 APOSTROPHE(<code>'</code>)
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error④③">Parse error</a>. Set the DOCTYPE token’s public identifier current DOCTYPE token to the empty string
-                (not missing), then switch to the <a data-link-type="dfn" href="#doctype-public-identifier-single-quoted-state" id="ref-for-doctype-public-identifier-single-quoted-state">DOCTYPE public identifier (single-quoted) state</a>. 
-      <dt>U+003E GREATER-THAN SIGN(<code>></code>)
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error④④">Parse error</a>. Set the DOCTYPE token’s public identifier current DOCTYPE token to the empty string
-                (not missing), then switch to the <a data-link-type="dfn" href="#doctype-public-identifier-single-quoted-state" id="ref-for-doctype-public-identifier-single-quoted-state①">DOCTYPE public identifier (single-quoted) state</a>. 
-      <dt>EOF
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error④⑤">Parse error</a>. Switch to the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state④⓪">data state</a>. Emit that DOCTYPE token. Reconsume the EOF
-                character. 
-      <dt>Anything else
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error④⑥">Parse error</a>. Switch to the <a data-link-type="dfn" href="#bogus-doctype-state" id="ref-for-bogus-doctype-state①">bogus DOCTYPE state</a>. Emit that DOCTYPE token. Reconsume the EOF
-                character. 
-     </dl>
-    <h4 class="heading settled" data-level="1.4.43" id="after_doctype_system_keyword_state"><span class="secno">1.4.43. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="after-doctype-system-keyword-state">After DOCTYPE system keyword state</dfn></span><a class="self-link" href="#after_doctype_system_keyword_state"></a></h4>
     <dd>
       Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character③⑧">next input character</a>: 
      <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)
-      <dt>U+000C FORM FEED (<code class="non-print">FF</code>)
       <dt>U+0020 SPACE (<code class="non-print">Space</code>)
-      <dd>Switch to the <a data-link-type="dfn" href="#before-doctype-system-identifier-state" id="ref-for-before-doctype-system-identifier-state">before DOCTYPE system identifier state</a>.
+      <dd>Switch to the <a data-link-type="dfn" href="#before-doctype-public-identifier-state" id="ref-for-before-doctype-public-identifier-state">before DOCTYPE public identifier state</a>.
       <dt>U+0022 QUOTATION MARK(<code>"</code>)
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error④⑦">Parse error</a>. Set the DOCTYPE token’s public identifier current DOCTYPE token to the empty string
-                (not missing), then switch to the <a data-link-type="dfn" href="#doctype-system-identifier-double-quoted-state" id="ref-for-doctype-system-identifier-double-quoted-state">DOCTYPE system identifier (double-quoted) state</a>. 
+      <dd>This is a <a data-link-type="dfn" href="#missing-whitespace-after-doctype-keyword" id="ref-for-missing-whitespace-after-doctype-keyword">missing-whitespace-after-doctype-keyword</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error④③">parse error</a>. Set the DOCTYPE token’s public identifier current DOCTYPE token to the empty string
+                (not missing), then switch to the <a data-link-type="dfn" href="#doctype-public-identifier-double-quoted-state" id="ref-for-doctype-public-identifier-double-quoted-state">DOCTYPE public identifier (double-quoted) state</a>. 
       <dt>U+0027 APOSTROPHE(<code>'</code>)
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error④⑧">Parse error</a>. Set the DOCTYPE token’s public identifier current DOCTYPE token to the empty string
-                (not missing), then switch to the <a data-link-type="dfn" href="#doctype-system-identifier-single-quoted-state" id="ref-for-doctype-system-identifier-single-quoted-state">DOCTYPE system identifier (single-quoted) state</a>. 
+      <dd>This is a <a data-link-type="dfn" href="#missing-whitespace-after-doctype-keyword" id="ref-for-missing-whitespace-after-doctype-keyword①">missing-whitespace-after-doctype-keyword</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error④④">parse error</a>. Set the DOCTYPE token’s public identifier current DOCTYPE token to the empty string
+                (not missing), then switch to the <a data-link-type="dfn" href="#doctype-public-identifier-single-quoted-state" id="ref-for-doctype-public-identifier-single-quoted-state">DOCTYPE public identifier (single-quoted) state</a>. 
       <dt>U+003E GREATER-THAN SIGN(<code>></code>)
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error④⑨">Parse error</a>. Set the DOCTYPE token’s public identifier current DOCTYPE token to the empty string
-                (not missing), then switch to the <a data-link-type="dfn" href="#doctype-system-identifier-single-quoted-state" id="ref-for-doctype-system-identifier-single-quoted-state①">DOCTYPE system identifier (single-quoted) state</a>. 
+      <dd>This is a <a data-link-type="dfn" href="#missing-doctype-identifier" id="ref-for-missing-doctype-identifier">missing-doctype-identifier</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error④⑤">parse error</a>. Set the DOCTYPE token’s public identifier
+                current DOCTYPE token to the empty string (not missing), then switch to the <a data-link-type="dfn" href="#doctype-public-identifier-single-quoted-state" id="ref-for-doctype-public-identifier-single-quoted-state①">DOCTYPE public identifier (single-quoted) state</a>. 
       <dt>EOF
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑤⓪">Parse error</a>. Switch to the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state④①">data state</a>. Emit that DOCTYPE token. Reconsume the EOF
-                character. 
+      <dd>This is a <a data-link-type="dfn" href="#eof-in-doctype" id="ref-for-eof-in-doctype④">eof-in-doctype</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error④⑥">parse error</a>. Emit current DOCTYPE token. Emit an end-of-file token. 
       <dt>Anything else
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑤①">Parse error</a>. Switch to the <a data-link-type="dfn" href="#bogus-doctype-state" id="ref-for-bogus-doctype-state②">bogus DOCTYPE state</a>.
+      <dd>This is a <a data-link-type="dfn" href="#missing-quote-before-identifier" id="ref-for-missing-quote-before-identifier">missing-quote-before-identifier</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error④⑦">parse error</a>. Reconsume in <a data-link-type="dfn" href="#bogus-doctype-state" id="ref-for-bogus-doctype-state①">bogus DOCTYPE state</a>. 
      </dl>
-    <h4 class="heading settled" data-level="1.4.44" id="before_doctype_system_identifier_state"><span class="secno">1.4.44. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="before-doctype-system-identifier-state">Before DOCTYPE system identifier state</dfn></span><a class="self-link" href="#before_doctype_system_identifier_state"></a></h4>
+    <h4 class="heading settled" data-level="1.4.43" id="after_doctype_system_keyword_state"><span class="secno">1.4.43. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="after-doctype-system-keyword-state">After DOCTYPE system keyword state</dfn></span><a class="self-link" href="#after_doctype_system_keyword_state"></a></h4>
     <dd>
       Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character③⑨">next input character</a>: 
      <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)
-      <dt>U+000C FORM FEED (<code class="non-print">FF</code>)
+      <dt>U+0020 SPACE (<code class="non-print">Space</code>)
+      <dd>Switch to the <a data-link-type="dfn" href="#before-doctype-system-identifier-state" id="ref-for-before-doctype-system-identifier-state">before DOCTYPE system identifier state</a>.
+      <dt>U+0022 QUOTATION MARK(<code>"</code>)
+      <dd>This is a <a data-link-type="dfn" href="#missing-whitespace-after-doctype-keyword" id="ref-for-missing-whitespace-after-doctype-keyword②">missing-whitespace-after-doctype-keyword</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error④⑧">parse error</a>. Set the DOCTYPE token’s public identifier current DOCTYPE token to the empty string
+                (not missing), then switch to the <a data-link-type="dfn" href="#doctype-system-identifier-double-quoted-state" id="ref-for-doctype-system-identifier-double-quoted-state">DOCTYPE system identifier (double-quoted) state</a>. 
+      <dt>U+0027 APOSTROPHE(<code>'</code>)
+      <dd>This is a <a data-link-type="dfn" href="#missing-whitespace-after-doctype-keyword" id="ref-for-missing-whitespace-after-doctype-keyword③">missing-whitespace-after-doctype-keyword</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error④⑨">parse error</a>. Set the DOCTYPE token’s public identifier current DOCTYPE token to the empty string
+                (not missing), then switch to the <a data-link-type="dfn" href="#doctype-system-identifier-single-quoted-state" id="ref-for-doctype-system-identifier-single-quoted-state">DOCTYPE system identifier (single-quoted) state</a>. 
+      <dt>U+003E GREATER-THAN SIGN(<code>></code>)
+      <dd>This is a <a data-link-type="dfn" href="#missing-doctype-identifier" id="ref-for-missing-doctype-identifier①">missing-doctype-identifier</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑤⓪">parse error</a>. Set the DOCTYPE token’s public identifier current DOCTYPE token to the empty string
+                (not missing), then switch to the <a data-link-type="dfn" href="#doctype-system-identifier-single-quoted-state" id="ref-for-doctype-system-identifier-single-quoted-state①">DOCTYPE system identifier (single-quoted) state</a>. 
+      <dt>EOF
+      <dd>This is a <a data-link-type="dfn" href="#eof-in-doctype" id="ref-for-eof-in-doctype⑤">eof-in-doctype</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑤①">parse error</a>. Emit current DOCTYPE token. Emit an end-of-file token. 
+      <dt>Anything else
+      <dd>This is a <a data-link-type="dfn" href="#missing-quote-before-identifier" id="ref-for-missing-quote-before-identifier①">missing-quote-before-identifier</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑤②">parse error</a>. Reconsume in <a data-link-type="dfn" href="#bogus-doctype-state" id="ref-for-bogus-doctype-state②">bogus DOCTYPE state</a>. 
+     </dl>
+    <h4 class="heading settled" data-level="1.4.44" id="before_doctype_system_identifier_state"><span class="secno">1.4.44. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="before-doctype-system-identifier-state">Before DOCTYPE system identifier state</dfn></span><a class="self-link" href="#before_doctype_system_identifier_state"></a></h4>
+    <dd>
+      Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character④⓪">next input character</a>: 
+     <dl class="switch">
+      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)
+      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)
       <dt>U+0020 SPACE (<code class="non-print">Space</code>)
       <dd>Ignore the character.
       <dt>U+0022 QUOTATION MARK(<code>"</code>)
       <dd>Set the DOCTYPE token’s system identifier current DOCTYPE token to the empty string (not missing), then
                 switch to the <a data-link-type="dfn" href="#doctype-system-identifier-double-quoted-state" id="ref-for-doctype-system-identifier-double-quoted-state①">DOCTYPE system identifier (double-quoted) state</a>. 
       <dt>U+0027 APOSTROPHE(<code>'</code>)
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑤②">Parse error</a>. Set the DOCTYPE token’s system identifier current DOCTYPE token to the empty string
-                (not missing), then switch to the <a data-link-type="dfn" href="#doctype-system-identifier-single-quoted-state" id="ref-for-doctype-system-identifier-single-quoted-state②">DOCTYPE system identifier (single-quoted) state</a>. 
+      <dd>Set the DOCTYPE token’s system identifier current DOCTYPE token to the empty string (not missing), then
+                switch to the <a data-link-type="dfn" href="#doctype-system-identifier-single-quoted-state" id="ref-for-doctype-system-identifier-single-quoted-state②">DOCTYPE system identifier (single-quoted) state</a>. 
       <dt>U+003E GREATER-THAN SIGN(<code>></code>)
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑤③">Parse error</a>. Switch to <a data-link-type="dfn" href="#data-state" id="ref-for-data-state④②">data state</a>. Emit current DOCTYPE token.
+      <dd>This is a <a data-link-type="dfn" href="#missing-doctype-identifier" id="ref-for-missing-doctype-identifier②">missing-doctype-identifier</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑤③">parse error</a>. Switch to <a data-link-type="dfn" href="#data-state" id="ref-for-data-state④⓪">data state</a>. Emit current DOCTYPE token.
       <dt>EOF
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑤④">Parse error</a>. Switch to the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state④③">data state</a>. Emit DOCTYPE token. Reconsume the EOF character. 
+      <dd>This is a <a data-link-type="dfn" href="#eof-in-doctype" id="ref-for-eof-in-doctype⑥">eof-in-doctype</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑤④">parse error</a>. Switch to the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state④①">data state</a>. Emit DOCTYPE token.
+                Emit the end-of-file token. 
       <dt>Anything else
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑤⑤">Parse error</a>. Switch to the <a data-link-type="dfn" href="#bogus-doctype-state" id="ref-for-bogus-doctype-state③">bogus DOCTYPE state</a>.
+      <dd>This is a <a data-link-type="dfn" href="#missing-quote-before-identifier" id="ref-for-missing-quote-before-identifier②">missing-quote-before-identifier</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑤⑤">parse error</a>. Reconsume in <a data-link-type="dfn" href="#bogus-doctype-state" id="ref-for-bogus-doctype-state③">bogus DOCTYPE state</a>.
      </dl>
     <h4 class="heading settled" data-level="1.4.45" id="before_doctype_public_identifier_state"><span class="secno">1.4.45. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="before-doctype-public-identifier-state">Before DOCTYPE public identifier state</dfn></span><a class="self-link" href="#before_doctype_public_identifier_state"></a></h4>
     <dd>
-      Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character④⓪">next input character</a>: 
+      Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character④①">next input character</a>: 
      <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)
-      <dt>U+000C FORM FEED (<code class="non-print">FF</code>)
       <dt>U+0020 SPACE (<code class="non-print">Space</code>)
       <dd>Ignore the character.
       <dt>U+0022 QUOTATION MARK(<code>"</code>)
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑤⑥">Parse error</a>. Set the DOCTYPE token’s public identifier current DOCTYPE token to the empty string
+      <dd>Set the DOCTYPE token’s public identifier current DOCTYPE token to the empty string
                 (not missing), then switch to the <a data-link-type="dfn" href="#doctype-public-identifier-double-quoted-state" id="ref-for-doctype-public-identifier-double-quoted-state①">DOCTYPE public identifier (double-quoted) state</a>. 
       <dt>U+0027 APOSTROPHE(<code>'</code>)
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑤⑦">Parse error</a>. Set the DOCTYPE token’s public identifier current DOCTYPE token to the empty string
+      <dd>Set the DOCTYPE token’s public identifier current DOCTYPE token to the empty string
                 (not missing), then switch to the <a data-link-type="dfn" href="#doctype-public-identifier-single-quoted-state" id="ref-for-doctype-public-identifier-single-quoted-state②">DOCTYPE public identifier (single-quoted) state</a>. 
       <dt>U+003E GREATER-THAN SIGN(<code>></code>)
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑤⑧">Parse error</a>. Switch to <a data-link-type="dfn" href="#data-state" id="ref-for-data-state④④">data state</a>. Emit current DOCTYPE token.
+      <dd>This is a <a data-link-type="dfn" href="#missing-doctype-identifier" id="ref-for-missing-doctype-identifier③">missing-doctype-identifier</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑤⑥">parse error</a>. Switch to <a data-link-type="dfn" href="#data-state" id="ref-for-data-state④②">data state</a>. Emit current DOCTYPE token.
       <dt>EOF
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑤⑨">Parse error</a>. Switch to the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state④⑤">data state</a>. Emit DOCTYPE token. Reconsume the EOF character. 
+      <dd>This is a <a data-link-type="dfn" href="#eof-in-doctype" id="ref-for-eof-in-doctype⑦">eof-in-doctype</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑤⑦">parse error</a>. Switch to the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state④③">data state</a>. Emit DOCTYPE token.
+                Emit the end-of-file token. 
       <dt>Anything else
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑥⓪">Parse error</a>. Switch to the <a data-link-type="dfn" href="#bogus-doctype-state" id="ref-for-bogus-doctype-state④">bogus DOCTYPE state</a>.
+      <dd>This is a <a data-link-type="dfn" href="#missing-quote-before-identifier" id="ref-for-missing-quote-before-identifier③">missing-quote-before-identifier</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑤⑧">parse error</a>. Reconsume in <a data-link-type="dfn" href="#bogus-doctype-state" id="ref-for-bogus-doctype-state④">bogus DOCTYPE state</a>.
      </dl>
     <h4 class="heading settled" data-level="1.4.46" id="doctype_public_identifier_single_quoted_state"><span class="secno">1.4.46. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="doctype-public-identifier-single-quoted-state">DOCTYPE public identifier (single-quoted) state</dfn></span><a class="self-link" href="#doctype_public_identifier_single_quoted_state"></a></h4>
     <dd>
-      Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character④①">next input character</a>: 
+      Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character④②">next input character</a>: 
      <dl class="switch">
       <dt>U+0027 APOSTROPHE(<code>'</code>)
       <dd>Switch to the <a data-link-type="dfn" href="#after-doctype-public-identifier-state" id="ref-for-after-doctype-public-identifier-state">after DOCTYPE public identifier state</a>.
       <dt>U+003E GREATER-THAN SIGN(<code>></code>)
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑥①">Parse error</a>. Switch to <a data-link-type="dfn" href="#data-state" id="ref-for-data-state④⑥">data state</a>. Emit current DOCTYPE token.
+      <dd>This is an <a data-link-type="dfn" href="#abrupt-doctype-identifier" id="ref-for-abrupt-doctype-identifier">abrupt-doctype-identifier</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑤⑨">parse error</a>. Switch to <a data-link-type="dfn" href="#data-state" id="ref-for-data-state④④">data state</a>. Emit current DOCTYPE token.
       <dt>EOF
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑥②">Parse error</a>. Switch to the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state④⑦">data state</a>. Emit DOCTYPE token. Reconsume the EOF character. 
+      <dd>This is a <a data-link-type="dfn" href="#eof-in-doctype" id="ref-for-eof-in-doctype⑧">eof-in-doctype</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑥⓪">parse error</a>. Switch to the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state④⑤">data state</a>. Emit DOCTYPE token.
+                Emit the end-of-file token. 
       <dt>Anything else
       <dd>Append the current input character to the current DOCTYPE token’s public identifier.
      </dl>
     <h4 class="heading settled" data-level="1.4.47" id="doctype_public_identifier_double_quoted_state"><span class="secno">1.4.47. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="doctype-public-identifier-double-quoted-state">DOCTYPE public identifier (double-quoted) state</dfn></span><a class="self-link" href="#doctype_public_identifier_double_quoted_state"></a></h4>
     <dd>
-      Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character④②">next input character</a>: 
+      Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character④③">next input character</a>: 
      <dl class="switch">
       <dt>U+0022 QUOTATION MARK(<code>"</code>)
       <dd>Switch to the <a data-link-type="dfn" href="#after-doctype-public-identifier-state" id="ref-for-after-doctype-public-identifier-state①">after DOCTYPE public identifier state</a>.
       <dt>U+003E GREATER-THAN SIGN(<code>></code>)
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑥③">Parse error</a>. Switch to <a data-link-type="dfn" href="#data-state" id="ref-for-data-state④⑧">data state</a>. Emit current DOCTYPE token.
+      <dd>This is an <a data-link-type="dfn" href="#abrupt-doctype-identifier" id="ref-for-abrupt-doctype-identifier①">abrupt-doctype-identifier</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑥①">parse error</a>. Switch to <a data-link-type="dfn" href="#data-state" id="ref-for-data-state④⑥">data state</a>. Emit current DOCTYPE token.
       <dt>EOF
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑥④">Parse error</a>. Switch to the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state④⑨">data state</a>. Emit DOCTYPE token. Reconsume the EOF character. 
+      <dd>This is a <a data-link-type="dfn" href="#eof-in-doctype" id="ref-for-eof-in-doctype⑨">eof-in-doctype</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑥②">parse error</a>. Emit DOCTYPE token. Emit the end-of-file token. 
       <dt>Anything else
       <dd>Append the current input character to the current DOCTYPE token’s public identifier.
      </dl>
     <h4 class="heading settled" data-level="1.4.48" id="after_doctype_public_identifier_state"><span class="secno">1.4.48. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="after-doctype-public-identifier-state">After DOCTYPE public identifier state</dfn></span><a class="self-link" href="#after_doctype_public_identifier_state"></a></h4>
     <dd>
-      Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character④③">next input character</a>: 
-     <dl class="switch">
-      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)
-      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)
-      <dt>U+000C FORM FEED (<code class="non-print">FF</code>)
-      <dt>U+0020 SPACE (<code class="non-print">Space</code>)
-      <dd>Switch to the <a data-link-type="dfn" href="#between-doctype-public-and-system-identifiers-state" id="ref-for-between-doctype-public-and-system-identifiers-state">between DOCTYPE public and system identifiers state</a>.
-      <dt>U+0027 APOSTROPHE(<code>'</code>)
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑥⑤">Parse error</a>. Set the DOCTYPE token’s system identifier to the empty string (not missing) then
-                switch to the <a data-link-type="dfn" href="#doctype-system-identifier-single-quoted-state" id="ref-for-doctype-system-identifier-single-quoted-state③">DOCTYPE system identifier (single-quoted) state</a>. 
-      <dt>U+0022 QUOTATION MARK(<code>"</code>)
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑥⑥">Parse error</a>. Set the DOCTYPE token’s system identifier to the empty string (not missing) then
-                switch to the <a data-link-type="dfn" href="#doctype-system-identifier-double-quoted-state" id="ref-for-doctype-system-identifier-double-quoted-state②">DOCTYPE system identifier (double-quoted) state</a>. 
-      <dt>U+003E GREATER-THAN SIGN(<code>></code>)
-      <dd>Switch to <a data-link-type="dfn" href="#data-state" id="ref-for-data-state⑤⓪">data state</a>. Emit current DOCTYPE token.
-      <dt>EOF
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑥⑦">Parse error</a>. Switch to the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state⑤①">data state</a>. Emit DOCTYPE token. Reconsume the EOF character. 
-      <dt>Anything else
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑥⑧">Parse error</a>. Switch to <a data-link-type="dfn" href="#bogus-doctype-state" id="ref-for-bogus-doctype-state⑤">bogus DOCTYPE state</a>.
-     </dl>
-    <h4 class="heading settled" data-level="1.4.49" id="between_doctype_public_and_system_identifier_state"><span class="secno">1.4.49. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="between-doctype-public-and-system-identifiers-state">Between DOCTYPE public and system identifiers state</dfn></span><a class="self-link" href="#between_doctype_public_and_system_identifier_state"></a></h4>
-    <dd>
       Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character④④">next input character</a>: 
      <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)
-      <dt>U+000C FORM FEED (<code class="non-print">FF</code>)
+      <dt>U+0020 SPACE (<code class="non-print">Space</code>)
+      <dd>Switch to the <a data-link-type="dfn" href="#between-doctype-public-and-system-identifiers-state" id="ref-for-between-doctype-public-and-system-identifiers-state">between DOCTYPE public and system identifiers state</a>.
+      <dt>U+0027 APOSTROPHE(<code>'</code>)
+      <dd>This is a <a data-link-type="dfn" href="#missing-whitespace-between-doctype-public-and-system-identifier" id="ref-for-missing-whitespace-between-doctype-public-and-system-identifier">missing-whitespace-between-doctype-public-and-system-identifier</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑥③">parse error</a>.
+                Set the DOCTYPE token’s system identifier to the empty string (not missing) then
+                switch to the <a data-link-type="dfn" href="#doctype-system-identifier-single-quoted-state" id="ref-for-doctype-system-identifier-single-quoted-state③">DOCTYPE system identifier (single-quoted) state</a>. 
+      <dt>U+0022 QUOTATION MARK(<code>"</code>)
+      <dd>This is a <a data-link-type="dfn" href="#missing-whitespace-between-doctype-public-and-system-identifier" id="ref-for-missing-whitespace-between-doctype-public-and-system-identifier①">missing-whitespace-between-doctype-public-and-system-identifier</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑥④">parse error</a>.
+                Set the DOCTYPE token’s system identifier to the empty string (not missing) then
+                switch to the <a data-link-type="dfn" href="#doctype-system-identifier-double-quoted-state" id="ref-for-doctype-system-identifier-double-quoted-state②">DOCTYPE system identifier (double-quoted) state</a>. 
+      <dt>U+003E GREATER-THAN SIGN(<code>></code>)
+      <dd>Switch to <a data-link-type="dfn" href="#data-state" id="ref-for-data-state④⑦">data state</a>. Emit current DOCTYPE token.
+      <dt>EOF
+      <dd>This is a <a data-link-type="dfn" href="#eof-in-doctype" id="ref-for-eof-in-doctype①⓪">eof-in-doctype</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑥⑤">parse error</a>. Emit the current DOCTYPE token. Emit the end-of-file token. 
+      <dt>Anything else
+      <dd>This is a <a data-link-type="dfn" href="#missing-quote-before-identifier" id="ref-for-missing-quote-before-identifier④">missing-quote-before-identifier</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑥⑥">parse error</a>. Reconsume in the <a data-link-type="dfn" href="#bogus-doctype-state" id="ref-for-bogus-doctype-state⑤">bogus DOCTYPE state</a>.
+     </dl>
+    <h4 class="heading settled" data-level="1.4.49" id="between_doctype_public_and_system_identifier_state"><span class="secno">1.4.49. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="between-doctype-public-and-system-identifiers-state">Between DOCTYPE public and system identifiers state</dfn></span><a class="self-link" href="#between_doctype_public_and_system_identifier_state"></a></h4>
+    <dd>
+      Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character④⑤">next input character</a>: 
+     <dl class="switch">
+      <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)
+      <dt>U+000A LINE FEED (<code class="non-print">LF</code>)
       <dt>U+0020 SPACE (<code class="non-print">Space</code>)
       <dd>Ignore the character.
       <dt>U+003E GREATER-THAN SIGN(<code>></code>)
-      <dd>Switch to <a data-link-type="dfn" href="#data-state" id="ref-for-data-state⑤②">data state</a>. Emit current DOCTYPE token.
+      <dd>Switch to <a data-link-type="dfn" href="#data-state" id="ref-for-data-state④⑧">data state</a>. Emit current DOCTYPE token.
       <dt>U+0027 APOSTROPHE(<code>'</code>)
       <dd>Set the DOCTYPE token’s system identifier to the empty string (not missing) then switch to the <a data-link-type="dfn" href="#doctype-system-identifier-single-quoted-state" id="ref-for-doctype-system-identifier-single-quoted-state④">DOCTYPE
                 system identifier (single-quoted) state</a>. 
@@ -3003,60 +3038,59 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
       <dd>Set the DOCTYPE token’s system identifier to the empty string (not missing) then switch to the <a data-link-type="dfn" href="#doctype-system-identifier-double-quoted-state" id="ref-for-doctype-system-identifier-double-quoted-state③">DOCTYPE
                 system identifier (double-quoted) state</a>. 
       <dt>EOF
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑥⑨">Parse error</a>. Switch to the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state⑤③">data state</a>. Emit DOCTYPE token. Reconsume the EOF character. 
+      <dd>This is a <a data-link-type="dfn" href="#eof-in-doctype" id="ref-for-eof-in-doctype①①">eof-in-doctype</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑥⑦">parse error</a>. Emit the current DOCTYPE token. Emit the end-of-file token. 
       <dt>Anything else
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑦⓪">Parse error</a>. Switch to <a data-link-type="dfn" href="#bogus-doctype-state" id="ref-for-bogus-doctype-state⑥">Bogus DOCTYPE state</a>.
+      <dd>This is a <a data-link-type="dfn" href="#missing-quote-before-identifier" id="ref-for-missing-quote-before-identifier⑤">missing-quote-before-identifier</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑥⑧">parse error</a>. Reconsume in <a data-link-type="dfn" href="#bogus-doctype-state" id="ref-for-bogus-doctype-state⑥">Bogus DOCTYPE state</a>.
      </dl>
     <h4 class="heading settled" data-level="1.4.50" id="doctype_system_identifier_single_quote_state"><span class="secno">1.4.50. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="doctype-system-identifier-single-quoted-state">DOCTYPE system identifier (single-quoted) state</dfn></span><a class="self-link" href="#doctype_system_identifier_single_quote_state"></a></h4>
     <dd>
-      Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character④⑤">next input character</a>: 
+      Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character④⑥">next input character</a>: 
      <dl class="switch">
       <dt>U+0027 APOSTROPHE(<code>'</code>)
       <dd>Switch to the <a data-link-type="dfn" href="#after-doctype-system-identifiers-state" id="ref-for-after-doctype-system-identifiers-state">after DOCTYPE system identifiers state</a>.
       <dt>U+003E GREATER-THAN SIGN(<code>></code>)
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑦①">Parse error</a>. Switch to <a data-link-type="dfn" href="#data-state" id="ref-for-data-state⑤④">data state</a>. Emit current DOCTYPE token.
+      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑥⑨">Parse error</a>. Switch to <a data-link-type="dfn" href="#data-state" id="ref-for-data-state④⑨">data state</a>. Emit current DOCTYPE token.
       <dt>EOF
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑦②">Parse error</a>. Switch to the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state⑤⑤">data state</a>. Emit DOCTYPE token. Reconsume the EOF character. 
+      <dd>This is a <a data-link-type="dfn" href="#eof-in-doctype" id="ref-for-eof-in-doctype①②">eof-in-doctype</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑦⓪">parse error</a>. Emit the current DOCTYPE token. Emit the end-of-file token. 
       <dt>Anything else
       <dd>Append the current input character to the current DOCTYPE token’s system identifier.
      </dl>
     <h4 class="heading settled" data-level="1.4.51" id="doctype_system_identifier_double_quote_state"><span class="secno">1.4.51. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="doctype-system-identifier-double-quoted-state">DOCTYPE system identifier (double-quoted) state</dfn></span><a class="self-link" href="#doctype_system_identifier_double_quote_state"></a></h4>
     <dd>
-      Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character④⑥">next input character</a>: 
+      Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character④⑦">next input character</a>: 
      <dl class="switch">
       <dt>U+0022 QUOTATION MARK(<code>"</code>)
       <dd>Switch to the <a data-link-type="dfn" href="#after-doctype-system-identifiers-state" id="ref-for-after-doctype-system-identifiers-state①">after DOCTYPE system identifiers state</a>.
       <dt>U+003E GREATER-THAN SIGN(<code>></code>)
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑦③">Parse error</a>. Switch to <a data-link-type="dfn" href="#data-state" id="ref-for-data-state⑤⑥">data state</a>. Emit current DOCTYPE token.
+      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑦①">Parse error</a>. Switch to <a data-link-type="dfn" href="#data-state" id="ref-for-data-state⑤⓪">data state</a>. Emit current DOCTYPE token.
       <dt>EOF
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑦④">Parse error</a>. Switch to the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state⑤⑦">data state</a>. Emit DOCTYPE token. Reconsume the EOF character. 
+      <dd>This is a <a data-link-type="dfn" href="#eof-in-doctype" id="ref-for-eof-in-doctype①③">eof-in-doctype</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑦②">parse error</a>. Emit the current DOCTYPE token. Emit the end-of-file token. 
       <dt>Anything else
       <dd>Append the current input character to the current DOCTYPE token’s system identifier.
      </dl>
     <h4 class="heading settled" data-level="1.4.52" id="after_doctype_system_identifier_state"><span class="secno">1.4.52. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="after-doctype-system-identifiers-state">After DOCTYPE system identifiers state</dfn></span><a class="self-link" href="#after_doctype_system_identifier_state"></a></h4>
     <dd>
-      Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character④⑦">next input character</a>: 
+      Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character④⑧">next input character</a>: 
      <dl class="switch">
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)
-      <dt>U+000C FORM FEED (<code class="non-print">FF</code>)
       <dt>U+0020 SPACE (<code class="non-print">Space</code>)
       <dd>Ignore the character.
       <dt>U+003E GREATER-THAN SIGN(<code>></code>)
-      <dd>Switch to <a data-link-type="dfn" href="#data-state" id="ref-for-data-state⑤⑧">data state</a>. Emit current DOCTYPE token.
+      <dd>Switch to <a data-link-type="dfn" href="#data-state" id="ref-for-data-state⑤①">data state</a>. Emit current DOCTYPE token.
       <dt>EOF
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑦⑤">Parse error</a>. Switch to the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state⑤⑨">data state</a>. Emit DOCTYPE token. Reconsume the EOF character. 
+      <dd>This is a <a data-link-type="dfn" href="#eof-in-doctype" id="ref-for-eof-in-doctype①④">eof-in-doctype</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑦③">parse error</a>. Emit the current DOCTYPE token. Emit the end-of-file token. 
       <dt>Anything else
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑦⑥">Parse error</a>. Switch to <a data-link-type="dfn" href="#bogus-doctype-state" id="ref-for-bogus-doctype-state⑦">Bogus DOCTYPE state</a>.
+      <dd>This is a <a data-link-type="dfn" href="#missing-quote-before-identifier" id="ref-for-missing-quote-before-identifier⑥">missing-quote-before-identifier</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑦④">parse error</a>. Switch to <a data-link-type="dfn" href="#bogus-doctype-state" id="ref-for-bogus-doctype-state⑦">Bogus DOCTYPE state</a>.
      </dl>
     <h4 class="heading settled" data-level="1.4.53" id="bogus_doctype_state"><span class="secno">1.4.53. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="bogus-doctype-state">Bogus DOCTYPE state</dfn></span><a class="self-link" href="#bogus_doctype_state"></a></h4>
     <dd>
-      Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character④⑧">next input character</a>: 
+      Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character④⑨">next input character</a>: 
      <dl class="switch">
       <dt>U+003E GREATER-THAN SIGN(<code>></code>)
-      <dd>Switch to <a data-link-type="dfn" href="#data-state" id="ref-for-data-state⑥⓪">data state</a>. Emit DOCTYPE token.
+      <dd>Switch to <a data-link-type="dfn" href="#data-state" id="ref-for-data-state⑤②">data state</a>. Emit DOCTYPE token.
       <dt>EOF
-      <dd>Switch to the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state⑥①">data state</a>. Emit DOCTYPE token. Reconsume the EOF character.
+      <dd>Emit DOCTYPE token. Emit the end-of-file token.
       <dt>Anything else
       <dd>Ignore character.
      </dl>
@@ -3107,10 +3141,10 @@ that it becomes the new <a data-link-type="dfn" href="#current-element" id="ref-
        <p>Append a <code>ProcessingInstruction</code> node to the <code>Document</code> node with the <code>target</code> and <code>data</code> attributes set to the target and data given in the token.</p>
       <dt>An end-of-file token
       <dd>
-       <p><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑦⑦">Parse error</a>. Reprocess the token in the <a data-link-type="dfn" href="#end-phase" id="ref-for-end-phase①">end
+       <p><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑦⑤">Parse error</a>. Reprocess the token in the <a data-link-type="dfn" href="#end-phase" id="ref-for-end-phase①">end
                 phase</a>.</p>
       <dt>Anything else
-      <dd> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑦⑧">Parse error</a>. Ignore the token. 
+      <dd> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑦⑥">Parse error</a>. Ignore the token. 
      </dl>
     <dt><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="main-phase">Main phase</dfn>
     <dd>
@@ -3131,7 +3165,7 @@ that it becomes the new <a data-link-type="dfn" href="#current-element" id="ref-
       <dt>An end tag token
       <dd>
        <p>If the tag name of the <a href="current element">current node</a> does not match the tag
-                name of the end tag token this is a <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑦⑨">parse error</a>.</p>
+                name of the end tag token this is a <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑦⑦">parse error</a>.</p>
        <p>If there is an <a data-link-type="dfn" href="#element-in-scope" id="ref-for-element-in-scope">element in scope</a> with the same tag name as
                 that of the token pop nodes from the <a data-link-type="dfn" href="#stack-of-open-elements" id="ref-for-stack-of-open-elements③">stack of open elements</a> until the first such element has been popped from the stack.</p>
        <p>If there are no more elements on the stack of open elements at this point
@@ -3150,7 +3184,7 @@ that it becomes the new <a data-link-type="dfn" href="#current-element" id="ref-
                 element</a> with the <code>target</code> and <code>data</code> attributes
                 set to the target and data given in the token. 
       <dt>An end-of-file token
-      <dd> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑧⓪">Parse error</a>. Reprocess the token in the <a data-link-type="dfn" href="#end-phase" id="ref-for-end-phase④">end phase</a>. 
+      <dd> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑦⑧">Parse error</a>. Reprocess the token in the <a data-link-type="dfn" href="#end-phase" id="ref-for-end-phase④">end phase</a>. 
      </dl>
     <dt><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="end-phase">End phase</dfn>
      before 
@@ -3169,7 +3203,7 @@ that it becomes the new <a data-link-type="dfn" href="#current-element" id="ref-
        <p><a data-link-type="dfn" href="#stop-parsing" id="ref-for-stop-parsing">Stop parsing</a>.</p>
       <dt>Anything else
       <dd>
-       <p><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑧①">Parse error</a>. Ignore the token.</p>
+       <p><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error⑦⑨">Parse error</a>. Ignore the token.</p>
      </dl>
    </dl>
    <p>Once the user agent <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="stop parsing" data-noexport id="stop-parsing">stops parsing</dfn> the
@@ -3336,6 +3370,7 @@ that it becomes the new <a data-link-type="dfn" href="#current-element" id="ref-
   <h3 class="no-num no-ref heading settled" id="index-defined-here"><span class="content">Terms defined by this specification</span><a class="self-link" href="#index-defined-here"></a></h3>
   <ul class="index">
    <li><a href="#abrupt-closing-of-empty-comment">abrupt-closing-of-empty-comment</a><span>, in § 1.2</span>
+   <li><a href="#abrupt-doctype-identifier">abrupt-doctype-identifier</a><span>, in § 1.2</span>
    <li><a href="#additional-allowed-character">additional allowed character</a><span>, in § 1.4.37</span>
    <li><a href="#after-doctype-name-state">After DOCTYPE name state</a><span>, in § 1.4.41</span>
    <li><a href="#after-doctype-public-identifier-state">After DOCTYPE public identifier state</a><span>, in § 1.4.48</span>
@@ -3387,12 +3422,20 @@ that it becomes the new <a data-link-type="dfn" href="#current-element" id="ref-
    <li><a href="#end-tag-open-state">End tag open state</a><span>, in § 1.4.4</span>
    <li><a href="#eof-in-cdata">eof-in-cdata</a><span>, in § 1.2</span>
    <li><a href="#eof-in-comment">eof-in-comment</a><span>, in § 1.2</span>
+   <li><a href="#eof-in-doctype">eof-in-doctype</a><span>, in § 1.2</span>
    <li><a href="#eof-in-tag">eof-in-tag</a><span>, in § 1.2</span>
    <li><a href="#incorrectly-opened-comment">incorrectly-opened-comment</a><span>, in § 1.2</span>
    <li><a href="#insert-an-element">insert an element</a><span>, in § 1.5</span>
+   <li><a href="#invalid-characters-after-doctype">invalid-characters-after-doctype</a><span>, in § 1.2</span>
    <li><a href="#lowercase-ascii-letters">lowercase ASCII letters</a><span>, in § 3</span>
    <li><a href="#main-phase">Main phase</a><span>, in § 1.5</span>
    <li><a href="#markup-declaration-state">Markup declaration state</a><span>, in § 1.4.21</span>
+   <li><a href="#missing-doctype-identifier">missing-doctype-identifier</a><span>, in § 1.2</span>
+   <li><a href="#missing-doctype-name">missing-doctype-name</a><span>, in § 1.2</span>
+   <li><a href="#missing-quote-before-identifier">missing-quote-before-identifier</a><span>, in § 1.2</span>
+   <li><a href="#missing-whitespace-after-doctype-keyword">missing-whitespace-after-doctype-keyword</a><span>, in § 1.2</span>
+   <li><a href="#missing-whitespace-before-doctype-name-parse-error">missing-whitespace-before-doctype-name parse error</a><span>, in § 1.2</span>
+   <li><a href="#missing-whitespace-between-doctype-public-and-system-identifier">missing-whitespace-between-doctype-public-and-system-identifier</a><span>, in § 1.2</span>
    <li><a href="#next-input-character">next input character</a><span>, in § 1.4</span>
    <li><a href="#parse-error">parse error</a><span>, in § 1</span>
    <li><a href="#pi-after-state">Pi after state</a><span>, in § 1.4.20</span>
@@ -3442,33 +3485,34 @@ that it becomes the new <a data-link-type="dfn" href="#current-element" id="ref-
     <li><a href="#ref-for-parse-error①⑤">1.4.16. Pi state</a>
     <li><a href="#ref-for-parse-error①⑥">1.4.17. Pi target state</a>
     <li><a href="#ref-for-parse-error①⑦">1.4.19. Pi data state</a>
-    <li><a href="#ref-for-parse-error①⑧">1.4.22. Comment start state</a>
-    <li><a href="#ref-for-parse-error①⑨">1.4.23. Comment start dash state</a> <a href="#ref-for-parse-error②⓪">(2)</a>
-    <li><a href="#ref-for-parse-error②①">1.4.24. Comment state</a>
-    <li><a href="#ref-for-parse-error②②">1.4.28. Comment less-than sign bang dash dash state </a>
-    <li><a href="#ref-for-parse-error②③">1.4.29. Comment end dash state</a>
-    <li><a href="#ref-for-parse-error②④">1.4.30. Comment end state</a>
-    <li><a href="#ref-for-parse-error②⑤">1.4.31. Comment end bang state</a> <a href="#ref-for-parse-error②⑥">(2)</a>
-    <li><a href="#ref-for-parse-error②⑦">1.4.32. CDATA state</a>
-    <li><a href="#ref-for-parse-error②⑧">1.4.33. CDATA bracket state</a>
-    <li><a href="#ref-for-parse-error②⑨">1.4.34. CDATA end state</a>
-    <li><a href="#ref-for-parse-error③⓪">1.4.37. Tokenizing character references</a> <a href="#ref-for-parse-error③①">(2)</a> <a href="#ref-for-parse-error③②">(3)</a> <a href="#ref-for-parse-error③③">(4)</a> <a href="#ref-for-parse-error③④">(5)</a>
-    <li><a href="#ref-for-parse-error③⑤">1.4.38. DOCTYPE state</a> <a href="#ref-for-parse-error③⑥">(2)</a>
-    <li><a href="#ref-for-parse-error③⑦">1.4.39. Before DOCTYPE name state</a> <a href="#ref-for-parse-error③⑧">(2)</a>
-    <li><a href="#ref-for-parse-error③⑨">1.4.40. DOCTYPE name state</a>
-    <li><a href="#ref-for-parse-error④⓪">1.4.41. After DOCTYPE name state</a> <a href="#ref-for-parse-error④①">(2)</a>
-    <li><a href="#ref-for-parse-error④②">1.4.42. After DOCTYPE public keyword state</a> <a href="#ref-for-parse-error④③">(2)</a> <a href="#ref-for-parse-error④④">(3)</a> <a href="#ref-for-parse-error④⑤">(4)</a> <a href="#ref-for-parse-error④⑥">(5)</a>
-    <li><a href="#ref-for-parse-error④⑦">1.4.43. After DOCTYPE system keyword state</a> <a href="#ref-for-parse-error④⑧">(2)</a> <a href="#ref-for-parse-error④⑨">(3)</a> <a href="#ref-for-parse-error⑤⓪">(4)</a> <a href="#ref-for-parse-error⑤①">(5)</a>
-    <li><a href="#ref-for-parse-error⑤②">1.4.44. Before DOCTYPE system identifier state</a> <a href="#ref-for-parse-error⑤③">(2)</a> <a href="#ref-for-parse-error⑤④">(3)</a> <a href="#ref-for-parse-error⑤⑤">(4)</a>
-    <li><a href="#ref-for-parse-error⑤⑥">1.4.45. Before DOCTYPE public identifier state</a> <a href="#ref-for-parse-error⑤⑦">(2)</a> <a href="#ref-for-parse-error⑤⑧">(3)</a> <a href="#ref-for-parse-error⑤⑨">(4)</a> <a href="#ref-for-parse-error⑥⓪">(5)</a>
-    <li><a href="#ref-for-parse-error⑥①">1.4.46. DOCTYPE public identifier (single-quoted) state</a> <a href="#ref-for-parse-error⑥②">(2)</a>
-    <li><a href="#ref-for-parse-error⑥③">1.4.47. DOCTYPE public identifier (double-quoted) state</a> <a href="#ref-for-parse-error⑥④">(2)</a>
-    <li><a href="#ref-for-parse-error⑥⑤">1.4.48. After DOCTYPE public identifier state</a> <a href="#ref-for-parse-error⑥⑥">(2)</a> <a href="#ref-for-parse-error⑥⑦">(3)</a> <a href="#ref-for-parse-error⑥⑧">(4)</a>
-    <li><a href="#ref-for-parse-error⑥⑨">1.4.49. Between DOCTYPE public and system identifiers state</a> <a href="#ref-for-parse-error⑦⓪">(2)</a>
-    <li><a href="#ref-for-parse-error⑦①">1.4.50. DOCTYPE system identifier (single-quoted) state</a> <a href="#ref-for-parse-error⑦②">(2)</a>
-    <li><a href="#ref-for-parse-error⑦③">1.4.51. DOCTYPE system identifier (double-quoted) state</a> <a href="#ref-for-parse-error⑦④">(2)</a>
-    <li><a href="#ref-for-parse-error⑦⑤">1.4.52. After DOCTYPE system identifiers state</a> <a href="#ref-for-parse-error⑦⑥">(2)</a>
-    <li><a href="#ref-for-parse-error⑦⑦">1.5. Tree construction</a> <a href="#ref-for-parse-error⑦⑧">(2)</a> <a href="#ref-for-parse-error⑦⑨">(3)</a> <a href="#ref-for-parse-error⑧⓪">(4)</a> <a href="#ref-for-parse-error⑧①">(5)</a>
+    <li><a href="#ref-for-parse-error①⑧">1.4.21. Markup declaration state</a>
+    <li><a href="#ref-for-parse-error①⑨">1.4.22. Comment start state</a>
+    <li><a href="#ref-for-parse-error②⓪">1.4.23. Comment start dash state</a> <a href="#ref-for-parse-error②①">(2)</a>
+    <li><a href="#ref-for-parse-error②②">1.4.24. Comment state</a>
+    <li><a href="#ref-for-parse-error②③">1.4.28. Comment less-than sign bang dash dash state </a>
+    <li><a href="#ref-for-parse-error②④">1.4.29. Comment end dash state</a>
+    <li><a href="#ref-for-parse-error②⑤">1.4.30. Comment end state</a>
+    <li><a href="#ref-for-parse-error②⑥">1.4.31. Comment end bang state</a> <a href="#ref-for-parse-error②⑦">(2)</a>
+    <li><a href="#ref-for-parse-error②⑧">1.4.32. CDATA state</a>
+    <li><a href="#ref-for-parse-error②⑨">1.4.33. CDATA bracket state</a>
+    <li><a href="#ref-for-parse-error③⓪">1.4.34. CDATA end state</a>
+    <li><a href="#ref-for-parse-error③①">1.4.37. Tokenizing character references</a> <a href="#ref-for-parse-error③②">(2)</a> <a href="#ref-for-parse-error③③">(3)</a> <a href="#ref-for-parse-error③④">(4)</a> <a href="#ref-for-parse-error③⑤">(5)</a>
+    <li><a href="#ref-for-parse-error③⑥">1.4.38. DOCTYPE state</a> <a href="#ref-for-parse-error③⑦">(2)</a>
+    <li><a href="#ref-for-parse-error③⑧">1.4.39. Before DOCTYPE name state</a> <a href="#ref-for-parse-error③⑨">(2)</a>
+    <li><a href="#ref-for-parse-error④⓪">1.4.40. DOCTYPE name state</a>
+    <li><a href="#ref-for-parse-error④①">1.4.41. After DOCTYPE name state</a> <a href="#ref-for-parse-error④②">(2)</a>
+    <li><a href="#ref-for-parse-error④③">1.4.42. After DOCTYPE public keyword state</a> <a href="#ref-for-parse-error④④">(2)</a> <a href="#ref-for-parse-error④⑤">(3)</a> <a href="#ref-for-parse-error④⑥">(4)</a> <a href="#ref-for-parse-error④⑦">(5)</a>
+    <li><a href="#ref-for-parse-error④⑧">1.4.43. After DOCTYPE system keyword state</a> <a href="#ref-for-parse-error④⑨">(2)</a> <a href="#ref-for-parse-error⑤⓪">(3)</a> <a href="#ref-for-parse-error⑤①">(4)</a> <a href="#ref-for-parse-error⑤②">(5)</a>
+    <li><a href="#ref-for-parse-error⑤③">1.4.44. Before DOCTYPE system identifier state</a> <a href="#ref-for-parse-error⑤④">(2)</a> <a href="#ref-for-parse-error⑤⑤">(3)</a>
+    <li><a href="#ref-for-parse-error⑤⑥">1.4.45. Before DOCTYPE public identifier state</a> <a href="#ref-for-parse-error⑤⑦">(2)</a> <a href="#ref-for-parse-error⑤⑧">(3)</a>
+    <li><a href="#ref-for-parse-error⑤⑨">1.4.46. DOCTYPE public identifier (single-quoted) state</a> <a href="#ref-for-parse-error⑥⓪">(2)</a>
+    <li><a href="#ref-for-parse-error⑥①">1.4.47. DOCTYPE public identifier (double-quoted) state</a> <a href="#ref-for-parse-error⑥②">(2)</a>
+    <li><a href="#ref-for-parse-error⑥③">1.4.48. After DOCTYPE public identifier state</a> <a href="#ref-for-parse-error⑥④">(2)</a> <a href="#ref-for-parse-error⑥⑤">(3)</a> <a href="#ref-for-parse-error⑥⑥">(4)</a>
+    <li><a href="#ref-for-parse-error⑥⑦">1.4.49. Between DOCTYPE public and system identifiers state</a> <a href="#ref-for-parse-error⑥⑧">(2)</a>
+    <li><a href="#ref-for-parse-error⑥⑨">1.4.50. DOCTYPE system identifier (single-quoted) state</a> <a href="#ref-for-parse-error⑦⓪">(2)</a>
+    <li><a href="#ref-for-parse-error⑦①">1.4.51. DOCTYPE system identifier (double-quoted) state</a> <a href="#ref-for-parse-error⑦②">(2)</a>
+    <li><a href="#ref-for-parse-error⑦③">1.4.52. After DOCTYPE system identifiers state</a> <a href="#ref-for-parse-error⑦④">(2)</a>
+    <li><a href="#ref-for-parse-error⑦⑤">1.5. Tree construction</a> <a href="#ref-for-parse-error⑦⑥">(2)</a> <a href="#ref-for-parse-error⑦⑦">(3)</a> <a href="#ref-for-parse-error⑦⑧">(4)</a> <a href="#ref-for-parse-error⑦⑨">(5)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="abrupt-closing-of-empty-comment">
@@ -3478,10 +3522,23 @@ that it becomes the new <a data-link-type="dfn" href="#current-element" id="ref-
     <li><a href="#ref-for-abrupt-closing-of-empty-comment①">1.4.23. Comment start dash state</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="abrupt-doctype-identifier">
+   <b><a href="#abrupt-doctype-identifier">#abrupt-doctype-identifier</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-abrupt-doctype-identifier">1.4.46. DOCTYPE public identifier (single-quoted) state</a>
+    <li><a href="#ref-for-abrupt-doctype-identifier①">1.4.47. DOCTYPE public identifier (double-quoted) state</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="colon-before-attr">
    <b><a href="#colon-before-attr">#colon-before-attr</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-colon-before-attr">1.4.9. Tag attribute name before state</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="eof-in-cdata">
+   <b><a href="#eof-in-cdata">#eof-in-cdata</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-eof-in-cdata">1.4.19. Pi data state</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="eof-in-comment">
@@ -3491,10 +3548,24 @@ that it becomes the new <a data-link-type="dfn" href="#current-element" id="ref-
     <li><a href="#ref-for-eof-in-comment①">1.4.24. Comment state</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="eof-in-cdata">
-   <b><a href="#eof-in-cdata">#eof-in-cdata</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="eof-in-doctype">
+   <b><a href="#eof-in-doctype">#eof-in-doctype</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-eof-in-cdata">1.4.19. Pi data state</a>
+    <li><a href="#ref-for-eof-in-doctype">1.4.38. DOCTYPE state</a>
+    <li><a href="#ref-for-eof-in-doctype①">1.4.39. Before DOCTYPE name state</a>
+    <li><a href="#ref-for-eof-in-doctype②">1.4.40. DOCTYPE name state</a>
+    <li><a href="#ref-for-eof-in-doctype③">1.4.41. After DOCTYPE name state</a>
+    <li><a href="#ref-for-eof-in-doctype④">1.4.42. After DOCTYPE public keyword state</a>
+    <li><a href="#ref-for-eof-in-doctype⑤">1.4.43. After DOCTYPE system keyword state</a>
+    <li><a href="#ref-for-eof-in-doctype⑥">1.4.44. Before DOCTYPE system identifier state</a>
+    <li><a href="#ref-for-eof-in-doctype⑦">1.4.45. Before DOCTYPE public identifier state</a>
+    <li><a href="#ref-for-eof-in-doctype⑧">1.4.46. DOCTYPE public identifier (single-quoted) state</a>
+    <li><a href="#ref-for-eof-in-doctype⑨">1.4.47. DOCTYPE public identifier (double-quoted) state</a>
+    <li><a href="#ref-for-eof-in-doctype①⓪">1.4.48. After DOCTYPE public identifier state</a>
+    <li><a href="#ref-for-eof-in-doctype①①">1.4.49. Between DOCTYPE public and system identifiers state</a>
+    <li><a href="#ref-for-eof-in-doctype①②">1.4.50. DOCTYPE system identifier (single-quoted) state</a>
+    <li><a href="#ref-for-eof-in-doctype①③">1.4.51. DOCTYPE system identifier (double-quoted) state</a>
+    <li><a href="#ref-for-eof-in-doctype①④">1.4.52. After DOCTYPE system identifiers state</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="eof-in-tag">
@@ -3504,12 +3575,68 @@ that it becomes the new <a data-link-type="dfn" href="#current-element" id="ref-
     <li><a href="#ref-for-eof-in-tag①">1.4.9. Tag attribute name before state</a>
     <li><a href="#ref-for-eof-in-tag②">1.4.10. Tag attribute name state</a>
     <li><a href="#ref-for-eof-in-tag③">1.4.11. Tag attribute name after state</a>
+    <li><a href="#ref-for-eof-in-tag④">1.4.12. Tag attribute value before state</a>
+    <li><a href="#ref-for-eof-in-tag⑤">1.4.13. Tag attribute value double quoted state</a>
+    <li><a href="#ref-for-eof-in-tag⑥">1.4.14. Tag attribute value single quoted state</a>
+    <li><a href="#ref-for-eof-in-tag⑦">1.4.15. Tag attribute value unquoted state</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="incorrectly-opened-comment">
    <b><a href="#incorrectly-opened-comment">#incorrectly-opened-comment</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-incorrectly-opened-comment">1.4.21. Markup declaration state</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="invalid-characters-after-doctype">
+   <b><a href="#invalid-characters-after-doctype">#invalid-characters-after-doctype</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-invalid-characters-after-doctype">1.4.41. After DOCTYPE name state</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="missing-doctype-identifier">
+   <b><a href="#missing-doctype-identifier">#missing-doctype-identifier</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-missing-doctype-identifier">1.4.42. After DOCTYPE public keyword state</a>
+    <li><a href="#ref-for-missing-doctype-identifier①">1.4.43. After DOCTYPE system keyword state</a>
+    <li><a href="#ref-for-missing-doctype-identifier②">1.4.44. Before DOCTYPE system identifier state</a>
+    <li><a href="#ref-for-missing-doctype-identifier③">1.4.45. Before DOCTYPE public identifier state</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="missing-quote-before-identifier">
+   <b><a href="#missing-quote-before-identifier">#missing-quote-before-identifier</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-missing-quote-before-identifier">1.4.42. After DOCTYPE public keyword state</a>
+    <li><a href="#ref-for-missing-quote-before-identifier①">1.4.43. After DOCTYPE system keyword state</a>
+    <li><a href="#ref-for-missing-quote-before-identifier②">1.4.44. Before DOCTYPE system identifier state</a>
+    <li><a href="#ref-for-missing-quote-before-identifier③">1.4.45. Before DOCTYPE public identifier state</a>
+    <li><a href="#ref-for-missing-quote-before-identifier④">1.4.48. After DOCTYPE public identifier state</a>
+    <li><a href="#ref-for-missing-quote-before-identifier⑤">1.4.49. Between DOCTYPE public and system identifiers state</a>
+    <li><a href="#ref-for-missing-quote-before-identifier⑥">1.4.52. After DOCTYPE system identifiers state</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="missing-whitespace-after-doctype-keyword">
+   <b><a href="#missing-whitespace-after-doctype-keyword">#missing-whitespace-after-doctype-keyword</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-missing-whitespace-after-doctype-keyword">1.4.42. After DOCTYPE public keyword state</a> <a href="#ref-for-missing-whitespace-after-doctype-keyword①">(2)</a>
+    <li><a href="#ref-for-missing-whitespace-after-doctype-keyword②">1.4.43. After DOCTYPE system keyword state</a> <a href="#ref-for-missing-whitespace-after-doctype-keyword③">(2)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="missing-whitespace-before-doctype-name-parse-error">
+   <b><a href="#missing-whitespace-before-doctype-name-parse-error">#missing-whitespace-before-doctype-name-parse-error</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-missing-whitespace-before-doctype-name-parse-error">1.4.38. DOCTYPE state</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="missing-whitespace-between-doctype-public-and-system-identifier">
+   <b><a href="#missing-whitespace-between-doctype-public-and-system-identifier">#missing-whitespace-between-doctype-public-and-system-identifier</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-missing-whitespace-between-doctype-public-and-system-identifier">1.4.48. After DOCTYPE public identifier state</a> <a href="#ref-for-missing-whitespace-between-doctype-public-and-system-identifier①">(2)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="missing-doctype-name">
+   <b><a href="#missing-doctype-name">#missing-doctype-name</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-missing-doctype-name">1.4.39. Before DOCTYPE name state</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="tokenization">
@@ -3567,22 +3694,23 @@ that it becomes the new <a data-link-type="dfn" href="#current-element" id="ref-
     <li><a href="#ref-for-next-input-character③⓪">1.4.32. CDATA state</a>
     <li><a href="#ref-for-next-input-character③①">1.4.33. CDATA bracket state</a>
     <li><a href="#ref-for-next-input-character③②">1.4.34. CDATA end state</a>
-    <li><a href="#ref-for-next-input-character③③">1.4.38. DOCTYPE state</a>
-    <li><a href="#ref-for-next-input-character③④">1.4.39. Before DOCTYPE name state</a>
-    <li><a href="#ref-for-next-input-character③⑤">1.4.40. DOCTYPE name state</a>
-    <li><a href="#ref-for-next-input-character③⑥">1.4.41. After DOCTYPE name state</a>
-    <li><a href="#ref-for-next-input-character③⑦">1.4.42. After DOCTYPE public keyword state</a>
-    <li><a href="#ref-for-next-input-character③⑧">1.4.43. After DOCTYPE system keyword state</a>
-    <li><a href="#ref-for-next-input-character③⑨">1.4.44. Before DOCTYPE system identifier state</a>
-    <li><a href="#ref-for-next-input-character④⓪">1.4.45. Before DOCTYPE public identifier state</a>
-    <li><a href="#ref-for-next-input-character④①">1.4.46. DOCTYPE public identifier (single-quoted) state</a>
-    <li><a href="#ref-for-next-input-character④②">1.4.47. DOCTYPE public identifier (double-quoted) state</a>
-    <li><a href="#ref-for-next-input-character④③">1.4.48. After DOCTYPE public identifier state</a>
-    <li><a href="#ref-for-next-input-character④④">1.4.49. Between DOCTYPE public and system identifiers state</a>
-    <li><a href="#ref-for-next-input-character④⑤">1.4.50. DOCTYPE system identifier (single-quoted) state</a>
-    <li><a href="#ref-for-next-input-character④⑥">1.4.51. DOCTYPE system identifier (double-quoted) state</a>
-    <li><a href="#ref-for-next-input-character④⑦">1.4.52. After DOCTYPE system identifiers state</a>
-    <li><a href="#ref-for-next-input-character④⑧">1.4.53. Bogus DOCTYPE state</a>
+    <li><a href="#ref-for-next-input-character③③">1.4.36. Bogus comment state</a>
+    <li><a href="#ref-for-next-input-character③④">1.4.38. DOCTYPE state</a>
+    <li><a href="#ref-for-next-input-character③⑤">1.4.39. Before DOCTYPE name state</a>
+    <li><a href="#ref-for-next-input-character③⑥">1.4.40. DOCTYPE name state</a>
+    <li><a href="#ref-for-next-input-character③⑦">1.4.41. After DOCTYPE name state</a>
+    <li><a href="#ref-for-next-input-character③⑧">1.4.42. After DOCTYPE public keyword state</a>
+    <li><a href="#ref-for-next-input-character③⑨">1.4.43. After DOCTYPE system keyword state</a>
+    <li><a href="#ref-for-next-input-character④⓪">1.4.44. Before DOCTYPE system identifier state</a>
+    <li><a href="#ref-for-next-input-character④①">1.4.45. Before DOCTYPE public identifier state</a>
+    <li><a href="#ref-for-next-input-character④②">1.4.46. DOCTYPE public identifier (single-quoted) state</a>
+    <li><a href="#ref-for-next-input-character④③">1.4.47. DOCTYPE public identifier (double-quoted) state</a>
+    <li><a href="#ref-for-next-input-character④④">1.4.48. After DOCTYPE public identifier state</a>
+    <li><a href="#ref-for-next-input-character④⑤">1.4.49. Between DOCTYPE public and system identifiers state</a>
+    <li><a href="#ref-for-next-input-character④⑥">1.4.50. DOCTYPE system identifier (single-quoted) state</a>
+    <li><a href="#ref-for-next-input-character④⑦">1.4.51. DOCTYPE system identifier (double-quoted) state</a>
+    <li><a href="#ref-for-next-input-character④⑧">1.4.52. After DOCTYPE system identifiers state</a>
+    <li><a href="#ref-for-next-input-character④⑨">1.4.53. Bogus DOCTYPE state</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="current-input-character">
@@ -3591,6 +3719,8 @@ that it becomes the new <a data-link-type="dfn" href="#current-element" id="ref-
     <li><a href="#ref-for-current-input-character">1.4.1. Data state</a>
     <li><a href="#ref-for-current-input-character①">1.4.24. Comment state</a>
     <li><a href="#ref-for-current-input-character②">1.4.25. Comment less-than sign state</a> <a href="#ref-for-current-input-character③">(2)</a>
+    <li><a href="#ref-for-current-input-character④">1.4.36. Bogus comment state</a>
+    <li><a href="#ref-for-current-input-character⑤">1.4.40. DOCTYPE name state</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="data-state">
@@ -3605,38 +3735,36 @@ that it becomes the new <a data-link-type="dfn" href="#current-element" id="ref-
     <li><a href="#ref-for-data-state①⓪">1.4.8. Empty tag state</a>
     <li><a href="#ref-for-data-state①①">1.4.9. Tag attribute name before state</a> <a href="#ref-for-data-state①②">(2)</a>
     <li><a href="#ref-for-data-state①③">1.4.10. Tag attribute name state</a> <a href="#ref-for-data-state①④">(2)</a>
-    <li><a href="#ref-for-data-state①⑤">1.4.11. Tag attribute name after state</a>
-    <li><a href="#ref-for-data-state①⑥">1.4.12. Tag attribute value before state</a> <a href="#ref-for-data-state①⑦">(2)</a>
-    <li><a href="#ref-for-data-state①⑧">1.4.13. Tag attribute value double quoted state</a>
-    <li><a href="#ref-for-data-state①⑨">1.4.14. Tag attribute value single quoted state</a>
-    <li><a href="#ref-for-data-state②⓪">1.4.15. Tag attribute value unquoted state</a> <a href="#ref-for-data-state②①">(2)</a>
-    <li><a href="#ref-for-data-state②②">1.4.17. Pi target state</a>
-    <li><a href="#ref-for-data-state②③">1.4.19. Pi data state</a>
-    <li><a href="#ref-for-data-state②④">1.4.20. Pi after state</a>
-    <li><a href="#ref-for-data-state②⑤">1.4.22. Comment start state</a>
-    <li><a href="#ref-for-data-state②⑥">1.4.23. Comment start dash state</a>
-    <li><a href="#ref-for-data-state②⑦">1.4.30. Comment end state</a>
-    <li><a href="#ref-for-data-state②⑧">1.4.31. Comment end bang state</a>
-    <li><a href="#ref-for-data-state②⑨">1.4.32. CDATA state</a>
-    <li><a href="#ref-for-data-state③⓪">1.4.33. CDATA bracket state</a>
-    <li><a href="#ref-for-data-state③①">1.4.34. CDATA end state</a> <a href="#ref-for-data-state③②">(2)</a>
-    <li><a href="#ref-for-data-state③③">1.4.36. Bogus comment state</a>
-    <li><a href="#ref-for-data-state③④">1.4.38. DOCTYPE state</a>
-    <li><a href="#ref-for-data-state③⑤">1.4.39. Before DOCTYPE name state</a> <a href="#ref-for-data-state③⑥">(2)</a>
-    <li><a href="#ref-for-data-state③⑦">1.4.40. DOCTYPE name state</a> <a href="#ref-for-data-state③⑧">(2)</a>
+    <li><a href="#ref-for-data-state①⑤">1.4.11. Tag attribute name after state</a> <a href="#ref-for-data-state①⑥">(2)</a>
+    <li><a href="#ref-for-data-state①⑦">1.4.12. Tag attribute value before state</a> <a href="#ref-for-data-state①⑧">(2)</a>
+    <li><a href="#ref-for-data-state①⑨">1.4.13. Tag attribute value double quoted state</a>
+    <li><a href="#ref-for-data-state②⓪">1.4.14. Tag attribute value single quoted state</a>
+    <li><a href="#ref-for-data-state②①">1.4.15. Tag attribute value unquoted state</a> <a href="#ref-for-data-state②②">(2)</a>
+    <li><a href="#ref-for-data-state②③">1.4.17. Pi target state</a>
+    <li><a href="#ref-for-data-state②④">1.4.19. Pi data state</a>
+    <li><a href="#ref-for-data-state②⑤">1.4.20. Pi after state</a>
+    <li><a href="#ref-for-data-state②⑥">1.4.22. Comment start state</a>
+    <li><a href="#ref-for-data-state②⑦">1.4.23. Comment start dash state</a>
+    <li><a href="#ref-for-data-state②⑧">1.4.30. Comment end state</a>
+    <li><a href="#ref-for-data-state②⑨">1.4.31. Comment end bang state</a>
+    <li><a href="#ref-for-data-state③⓪">1.4.32. CDATA state</a>
+    <li><a href="#ref-for-data-state③①">1.4.33. CDATA bracket state</a>
+    <li><a href="#ref-for-data-state③②">1.4.34. CDATA end state</a> <a href="#ref-for-data-state③③">(2)</a>
+    <li><a href="#ref-for-data-state③④">1.4.36. Bogus comment state</a>
+    <li><a href="#ref-for-data-state③⑤">1.4.38. DOCTYPE state</a>
+    <li><a href="#ref-for-data-state③⑥">1.4.39. Before DOCTYPE name state</a> <a href="#ref-for-data-state③⑦">(2)</a>
+    <li><a href="#ref-for-data-state③⑧">1.4.40. DOCTYPE name state</a>
     <li><a href="#ref-for-data-state③⑨">1.4.41. After DOCTYPE name state</a>
-    <li><a href="#ref-for-data-state④⓪">1.4.42. After DOCTYPE public keyword state</a>
-    <li><a href="#ref-for-data-state④①">1.4.43. After DOCTYPE system keyword state</a>
-    <li><a href="#ref-for-data-state④②">1.4.44. Before DOCTYPE system identifier state</a> <a href="#ref-for-data-state④③">(2)</a>
-    <li><a href="#ref-for-data-state④④">1.4.45. Before DOCTYPE public identifier state</a> <a href="#ref-for-data-state④⑤">(2)</a>
-    <li><a href="#ref-for-data-state④⑥">1.4.46. DOCTYPE public identifier (single-quoted) state</a> <a href="#ref-for-data-state④⑦">(2)</a>
-    <li><a href="#ref-for-data-state④⑧">1.4.47. DOCTYPE public identifier (double-quoted) state</a> <a href="#ref-for-data-state④⑨">(2)</a>
-    <li><a href="#ref-for-data-state⑤⓪">1.4.48. After DOCTYPE public identifier state</a> <a href="#ref-for-data-state⑤①">(2)</a>
-    <li><a href="#ref-for-data-state⑤②">1.4.49. Between DOCTYPE public and system identifiers state</a> <a href="#ref-for-data-state⑤③">(2)</a>
-    <li><a href="#ref-for-data-state⑤④">1.4.50. DOCTYPE system identifier (single-quoted) state</a> <a href="#ref-for-data-state⑤⑤">(2)</a>
-    <li><a href="#ref-for-data-state⑤⑥">1.4.51. DOCTYPE system identifier (double-quoted) state</a> <a href="#ref-for-data-state⑤⑦">(2)</a>
-    <li><a href="#ref-for-data-state⑤⑧">1.4.52. After DOCTYPE system identifiers state</a> <a href="#ref-for-data-state⑤⑨">(2)</a>
-    <li><a href="#ref-for-data-state⑥⓪">1.4.53. Bogus DOCTYPE state</a> <a href="#ref-for-data-state⑥①">(2)</a>
+    <li><a href="#ref-for-data-state④⓪">1.4.44. Before DOCTYPE system identifier state</a> <a href="#ref-for-data-state④①">(2)</a>
+    <li><a href="#ref-for-data-state④②">1.4.45. Before DOCTYPE public identifier state</a> <a href="#ref-for-data-state④③">(2)</a>
+    <li><a href="#ref-for-data-state④④">1.4.46. DOCTYPE public identifier (single-quoted) state</a> <a href="#ref-for-data-state④⑤">(2)</a>
+    <li><a href="#ref-for-data-state④⑥">1.4.47. DOCTYPE public identifier (double-quoted) state</a>
+    <li><a href="#ref-for-data-state④⑦">1.4.48. After DOCTYPE public identifier state</a>
+    <li><a href="#ref-for-data-state④⑧">1.4.49. Between DOCTYPE public and system identifiers state</a>
+    <li><a href="#ref-for-data-state④⑨">1.4.50. DOCTYPE system identifier (single-quoted) state</a>
+    <li><a href="#ref-for-data-state⑤⓪">1.4.51. DOCTYPE system identifier (double-quoted) state</a>
+    <li><a href="#ref-for-data-state⑤①">1.4.52. After DOCTYPE system identifiers state</a>
+    <li><a href="#ref-for-data-state⑤②">1.4.53. Bogus DOCTYPE state</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="character-reference-in-data-state">
