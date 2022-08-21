@@ -308,8 +308,8 @@ input. The <dfn>current input character</dfn> is the last character to have been
 
             <dt>Anything else</dt>
 
-            <dd>Create a new tag token and set its name to the input character, then
-                switch to the <a>tag name state</a>.
+            <dd>Create a new tag token, then <a>reconsume</a> <a>current input character</a>
+                in <a>tag name state</a>.
             </dd>
         </dl>
     </dd>
@@ -335,14 +335,13 @@ input. The <dfn>current input character</dfn> is the last character to have been
             <dt>EOF</dt>
 
             <dd><a>Parse error</a>. Emit a U+003C LESSER-THAN SIGN (<code>&lt;</code>) character
-                token and a U+002F SOLIDUS (<code>/</code>) character token. Reconsume the current
-                input character in the <a>data state</a>.
+                token and a U+002F SOLIDUS (<code>/</code>) character token. Reconsume the <a>current
+                input character</a> in the <a>data state</a>.
             </dd>
 
             <dt>Anything else</dt>
 
-            <dd>Create an end tag token and set its name to the input character, then
-                switch to the <a>end tag name state</a>.
+            <dd>Create an end tag token, then reconsume the <a>current input character</a> in the <a>end tag name state</a>.
             </dd>
         </dl>
     </dd>
@@ -369,7 +368,7 @@ input. The <dfn>current input character</dfn> is the last character to have been
             </dd>
 
             <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
-            <dd>Emit the current token and then switch to the <a>data
+            <dd>Emit the end tag token and then switch to the <a>data
                 state</a>.
             </dd>
             <dt>Anything else</dt>
@@ -388,7 +387,7 @@ input. The <dfn>current input character</dfn> is the last character to have been
         Consume the <a>next input character</a>:
         <dl class="switch">
             <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
-            <dd>Emit the current token and then switch to the <a>data state</a>.</dd>
+            <dd>Emit the end tag token and then switch to the <a>data state</a>.</dd>
 
             <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
             <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
@@ -724,8 +723,7 @@ input. The <dfn>current input character</dfn> is the last character to have been
             </dd>
 
             <dt>Anything else</dt>
-            <dd>Create a new processing instruction token. Set target to the current
-                input character and data to the empty string. Then switch to the <a>pi
+            <dd>Create a new processing instruction token. <a>Reconsume</a> current character in <a>pi
                     target state</a>.
             </dd>
         </dl>

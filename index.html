@@ -1488,7 +1488,7 @@ Possible extra rowspan handling
 	}
 </style>
   <meta content="Bikeshed version dfbc2b297, updated Thu Nov 11 15:52:32 2021 -0800" name="generator">
-  <meta content="23430e0f18ee674fc8a4c4f44bcecc3d6e8e3bc0" name="document-revision">
+  <meta content="ba26fd2a4a61e8171e923db37bfad0f6624f0556" name="document-revision">
 <style>
     switch {
         padding-left: 2em;
@@ -1980,7 +1980,7 @@ dfn > a.self-link::before      { content: "#"; }
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">XML5 Standard</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Living Standard, <time class="dt-updated" datetime="2022-08-03">3 August 2022</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Living Standard, <time class="dt-updated" datetime="2022-08-22">22 August 2022</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>Issue Tracking:
@@ -1993,7 +1993,7 @@ dfn > a.self-link::before      { content: "#"; }
    <div data-fill-with="warning"></div>
    <p class="copyright" data-fill-with="copyright"><a href="http://creativecommons.org/publicdomain/zero/1.0/" rel="license"><img alt="CC0" height="15" src="https://licensebuttons.net/p/zero/1.0/80x15.png" width="80"></a> To the extent possible under law, the editors have waived all copyright
 and related or neighboring rights to this work.
-In addition, as of 3 August 2022,
+In addition, as of 22 August 2022,
 the editors have made this specification available under the <a href="http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0" rel="license">Open Web Foundation Agreement Version 1.0</a>,
 which is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.
 Parts of this work may be from another specification document.  If so, those parts are instead covered by the license of that specification document. </p>
@@ -2235,8 +2235,7 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
       <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error">Parse error</a>. Emit a U+003C LESSER-THAN SIGN (<code>&lt;</code>) character.
                 Reconsume the current input character in the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state①">data state</a>. 
       <dt>Anything else
-      <dd>Create a new tag token and set its name to the input character, then
-                switch to the <a data-link-type="dfn" href="#tag-name-state" id="ref-for-tag-name-state">tag name state</a>. 
+      <dd>Create a new tag token, then <a data-link-type="dfn" href="#reconsume" id="ref-for-reconsume">reconsume</a> <a data-link-type="dfn" href="#current-input-character" id="ref-for-current-input-character①">current input character</a> in <a data-link-type="dfn" href="#tag-name-state" id="ref-for-tag-name-state">tag name state</a>. 
      </dl>
     <h4 class="heading settled" data-level="1.4.4" id="end_tag_open_state"><span class="secno">1.4.4. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="end-tag-open-state">End tag open state</dfn></span><a class="self-link" href="#end_tag_open_state"></a></h4>
     <dd>
@@ -2252,11 +2251,10 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
       <dt>U+003A (<code>:</code>)
       <dt>EOF
       <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error①">Parse error</a>. Emit a U+003C LESSER-THAN SIGN (<code>&lt;</code>) character
-                token and a U+002F SOLIDUS (<code>/</code>) character token. Reconsume the current
-                input character in the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state③">data state</a>. 
+                token and a U+002F SOLIDUS (<code>/</code>) character token. Reconsume the <a data-link-type="dfn" href="#current-input-character" id="ref-for-current-input-character②">current
+                input character</a> in the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state③">data state</a>. 
       <dt>Anything else
-      <dd>Create an end tag token and set its name to the input character, then
-                switch to the <a data-link-type="dfn" href="#end-tag-name-state" id="ref-for-end-tag-name-state">end tag name state</a>. 
+      <dd>Create an end tag token, then reconsume the <a data-link-type="dfn" href="#current-input-character" id="ref-for-current-input-character③">current input character</a> in the <a data-link-type="dfn" href="#end-tag-name-state" id="ref-for-end-tag-name-state">end tag name state</a>. 
      </dl>
     <h4 class="heading settled" data-level="1.4.5" id="end_stag_name_state"><span class="secno">1.4.5. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="end-tag-name-state">End tag name state</dfn></span><a class="self-link" href="#end_stag_name_state"></a></h4>
     <dd>
@@ -2272,7 +2270,7 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
       <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error③">Parse error</a>. Emit the start tag token and then reprocess the
                 current input character in the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state④">data state</a>. 
       <dt>U+003E GREATER-THAN SIGN (<code>></code>)
-      <dd>Emit the current token and then switch to the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state⑤">data
+      <dd>Emit the end tag token and then switch to the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state⑤">data
                 state</a>. 
       <dt>Anything else
       <dd>Append the current input character to the tag name and stay in the
@@ -2283,7 +2281,7 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
      <p>Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character④">next input character</a>:</p>
      <dl class="switch">
       <dt>U+003E GREATER-THAN SIGN (<code>></code>)
-      <dd>Emit the current token and then switch to the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state⑥">data state</a>.
+      <dd>Emit the end tag token and then switch to the <a data-link-type="dfn" href="#data-state" id="ref-for-data-state⑥">data state</a>.
       <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)
       <dt>U+000A LINE FEED (<code class="non-print">LF</code>)
       <dt>U+0020 SPACE (<code class="non-print">Space</code>)
@@ -2478,8 +2476,7 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
       <dt>EOF
       <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error①⑤">Parse error</a>. Reprocess the current input character in the <a data-link-type="dfn" href="#bogus-comment-state" id="ref-for-bogus-comment-state">bogus comment state</a>. 
       <dt>Anything else
-      <dd>Create a new processing instruction token. Set target to the current
-                input character and data to the empty string. Then switch to the <a data-link-type="dfn" href="#pi-target-state" id="ref-for-pi-target-state">pi
+      <dd>Create a new processing instruction token. <a data-link-type="dfn" href="#reconsume" id="ref-for-reconsume①">Reconsume</a> current character in <a data-link-type="dfn" href="#pi-target-state" id="ref-for-pi-target-state">pi
                     target state</a>. 
      </dl>
     <h4 class="heading settled" data-level="1.4.17" id="pi_target_state"><span class="secno">1.4.17. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="pi-target-state">Pi target state</dfn></span><a class="self-link" href="#pi_target_state"></a></h4>
@@ -2564,7 +2561,7 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
       <dd>This is an <a data-link-type="dfn" href="#abrupt-closing-of-empty-comment" id="ref-for-abrupt-closing-of-empty-comment">abrupt-closing-of-empty-comment</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error①⑨">parse error</a>. Switch to <a data-link-type="dfn" href="#data-state" id="ref-for-data-state②⑥">data state</a>.
                 Emit the current comment token. 
       <dt>Anything else
-      <dd><a data-link-type="dfn" href="#reconsume" id="ref-for-reconsume">Reconsume</a> in the <a data-link-type="dfn" href="#comment-state" id="ref-for-comment-state">comment state</a>
+      <dd><a data-link-type="dfn" href="#reconsume" id="ref-for-reconsume②">Reconsume</a> in the <a data-link-type="dfn" href="#comment-state" id="ref-for-comment-state">comment state</a>
      </dl>
     <h4 class="heading settled" data-level="1.4.23" id="comment_start_dash_state"><span class="secno">1.4.23. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="comment-start-dash-state">Comment start dash state</dfn></span><a class="self-link" href="#comment_start_dash_state"></a></h4>
     <dd>
@@ -2578,14 +2575,14 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
       <dt>EOF
       <dd>This is an <a data-link-type="dfn" href="#eof-in-comment" id="ref-for-eof-in-comment">eof-in-comment</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error②①">parse error</a>. Emit the comment token. Emit an end-of-file-token. 
       <dt>Anything else
-      <dd>Append a U+002D HYPHEN-MINUS character (<code>-</code>) to the comment token’s data. <a data-link-type="dfn" href="#reconsume" id="ref-for-reconsume①">Reconsume</a> in the comment state. 
+      <dd>Append a U+002D HYPHEN-MINUS character (<code>-</code>) to the comment token’s data. <a data-link-type="dfn" href="#reconsume" id="ref-for-reconsume③">Reconsume</a> in the comment state. 
      </dl>
     <h4 class="heading settled" data-level="1.4.24" id="comment_state"><span class="secno">1.4.24. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="comment-state">Comment state</dfn></span><a class="self-link" href="#comment_state"></a></h4>
     <dd>
      <p>Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character②①">next input character</a>:</p>
      <dl class="switch">
       <dt>U+003C LESS-THAN SIGN (<code>&lt;</code>)
-      <dd>Append the <a data-link-type="dfn" href="#current-input-character" id="ref-for-current-input-character①">current input character</a> to the comment tokens' date.
+      <dd>Append the <a data-link-type="dfn" href="#current-input-character" id="ref-for-current-input-character④">current input character</a> to the comment tokens' date.
                 Switch to the <a data-link-type="dfn" href="#comment-less-than-sign-state" id="ref-for-comment-less-than-sign-state">comment less-than sign state</a>. 
       <dt>U+002D HYPHEN-MINUS (<code>-</code>)
       <dd>Switch to the <a data-link-type="dfn" href="#comment-end-dash-state" id="ref-for-comment-end-dash-state">comment end dash state</a>.
@@ -2600,12 +2597,12 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
      <p>Consume the <a data-link-type="dfn" href="#next-input-character" id="ref-for-next-input-character②③">next input character</a>:</p>
      <dl class="switch">
       <dt>U+0021 EXCLAMATION-MARK (<code>!</code>)
-      <dd>Append the <a data-link-type="dfn" href="#current-input-character" id="ref-for-current-input-character②">current input character</a> to the comment token’s data.
+      <dd>Append the <a data-link-type="dfn" href="#current-input-character" id="ref-for-current-input-character⑤">current input character</a> to the comment token’s data.
                 Switch to the <a data-link-type="dfn" href="#comment-less-than-sign-bang-state" id="ref-for-comment-less-than-sign-bang-state">comment less-than sign bang state</a>. 
       <dt>U+003C LESS-THAN SIGN (<code>&lt;</code>)
-      <dd>Append the <a data-link-type="dfn" href="#current-input-character" id="ref-for-current-input-character③">current input character</a> to the comment token’s data. 
+      <dd>Append the <a data-link-type="dfn" href="#current-input-character" id="ref-for-current-input-character⑥">current input character</a> to the comment token’s data. 
       <dt>Anything else
-      <dd><a data-link-type="dfn" href="#reconsume" id="ref-for-reconsume②">Reconsume</a> in the <a data-link-type="dfn" href="#comment-state" id="ref-for-comment-state①">comment state</a>.
+      <dd><a data-link-type="dfn" href="#reconsume" id="ref-for-reconsume④">Reconsume</a> in the <a data-link-type="dfn" href="#comment-state" id="ref-for-comment-state①">comment state</a>.
      </dl>
     <h4 class="heading settled" data-level="1.4.26" id="comment_less_than_sign_bang_state"><span class="secno">1.4.26. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="comment-less-than-sign-bang-state">Comment less-than sign bang state</dfn></span><a class="self-link" href="#comment_less_than_sign_bang_state"></a></h4>
     <dd>
@@ -2614,7 +2611,7 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
       <dt>U+002D HYPHEN-MINUS (<code>-</code>)
       <dd>Switch to the <a data-link-type="dfn" href="#comment-less-than-sign-bang-dash-state" id="ref-for-comment-less-than-sign-bang-dash-state">comment less-than sign bang dash state</a>.
       <dt>Anything else
-      <dd><a data-link-type="dfn" href="#reconsume" id="ref-for-reconsume③">Reconsume</a> in the <a data-link-type="dfn" href="#comment-state" id="ref-for-comment-state②">comment state</a>.
+      <dd><a data-link-type="dfn" href="#reconsume" id="ref-for-reconsume⑤">Reconsume</a> in the <a data-link-type="dfn" href="#comment-state" id="ref-for-comment-state②">comment state</a>.
      </dl>
     <h4 class="heading settled" data-level="1.4.27" id="comment_less_than_sign_bang_dash_state"><span class="secno">1.4.27. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="comment-less-than-sign-bang-dash-state">Comment less-than sign bang dash state</dfn></span><a class="self-link" href="#comment_less_than_sign_bang_dash_state"></a></h4>
     <dd>
@@ -2623,7 +2620,7 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
       <dt>U+002D HYPHEN-MINUS (<code>-</code>)
       <dd>Switch to the <a data-link-type="dfn" href="#comment-less-than-sign-bang-dash-dash-state" id="ref-for-comment-less-than-sign-bang-dash-dash-state">comment less-than sign bang dash dash state</a>.
       <dt>Anything else
-      <dd><a data-link-type="dfn" href="#reconsume" id="ref-for-reconsume④">Reconsume</a> in the <a data-link-type="dfn" href="#comment-end-dash-state" id="ref-for-comment-end-dash-state①">comment end dash state</a>.
+      <dd><a data-link-type="dfn" href="#reconsume" id="ref-for-reconsume⑥">Reconsume</a> in the <a data-link-type="dfn" href="#comment-end-dash-state" id="ref-for-comment-end-dash-state①">comment end dash state</a>.
      </dl>
     <h4 class="heading settled" data-level="1.4.28" id="comment_less_than_sign_bang_dash_dash_state"><span class="secno">1.4.28. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="comment-less-than-sign-bang-dash-dash-state">Comment less-than sign bang dash dash state</dfn> </span><a class="self-link" href="#comment_less_than_sign_bang_dash_dash_state"></a></h4>
     <dd>
@@ -2631,9 +2628,9 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
      <dl class="switch">
       <dt>U+003E GREATER-THAN-SIGN (<code>></code>)
       <dt>EOF
-      <dd><a data-link-type="dfn" href="#reconsume" id="ref-for-reconsume⑤">Reconsume</a> in the <a data-link-type="dfn" href="#comment-end-state" id="ref-for-comment-end-state①">comment end state</a>.
+      <dd><a data-link-type="dfn" href="#reconsume" id="ref-for-reconsume⑦">Reconsume</a> in the <a data-link-type="dfn" href="#comment-end-state" id="ref-for-comment-end-state①">comment end state</a>.
       <dt>Anything else
-      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error②③">Parse error</a>.<a data-link-type="dfn" href="#reconsume" id="ref-for-reconsume⑥">Reconsume</a> in the <a data-link-type="dfn" href="#comment-end-state" id="ref-for-comment-end-state②">comment end state</a>. 
+      <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error②③">Parse error</a>.<a data-link-type="dfn" href="#reconsume" id="ref-for-reconsume⑧">Reconsume</a> in the <a data-link-type="dfn" href="#comment-end-state" id="ref-for-comment-end-state②">comment end state</a>. 
      </dl>
     <h4 class="heading settled" data-level="1.4.29" id="comment_end_dash_state"><span class="secno">1.4.29. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="comment-end-dash-state">Comment end dash state</dfn></span><a class="self-link" href="#comment_end_dash_state"></a></h4>
     <dd>
@@ -2645,7 +2642,7 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
       <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error②④">Parse error</a>. Emit the comment token. Emit an end-of-file token.
       <dt>Anything else
       <dd>Append a U+002D HYPHEN-MINUS (<code>-</code>) to the comment’s token
-                data. <a data-link-type="dfn" href="#reconsume" id="ref-for-reconsume⑦">Reconsume</a> in the <a data-link-type="dfn" href="#comment-state" id="ref-for-comment-state③">comment state</a>. 
+                data. <a data-link-type="dfn" href="#reconsume" id="ref-for-reconsume⑨">Reconsume</a> in the <a data-link-type="dfn" href="#comment-state" id="ref-for-comment-state③">comment state</a>. 
      </dl>
     <h4 class="heading settled" data-level="1.4.30" id="comment_end_state"><span class="secno">1.4.30. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="comment-end-state">Comment end state</dfn></span><a class="self-link" href="#comment_end_state"></a></h4>
     <dd>
@@ -2662,7 +2659,7 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
       <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error②⑤">Parse error</a>. Emit the comment token. Emit an end-of-file token. 
       <dt>Anything else
       <dd>Append two U+002D (<code>-</code>) characters and the current input
-                character to the comment token’s data. <a data-link-type="dfn" href="#reconsume" id="ref-for-reconsume⑧">Reconsume</a> in the <a data-link-type="dfn" href="#comment-state" id="ref-for-comment-state④">comment
+                character to the comment token’s data. <a data-link-type="dfn" href="#reconsume" id="ref-for-reconsume①⓪">Reconsume</a> in the <a data-link-type="dfn" href="#comment-state" id="ref-for-comment-state④">comment
                     state</a>. 
      </dl>
     <h4 class="heading settled" data-level="1.4.31" id="comment_end_bang_state"><span class="secno">1.4.31. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="comment-end-bang-state">Comment end bang state</dfn></span><a class="self-link" href="#comment_end_bang_state"></a></h4>
@@ -2678,7 +2675,7 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
       <dd><a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error②⑦">Parse error</a>. Emit the comment token. Emit an end-of-file token.
       <dt>Anything else
       <dd>Append two U+002D (<code>-</code>) characters and U+0021 EXCLAMATION MARK character(<code>!</code>) to
-                the comment token’s data. <a data-link-type="dfn" href="#reconsume" id="ref-for-reconsume⑨">Reconsume</a> in the <a data-link-type="dfn" href="#comment-state" id="ref-for-comment-state⑤">comment
+                the comment token’s data. <a data-link-type="dfn" href="#reconsume" id="ref-for-reconsume①①">Reconsume</a> in the <a data-link-type="dfn" href="#comment-state" id="ref-for-comment-state⑤">comment
                     state</a>. 
      </dl>
     <h4 class="heading settled" data-level="1.4.32" id="cdata_state"><span class="secno">1.4.32. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="cdata-state">CDATA state</dfn></span><a class="self-link" href="#cdata_state"></a></h4>
@@ -2735,7 +2732,7 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
       <dt>EOF
       <dd>Emit the comment. Emit an end-of-file token
       <dt>Anything else
-      <dd> Append the <a data-link-type="dfn" href="#current-input-character" id="ref-for-current-input-character④">current input character</a> to the comment token’s data. 
+      <dd> Append the <a data-link-type="dfn" href="#current-input-character" id="ref-for-current-input-character⑦">current input character</a> to the comment token’s data. 
      </dl>
     <h4 class="heading settled" data-level="1.4.37" id="tokenizing_character_ref"><span class="secno">1.4.37. </span><span class="content"><dfn data-dfn-type="dfn" data-noexport id="tokenizing-character-references">Tokenizing character references<a class="self-link" href="#tokenizing-character-references"></a></dfn></span><a class="self-link" href="#tokenizing_character_ref"></a></h4>
     <dd>
@@ -2858,7 +2855,7 @@ input. The <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="curren
       <dd>This is <a data-link-type="dfn" href="#eof-in-doctype" id="ref-for-eof-in-doctype②">eof-in-doctype</a> <a data-link-type="dfn" href="#parse-error" id="ref-for-parse-error④⓪">parse error</a>. Emit the current DOCTYPE token.
                 Emit an end-of-file token. 
       <dt>Anything else
-      <dd>Append the <a data-link-type="dfn" href="#current-input-character" id="ref-for-current-input-character⑤">current input character</a> to the current DOCTYPE token’s name.
+      <dd>Append the <a data-link-type="dfn" href="#current-input-character" id="ref-for-current-input-character⑧">current input character</a> to the current DOCTYPE token’s name.
                 Reconsume the EOF character. 
      </dl>
     <h4 class="heading settled" data-level="1.4.41" id="after_doctype_name_state"><span class="secno">1.4.41. </span><span class="content"><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport id="after-doctype-name-state">After DOCTYPE name state</dfn></span><a class="self-link" href="#after_doctype_name_state"></a></h4>
@@ -3648,15 +3645,17 @@ that it becomes the new <a data-link-type="dfn" href="#current-element" id="ref-
   <aside class="dfn-panel" data-for="reconsume">
    <b><a href="#reconsume">#reconsume</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-reconsume">1.4.22. Comment start state</a>
-    <li><a href="#ref-for-reconsume①">1.4.23. Comment start dash state</a>
-    <li><a href="#ref-for-reconsume②">1.4.25. Comment less-than sign state</a>
-    <li><a href="#ref-for-reconsume③">1.4.26. Comment less-than sign bang state</a>
-    <li><a href="#ref-for-reconsume④">1.4.27. Comment less-than sign bang dash state</a>
-    <li><a href="#ref-for-reconsume⑤">1.4.28. Comment less-than sign bang dash dash state </a> <a href="#ref-for-reconsume⑥">(2)</a>
-    <li><a href="#ref-for-reconsume⑦">1.4.29. Comment end dash state</a>
-    <li><a href="#ref-for-reconsume⑧">1.4.30. Comment end state</a>
-    <li><a href="#ref-for-reconsume⑨">1.4.31. Comment end bang state</a>
+    <li><a href="#ref-for-reconsume">1.4.3. Tag open state</a>
+    <li><a href="#ref-for-reconsume①">1.4.16. Pi state</a>
+    <li><a href="#ref-for-reconsume②">1.4.22. Comment start state</a>
+    <li><a href="#ref-for-reconsume③">1.4.23. Comment start dash state</a>
+    <li><a href="#ref-for-reconsume④">1.4.25. Comment less-than sign state</a>
+    <li><a href="#ref-for-reconsume⑤">1.4.26. Comment less-than sign bang state</a>
+    <li><a href="#ref-for-reconsume⑥">1.4.27. Comment less-than sign bang dash state</a>
+    <li><a href="#ref-for-reconsume⑦">1.4.28. Comment less-than sign bang dash dash state </a> <a href="#ref-for-reconsume⑧">(2)</a>
+    <li><a href="#ref-for-reconsume⑨">1.4.29. Comment end dash state</a>
+    <li><a href="#ref-for-reconsume①⓪">1.4.30. Comment end state</a>
+    <li><a href="#ref-for-reconsume①①">1.4.31. Comment end bang state</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="next-input-character">
@@ -3717,10 +3716,12 @@ that it becomes the new <a data-link-type="dfn" href="#current-element" id="ref-
    <b><a href="#current-input-character">#current-input-character</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-current-input-character">1.4.1. Data state</a>
-    <li><a href="#ref-for-current-input-character①">1.4.24. Comment state</a>
-    <li><a href="#ref-for-current-input-character②">1.4.25. Comment less-than sign state</a> <a href="#ref-for-current-input-character③">(2)</a>
-    <li><a href="#ref-for-current-input-character④">1.4.36. Bogus comment state</a>
-    <li><a href="#ref-for-current-input-character⑤">1.4.40. DOCTYPE name state</a>
+    <li><a href="#ref-for-current-input-character①">1.4.3. Tag open state</a>
+    <li><a href="#ref-for-current-input-character②">1.4.4. End tag open state</a> <a href="#ref-for-current-input-character③">(2)</a>
+    <li><a href="#ref-for-current-input-character④">1.4.24. Comment state</a>
+    <li><a href="#ref-for-current-input-character⑤">1.4.25. Comment less-than sign state</a> <a href="#ref-for-current-input-character⑥">(2)</a>
+    <li><a href="#ref-for-current-input-character⑦">1.4.36. Bogus comment state</a>
+    <li><a href="#ref-for-current-input-character⑧">1.4.40. DOCTYPE name state</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="data-state">
