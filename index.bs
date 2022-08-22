@@ -922,7 +922,7 @@ input. The <dfn>current input character</dfn> is the last character to have been
 
         <dl class="switch">
             <dt>U+003C LESS-THAN SIGN (<code>&lt;</code>)</dt>
-            <dd>Append the <a>current input character</a> to the comment tokens' date.
+            <dd>Append the <a>current input character</a> to the comment token's data.
                 Switch to the <a>comment less-than sign state</a>.
             </dd>
 
@@ -930,12 +930,12 @@ input. The <dfn>current input character</dfn> is the last character to have been
             <dd>Switch to the <a>comment end dash state</a>.</dd>
 
             <dt>EOF</dt>
-            <dd>This is an <a>eof-in-comment</a> <a>parse error</a>.. Emit the comment token. Emit an end-of-file
+            <dd>This is an <a>eof-in-comment</a> <a>parse error</a>. Emit the current comment token. Emit an end-of-file
                 token.
             </dd>
 
             <dt>Anything else</dt>
-            <dd>Append the <a>next input character</a> to the comment token's data.</dd>
+            <dd>Append the <a>current input character</a> to the comment token's data.</dd>
         </dl>
     </dd>
 
