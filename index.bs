@@ -113,6 +113,14 @@ which they do not wish to apply the rules described in this specification.
         </td>
     </tr>
     <tr>
+        <td><dfn>abrupt-closing-xml-declaration</dfn></td>
+        <td>
+            This error occur if the parser encounters an unclosed quote in XML declaration. E.g. <code>
+            &lt;?xml version="1?&gt;
+        </code>
+        </td>
+    </tr>
+    <tr>
         <td><dfn>abrupt-doctype-identifier</dfn></td>
         <td>
             This error occurs if the parser encounters a U+003E (<code>&gt;</code>) code point in the DOCTYPE
@@ -154,6 +162,12 @@ which they do not wish to apply the rules described in this specification.
         </td>
     </tr>
     <tr>
+        <td><dfn>eof-in-xml-declaration</dfn></td>
+        <td>
+            This error occurs if the parser encounters the end of the input stream in a XML Declaration e.g. <code>&lt;?xml </code>
+        </td>
+    </tr>
+    <tr>
         <td><dfn>incorrectly-opened-comment</dfn></td>
         <td>This error occurs if the parser encounters the <code>&lt;!</code> code point sequence that is not
             immediately
@@ -162,6 +176,13 @@ which they do not wish to apply the rules described in this specification.
     </tr>
     <tr>
         <td><dfn>invalid-characters-after-doctype</dfn></td>
+        <td>This error occurs if the parser encounters any code point sequence other than "<code>PUBLIC</code>"
+            and "<code>SYSTEM</code>" keywords after a DOCTYPE name. In such a case, the parser ignores any following
+            public or system identifiers
+        </td>
+    </tr>
+    <tr>
+        <td><dfn>invalid-xml-declaration</dfn></td>
         <td>This error occurs if the parser encounters any code point sequence other than "<code>PUBLIC</code>"
             and "<code>SYSTEM</code>" keywords after a DOCTYPE name. In such a case, the parser ignores any following
             public or system identifiers
@@ -656,7 +677,7 @@ input. The <dfn>current input character</dfn> is the last character to have been
     <dd>
         Consume the <a>next input character</a>:
         <dl class="switch">
-            <dt>U+0022 APOSTROPHE (<code>'</code>)</dt>
+            <dt>U+0022 QUOTATION MARK (<code>'</code>)</dt>
             <dd>Switch to the <a>tag attribute name before state</a>.</dd>
 
             <dt>U+0026 AMPERSAND (<code>&amp;</code>)</dt>
@@ -718,20 +739,222 @@ input. The <dfn>current input character</dfn> is the last character to have been
     </h4>
 
     <dd>
+        If the next few characters are:
+        <dl class="switch">
+            <dt>Exact match for word "xml".</dt>
+            <dd>
+                Consume those characters and switch to <a>xml declaration state</a>
+            </dd>
 
+            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+            <dt>EOF</dt>
+            <dd><a>Parse error</a>. <a>Reconsume</a> current input characters in the
+                <a>bogus comment state</a>.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd>Create a new processing instruction token. <a>Reconsume</a> current characters in <a>pi
+                target state</a>.
+            </dd>
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="xml_declaration_state">
+        <span class="content"><dfn>XML declaration state</dfn></span>
+    </h4>
+
+    <dd>
         Consume the <a>next input character</a>:
         <dl class="switch">
             <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
             <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
             <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+            <dd>Stay in current state</dd>
+            <dt>U+0076 LATIN SMALL LETTER V (<code>v</code>)</dt>
+            <dt>U+0065 LATIN SMALL LETTER E (<code>E</code>)</dt>
+            <dt>U+0073 LATIN SMALL LETTER S (<code>S</code>)</dt>
+            <dd>Reconsume current character in <a>XML declaration attribute name state</a></dd>
+            <dt>
+                U+003F QUESTION MARK (<code>?</code>)
+            </dt>
+            <dd>Switch to <a>XML Declaration after state</a>.</dd>
             <dt>EOF</dt>
-            <dd><a>Parse error</a>. Reprocess the current input character in the
-                <a>bogus comment state</a>.
+            <dd>This is a <a>eof-in-xml-declaration</a> <a>parse error</a>. Append string "xml"
+                to the processing instruction target, emit current processing instruction token and emit end-of-file
+                token.
+            </dd>
+            <dt>Anything else</dt>
+            <dd>This is an <a>invalid-xml-declaration</a> <a>parse error</a>. Append string "xml"
+                to the processing instruction target, then reconsume current character in <a>pi data state</a></dd>
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="xml_declaration_attr_name_state">
+        <span class="content"><dfn>XML declaration attribute name state</dfn></span>
+    </h4>
+
+    <dd>
+        If the next few characters are:
+        <dl class="switch">
+            <dt>Exact match for word "version".</dt>
+            <dd>
+                Set current xml declaration attribute name to version. Switch to <a>XML declaration attribute name
+                after</a>.
+            </dd>
+
+            <dt>Exact match for word "encoding".</dt>
+            <dd>
+                Set current xml declaration attribute name to encoding. Switch to <a>XML declaration attribute name
+                after</a>.
+            </dd>
+
+            <dt>Exact match for word "standalone".</dt>
+            <dd>
+                Set current xml declaration attribute name to standalone. Switch to <a>XML declaration attribute name
+                after</a>.
             </dd>
 
             <dt>Anything else</dt>
-            <dd>Create a new processing instruction token. <a>Reconsume</a> current character in <a>pi
-                target state</a>.
+            <dd>This is an <a>invalid-xml-declaration</a> <a>parse error</a>. Switch to <a>pi target state</a></dd>
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="xml_declaration_attr_name_after_state">
+        <span class="content"><dfn>XML declaration attribute name after</dfn></span>
+    </h4>
+
+    <dd>
+        Consume the <a>next input character</a>:
+        <dl class="switch">
+            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+            <dd>Stay in current state.</dd>
+
+            <dt>U+003D EQUALS SIGN (<code>=</code>)</dt>
+            <dd>Switch to <a>XML declaration attribute before value state</a>.</dd>
+
+            <dt>EOF</dt>
+            <dd>This is an <a>eof-in-xml-declaration</a> <a>parse error</a>. Push to processing instruction target
+                <code>xml</code>, then push to processing instruction data <code>version=</code>.
+                Emit processing instruction token.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd>This is an <a>invalid-xml-declaration</a> <a>parse error</a>. Push to processing instruction target
+                <code>xml</code>, then push to processing instruction data <code>version=</code>.
+                Reconsume in <a>pi target state</a>.
+            </dd>
+            </dd>
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="xml_declaration_attribute_before_value_state">
+        <span class="content"><dfn>XML declaration attribute before value state</dfn></span>
+    </h4>
+
+    <dd>
+        Consume the <a>next input character</a>:
+        <dl class="switch">
+            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
+            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
+            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
+            <dd>Stay in current state.</dd>
+
+            <dt>U+0027 APOSTROPHE (<code>'</code>)</dt>
+            <dd>Switch to <a>XML declaration attribute value (single-quoted) state</a>.</dd>
+
+            <dt>U+0022 QUOTATION MARK (<code>"</code>)</dt>
+            <dd>Switch to <a>XML declaration attribute value (double-quoted) state</a>.</dd>
+
+            <dt>EOF</dt>
+            <dd>This is an <a>eof-in-xml-declaration</a> <a>parse error</a>. Push to processing instruction target
+                <code>xml</code>, then push to processing instruction data <code>version=</code>.
+                Emit processing instruction token.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd>This is an <a>invalid-xml-declaration</a> <a>parse error</a>. Push to processing instruction target
+                <code>xml</code>, then push to processing instruction data <code>version=</code>.
+                Reconsume in <a>pi target state</a>.
+            </dd>
+            </dd>
+        </dl>
+    </dd>
+
+
+    <h4 class="heading" id="xml_declaration_attribute_value_single_quoted_state">
+        <span class="content"><dfn>XML declaration attribute value (single-quoted) state</dfn></span>
+    </h4>
+
+    <dd>
+        If the next few characters are:
+        <dl class="switch">
+            <dt>U+0027 APOSTROPHE (<code>'</code>)</dt>
+            <dd>Switch to <a>XML declaration state</a>.</dd>
+
+            <dt>U+003F QUESTION MARK (<code>?</code>)</dt>
+            <dd>This is an <a>abrupt-closing-xml-declaration</a> <a>parse error</a>.
+                Switch to <a>XML Declaration after state</a>.
+            </dd>
+
+            <dt>EOF</dt>
+            <dd>This is an <a>eof-in-xml-declaration</a> <a>parse error</a>. Emit current xml declaration.
+                Emit end-of-file token.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd>This is an <a>invalid-xml-declaration</a> <a>parse error</a>. Switch to <a>pi target state</a>
+            </dd>
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="xml_declaration_attribute_value_double_quoted_state">
+        <span class="content"><dfn>XML declaration attribute value (double-quoted) state</dfn></span>
+    </h4>
+
+    <dd>
+        If the next few characters are:
+        <dl class="switch">
+            <dt>U+0022 QUOTATION MARK (<code>"</code>)</dt>
+            <dd>Switch to <a>XML declaration state</a>.</dd>
+
+            <dt>U+003F QUESTION MARK (<code>?</code>)</dt>
+            <dd>This is an <a>abrupt-closing-xml-declaration</a> <a>parse error</a>.
+                Switch to <a>XML Declaration after state</a>.
+            </dd>
+
+            <dt>EOF</dt>
+            <dd>This is an <a>eof-in-xml-declaration</a> <a>parse error</a>. Emit current xml declaration.
+                Emit end-of-file token.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd>This is an <a>invalid-xml-declaration</a> <a>parse error</a>. Switch to <a>pi target state</a>
+            </dd>
+        </dl>
+    </dd>
+
+    <h4 class="heading" id="xml_decl_after">
+        <span class="content"><dfn>XML declaration after state</dfn></span>
+    </h4>
+
+    <dd>
+        If the next few characters are:
+        <dl class="switch">
+            <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
+            <dd>Emit the xml declaration token and then switch to the <a>data state</a>.</dd>
+
+            <dt>U+003F QUESTION MARK(<code>?</code>)</dt>
+            <dd>Append the current input character to the PI's data and stay in the
+                current state.
+            </dd>
+
+            <dt>Anything else</dt>
+            <dd>Reprocess the current input character in the <a>pi data
+                state</a>.
             </dd>
         </dl>
     </dd>
@@ -796,7 +1019,8 @@ input. The <dfn>current input character</dfn> is the last character to have been
             <dd>Switch to the <a>pi after state</a>.</dd>
 
             <dt>EOF</dt>
-            <dd>This is a <a>eof-in-cdata</a> <a>parse error</a>. Emit the current processing instruction token and then
+            <dd>This is a <a>eof-in-cdata</a> <a>parse error</a>. Emit the current processing instruction token
+                and then
                 reprocess the
                 current input character in the <a>data state</a>.
             </dd>
@@ -841,21 +1065,24 @@ input. The <dfn>current input character</dfn> is the last character to have been
 
         <dl class="switch">
             <dt>Two U+002D HYPEN-MINUS characters (<code>-</code>)</dt>
-            <dd>Consume those two characters, create a comment token whose data is the empty string and switch to <a>comment
-                start state</a>.
+            <dd>Consume those two characters, create a comment token whose data is the empty string and switch
+                to <a>comment
+                    start state</a>.
             </dd>
 
-            <dt>ASCII case-insensitive match for word "DOCTYPE"</dt>
+            <dt>Exact match for word "DOCTYPE"</dt>
             <dd>Consume those characters and switch to <a>Doctype state</a></dd>
 
-            <dt>Exact match for word "[CDATA[" with a (the five uppercase letters "CDATA" with a U+005B LEFT SQUARE
+            <dt>Exact match for word "[CDATA[" with a (the five uppercase letters "CDATA" with a U+005B LEFT
+                SQUARE
                 BRACKET
                 character before and after)
             </dt>
             <dd>Consume those characters and switch to <a>CDATA state</a></dd>
 
             <dt>Anything else</dt>
-            <dd>Emit an <a>incorrectly-opened-comment</a> <a>parse error</a>. Create a comment token whose data is an
+            <dd>Emit an <a>incorrectly-opened-comment</a> <a>parse error</a>. Create a comment token whose data
+                is an
                 empty string.
                 Switch to <a>bogus comment state</a>
                 (don't consume any characters)
@@ -875,7 +1102,8 @@ input. The <dfn>current input character</dfn> is the last character to have been
             <dd>Switch to <a>comment start dash state</a></dd>
 
             <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
-            <dd>This is an <a>abrupt-closing-of-empty-comment</a> <a>parse error</a>. Switch to <a>data state</a>.
+            <dd>This is an <a>abrupt-closing-of-empty-comment</a> <a>parse error</a>. Switch to <a>data
+                state</a>.
                 Emit the current comment token.
             </dd>
 
@@ -896,12 +1124,14 @@ input. The <dfn>current input character</dfn> is the last character to have been
             <dd>Switch to <a>comment end state</a></dd>
 
             <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
-            <dd>This is an <a>abrupt-closing-of-empty-comment</a> <a>parse error</a>. Switch to <a>data state</a>.
+            <dd>This is an <a>abrupt-closing-of-empty-comment</a> <a>parse error</a>. Switch to <a>data
+                state</a>.
                 Emit the current comment token.
             </dd>
 
             <dt>EOF</dt>
-            <dd>This is an <a>eof-in-comment</a> <a>parse error</a>. Emit the comment token. Emit an end-of-file-token.
+            <dd>This is an <a>eof-in-comment</a> <a>parse error</a>. Emit the comment token. Emit an
+                end-of-file-token.
             </dd>
 
             <dt>Anything else</dt>
@@ -930,7 +1160,8 @@ input. The <dfn>current input character</dfn> is the last character to have been
             <dd>Switch to the <a>comment end dash state</a>.</dd>
 
             <dt>EOF</dt>
-            <dd>This is an <a>eof-in-comment</a> <a>parse error</a>. Emit the current comment token. Emit an end-of-file
+            <dd>This is an <a>eof-in-comment</a> <a>parse error</a>. Emit the current comment token. Emit an
+                end-of-file
                 token.
             </dd>
 
@@ -1078,7 +1309,8 @@ input. The <dfn>current input character</dfn> is the last character to have been
         <dl class="switch">
             <dt>U+002D HYPHEN-MINUS (<code>-</code>)</dt>
             <dd>Append a U+002D HYPHEN-MINUS character (<code>-</code>) and U+0021 EXCLAMATION MARK
-                character(<code>!</code>) to the comment token's data. Switch to the <a>comment end dash state</a>.
+                character(<code>!</code>) to the comment token's data. Switch to the <a>comment end dash
+                    state</a>.
             </dd>
 
             <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
@@ -1088,7 +1320,8 @@ input. The <dfn>current input character</dfn> is the last character to have been
             <dd><a>Parse error</a>. Emit the comment token. Emit an end-of-file token.</dd>
 
             <dt>Anything else</dt>
-            <dd>Append two U+002D (<code>-</code>) characters and U+0021 EXCLAMATION MARK character(<code>!</code>) to
+            <dd>Append two U+002D (<code>-</code>) characters and U+0021 EXCLAMATION MARK
+                character(<code>!</code>) to
                 the comment token's data. <a>Reconsume</a> in the <a>comment
                     state</a>.
             </dd>
@@ -1217,14 +1450,17 @@ input. The <dfn>current input character</dfn> is the last character to have been
 
     <dd>
 
-        This section defines how to <dfn>consume a character reference</dfn>, optionally with an <dfn>additional allowed
-        character</dfn>, which, if specified where the algorithm is invoked, adds a character to the list of characters
+        This section defines how to <dfn>consume a character reference</dfn>, optionally with an <dfn>additional
+        allowed
+        character</dfn>, which, if specified where the algorithm is invoked, adds a character to the list of
+        characters
         that cause there to not be a character reference.
 
         This definition is used when parsing character <a href="Data state">in text</a> and in <a
             href="Character reference in attribute value state">attributes</a>.
 
-        The behavior depends on identity of next character (the one immediately after the U+0026 AMPERSAND character),
+        The behavior depends on identity of next character (the one immediately after the U+0026 AMPERSAND
+        character),
         as follows:
 
         <dl class="switch">
@@ -1236,7 +1472,8 @@ input. The <dfn>current input character</dfn> is the last character to have been
             <dt>U+0026 AMPERSAND (<code>&amp;</code>)</dt>
             <dt>EOF</dt>
             <dt>The <a>additional allowed character</a> if there is one</dt>
-            <dd>Not a character reference. No characters are consumed and nothing is returned (This is not an error,
+            <dd>Not a character reference. No characters are consumed and nothing is returned (This is not an
+                error,
                 either).
             </dd>
             <dt>U+0023 NUMBER SIGN (<code>#</code>)
@@ -1262,30 +1499,40 @@ input. The <dfn>current input character</dfn> is the last character to have been
                     </dd>
                 </dl>
 
-                Consume as many characters as match the range of characters given above (<a>ASCII hex digits</a> or <a>ASCII
+                Consume as many characters as match the range of characters given above (<a>ASCII hex digits</a>
+                or <a>ASCII
                 digits</a>).
 
-                If no characters match the range, then don't consume any characters. This is a <a>parse error</a>;
+                If no characters match the range, then don't consume any characters. This is a <a>parse
+                error</a>;
                 return the U+0023 NUMBER SIGN character and if appropriate X character as string of text.
 
-                Otherwise, if the next character is a U+003B SEMICOLON, consume that too. If it isn't, there is a <a>parse
+                Otherwise, if the next character is a U+003B SEMICOLON, consume that too. If it isn't, there is
+                a <a>parse
                 error</a>.
 
-                If one or more characters match the range, then take them all and interpret the string of characters as
+                If one or more characters match the range, then take them all and interpret the string of
+                characters as
                 a number (either hexadecimal or decimal as appropriate).
 
                 <p class="warning">Should we do HTML like replacement? At least for null?</p>
 
-                Otherwise, if the number is in the range 0xD800 to 0xDFFF or is greater than 0x10FFFF, then this is a
+                Otherwise, if the number is in the range 0xD800 to 0xDFFF or is greater than 0x10FFFF, then this
+                is a
                 <a>parse error</a>. Return a U+FFFD REPLACEMENT CHARACTER character token.
 
-                <div class="warning">Should we refuse Unicode from ranges listed (0x0001 to 0x0008, 0x000D to 0x001F,
-                    0x007F to 0x009F, 0xFDD0 to 0xFDEF, or is one of 0x000B, 0xFFFE, 0xFFFF, 0x1FFFE, 0x1FFFF, 0x2FFFE,
-                    0x2FFFF, 0x3FFFE, 0x3FFFF, 0x4FFFE, 0x4FFFF, 0x5FFFE, 0x5FFFF, 0x6FFFE, 0x6FFFF, 0x7FFFE, 0x7FFFF,
-                    0x8FFFE, 0x8FFFF, 0x9FFFE, 0x9FFFF, 0xAFFFE, 0xAFFFF, 0xBFFFE, 0xBFFFF, 0xCFFFE, 0xCFFFF, 0xDFFFE,
+                <div class="warning">Should we refuse Unicode from ranges listed (0x0001 to 0x0008, 0x000D to
+                    0x001F,
+                    0x007F to 0x009F, 0xFDD0 to 0xFDEF, or is one of 0x000B, 0xFFFE, 0xFFFF, 0x1FFFE, 0x1FFFF,
+                    0x2FFFE,
+                    0x2FFFF, 0x3FFFE, 0x3FFFF, 0x4FFFE, 0x4FFFF, 0x5FFFE, 0x5FFFF, 0x6FFFE, 0x6FFFF, 0x7FFFE,
+                    0x7FFFF,
+                    0x8FFFE, 0x8FFFF, 0x9FFFE, 0x9FFFF, 0xAFFFE, 0xAFFFF, 0xBFFFE, 0xBFFFF, 0xCFFFE, 0xCFFFF,
+                    0xDFFFE,
                     0xDFFFF, 0xEFFFE, 0xEFFFF, 0xFFFFE, 0xFFFFF, 0x10FFFE, or 0x10FFFF)?<br/>
 
-                    I've noted that Javascript implementation of XML5 is having to go around some characters in its
+                    I've noted that Javascript implementation of XML5 is having to go around some characters in
+                    its
                     version.
                 </div>
             </dd>
@@ -1294,22 +1541,28 @@ input. The <dfn>current input character</dfn> is the last character to have been
 
                 Consume characters until you reach a U+003B SEMICOLON character (<code>;</code>).
 
-                <p class="warning">What happens if there is no semicolon? Does it read rest of the file? Maybe better
+                <p class="warning">What happens if there is no semicolon? Does it read rest of the file? Maybe
+                    better
                     solution is to read all characters that are part of name char according to <a
                             href="http://www.w3.org/TR/xml11/#NT-Name">XML 1.1. spec.</a></p>
 
-                Otherwise, a character reference is parsed. If the last character matched is not a U+003B SEMICOLON
+                Otherwise, a character reference is parsed. If the last character matched is not a U+003B
+                SEMICOLON
                 character (<code>;</code>), there is a <a>parse error</a>.
 
-                If there was a parse error the consumed characters are interperted as part of a string and are returned.
+                If there was a parse error the consumed characters are interperted as part of a string and are
+                returned.
 
-                If there wasn't a parse error return a reference with name equal to consumed characters, omitting the
+                If there wasn't a parse error return a reference with name equal to consumed characters,
+                omitting the
                 U+003B SEMICOLON character (<code>;</code>).
 
                 <div class="example" id="ref_tokenizer_example">
-                    If the markup contains following attribute <code>This is a &amp;ref;</code>, character tokenizer
-                    should return this as a reference named ref. However if the attribute defined is defined as <code>This
-                    is &amp;notref</code>, then the tokenizer will interpret this as a text <code>This is
+                    If the markup contains following attribute <code>This is a &amp;ref;</code>, character
+                    tokenizer
+                    should return this as a reference named ref. However if the attribute defined is defined as
+                    <code>This
+                        is &amp;notref</code>, then the tokenizer will interpret this as a text <code>This is
                     &amp;notref</code>, while emitting a <a>parse error</a>.
                 </div>
 
@@ -1352,7 +1605,8 @@ input. The <dfn>current input character</dfn> is the last character to have been
             <dd>Ignore the character.</dd>
 
             <dt><a>Uppercase ASCII letter</a></dt>
-            <dd>Create a new DOCTYPE token. Set the token name to lowercase version of the current input character.
+            <dd>Create a new DOCTYPE token. Set the token name to lowercase version of the current input
+                character.
                 Switch to the DOCTYPE name state.
             </dd>
 
@@ -1366,7 +1620,8 @@ input. The <dfn>current input character</dfn> is the last character to have been
             Create new DOCTYPE token. Emit DOCTYPE token. Emit an end-of-file token.
 
             <dt>Anything else</dt>
-            <dd>Create new DOCTYPE token. Set the token's name to current input character. Switch to <a>DOCTYPE name
+            <dd>Create new DOCTYPE token. Set the token's name to current input character. Switch to <a>DOCTYPE
+                name
                 state</a>.
             </dd>
         </dl>
@@ -1420,17 +1675,21 @@ input. The <dfn>current input character</dfn> is the last character to have been
             <dd> Switch to data state. Emit current DOCTYPE token.</dd>
 
             <dt>EOF</dt>
-            <dd>This is <a>eof-in-doctype</a> <a>parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token.
+            <dd>This is <a>eof-in-doctype</a> <a>parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE
+                token.
                 Emit an end-of-file token.
             </dd>
 
             <dt>Anything else</dt>
-            <dd>If the six characters starting from the current input character are an <a>ASCII case-insensitive</a>
-                match for word "PUBLIC", then consume those characters and switch to the <a>after DOCTYPE public keyword
+            <dd>If the six characters starting from the current input character are an <a>ASCII
+                case-insensitive</a>
+                match for word "PUBLIC", then consume those characters and switch to the <a>after DOCTYPE public
+                    keyword
                     state</a>.
 
                 Otherwise, if the six characters starting from the current input character are an <a>ASCII
-                    case-insensitive</a> match for word "SYSTEM", then consume those charactes and switch to the <a>after
+                    case-insensitive</a> match for word "SYSTEM", then consume those charactes and switch to the
+                <a>after
                     DOCTYPE system keyword state</a>.
 
                 Otherwise, this is a <a>invalid-characters-after-doctype</a> <a>parse error</a>. Switch to <a>bogus
@@ -1450,13 +1709,15 @@ input. The <dfn>current input character</dfn> is the last character to have been
             <dd>Switch to the <a>before DOCTYPE public identifier state</a>.</dd>
 
             <dt>U+0022 QUOTATION MARK(<code>&quot;</code>)</dt>
-            <dd>This is a <a>missing-whitespace-after-doctype-keyword</a> <a>parse error</a>. Set the DOCTYPE token's
+            <dd>This is a <a>missing-whitespace-after-doctype-keyword</a> <a>parse error</a>. Set the DOCTYPE
+                token's
                 public identifier current DOCTYPE token to the empty string
                 (not missing), then switch to the <a>DOCTYPE public identifier (double-quoted) state</a>.
             </dd>
 
             <dt>U+0027 APOSTROPHE(<code>'</code>)</dt>
-            <dd>This is a <a>missing-whitespace-after-doctype-keyword</a> <a>parse error</a>. Set the DOCTYPE token's
+            <dd>This is a <a>missing-whitespace-after-doctype-keyword</a> <a>parse error</a>. Set the DOCTYPE
+                token's
                 public identifier current DOCTYPE token to the empty string
                 (not missing), then switch to the <a>DOCTYPE public identifier (single-quoted) state</a>.
             </dd>
@@ -1464,17 +1725,20 @@ input. The <dfn>current input character</dfn> is the last character to have been
             <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
             <dd>This is a <a>missing-doctype-identifier</a> <a>parse error</a>. Set the DOCTYPE token's public
                 identifier
-                current DOCTYPE token to the empty string (not missing), then switch to the <a>DOCTYPE public identifier
+                current DOCTYPE token to the empty string (not missing), then switch to the <a>DOCTYPE public
+                    identifier
                     (single-quoted) state</a>.
             </dd>
 
             <dt>EOF</dt>
-            <dd>This is a <a>eof-in-doctype</a> <a>parse error</a>. Emit current DOCTYPE token. Emit an end-of-file
+            <dd>This is a <a>eof-in-doctype</a> <a>parse error</a>. Emit current DOCTYPE token. Emit an
+                end-of-file
                 token.
             </dd>
 
             <dt>Anything else</dt>
-            <dd>This is a <a>missing-quote-before-identifier</a> <a>parse error</a>. Reconsume in <a>bogus DOCTYPE
+            <dd>This is a <a>missing-quote-before-identifier</a> <a>parse error</a>. Reconsume in <a>bogus
+                DOCTYPE
                 state</a>.
             </dd>
         </dl>
@@ -1492,13 +1756,15 @@ input. The <dfn>current input character</dfn> is the last character to have been
             <dd>Switch to the <a>before DOCTYPE system identifier state</a>.</dd>
 
             <dt>U+0022 QUOTATION MARK(<code>&quot;</code>)</dt>
-            <dd>This is a <a>missing-whitespace-after-doctype-keyword</a> <a>parse error</a>. Set the DOCTYPE token's
+            <dd>This is a <a>missing-whitespace-after-doctype-keyword</a> <a>parse error</a>. Set the DOCTYPE
+                token's
                 public identifier current DOCTYPE token to the empty string
                 (not missing), then switch to the <a>DOCTYPE system identifier (double-quoted) state</a>.
             </dd>
 
             <dt>U+0027 APOSTROPHE(<code>'</code>)</dt>
-            <dd>This is a <a>missing-whitespace-after-doctype-keyword</a> <a>parse error</a>. Set the DOCTYPE token's
+            <dd>This is a <a>missing-whitespace-after-doctype-keyword</a> <a>parse error</a>. Set the DOCTYPE
+                token's
                 public identifier current DOCTYPE token to the empty string
                 (not missing), then switch to the <a>DOCTYPE system identifier (single-quoted) state</a>.
             </dd>
@@ -1510,12 +1776,14 @@ input. The <dfn>current input character</dfn> is the last character to have been
             </dd>
 
             <dt>EOF</dt>
-            <dd>This is a <a>eof-in-doctype</a> <a>parse error</a>. Emit current DOCTYPE token. Emit an end-of-file
+            <dd>This is a <a>eof-in-doctype</a> <a>parse error</a>. Emit current DOCTYPE token. Emit an
+                end-of-file
                 token.
             </dd>
 
             <dt>Anything else</dt>
-            <dd>This is a <a>missing-quote-before-identifier</a> <a>parse error</a>. Reconsume in <a>bogus DOCTYPE
+            <dd>This is a <a>missing-quote-before-identifier</a> <a>parse error</a>. Reconsume in <a>bogus
+                DOCTYPE
                 state</a>.
             </dd>
         </dl>
@@ -1534,27 +1802,32 @@ input. The <dfn>current input character</dfn> is the last character to have been
             <dd>Ignore the character.</dd>
 
             <dt>U+0022 QUOTATION MARK(<code>&quot;</code>)</dt>
-            <dd>Set the DOCTYPE token's system identifier current DOCTYPE token to the empty string (not missing), then
+            <dd>Set the DOCTYPE token's system identifier current DOCTYPE token to the empty string (not
+                missing), then
                 switch to the <a>DOCTYPE system identifier (double-quoted) state</a>.
             </dd>
 
             <dt>U+0027 APOSTROPHE(<code>'</code>)</dt>
-            <dd>Set the DOCTYPE token's system identifier current DOCTYPE token to the empty string (not missing), then
+            <dd>Set the DOCTYPE token's system identifier current DOCTYPE token to the empty string (not
+                missing), then
                 switch to the <a>DOCTYPE system identifier (single-quoted) state</a>.
             </dd>
 
             <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
-            <dd>This is a <a>missing-doctype-identifier</a> <a>parse error</a>. Switch to <a>data state</a>. Emit
+            <dd>This is a <a>missing-doctype-identifier</a> <a>parse error</a>. Switch to <a>data state</a>.
+                Emit
                 current DOCTYPE token.
             </dd>
 
             <dt>EOF</dt>
-            <dd>This is a <a>eof-in-doctype</a> <a>parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token.
+            <dd>This is a <a>eof-in-doctype</a> <a>parse error</a>. Switch to the <a>data state</a>. Emit
+                DOCTYPE token.
                 Emit the end-of-file token.
             </dd>
 
             <dt>Anything else</dt>
-            <dd>This is a <a>missing-quote-before-identifier</a> <a>parse error</a>. Reconsume in <a>bogus DOCTYPE
+            <dd>This is a <a>missing-quote-before-identifier</a> <a>parse error</a>. Reconsume in <a>bogus
+                DOCTYPE
                 state</a>.
             </dd>
         </dl>
@@ -1582,17 +1855,20 @@ input. The <dfn>current input character</dfn> is the last character to have been
             </dd>
 
             <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
-            <dd>This is a <a>missing-doctype-identifier</a> <a>parse error</a>. Switch to <a>data state</a>. Emit
+            <dd>This is a <a>missing-doctype-identifier</a> <a>parse error</a>. Switch to <a>data state</a>.
+                Emit
                 current DOCTYPE token.
             </dd>
 
             <dt>EOF</dt>
-            <dd>This is a <a>eof-in-doctype</a> <a>parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token.
+            <dd>This is a <a>eof-in-doctype</a> <a>parse error</a>. Switch to the <a>data state</a>. Emit
+                DOCTYPE token.
                 Emit the end-of-file token.
             </dd>
 
             <dt>Anything else</dt>
-            <dd>This is a <a>missing-quote-before-identifier</a> <a>parse error</a>. Reconsume in <a>bogus DOCTYPE
+            <dd>This is a <a>missing-quote-before-identifier</a> <a>parse error</a>. Reconsume in <a>bogus
+                DOCTYPE
                 state</a>.
             </dd>
 
@@ -1609,12 +1885,14 @@ input. The <dfn>current input character</dfn> is the last character to have been
             <dd>Switch to the <a>after DOCTYPE public identifier state</a>.</dd>
 
             <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
-            <dd>This is an <a>abrupt-doctype-identifier</a> <a>parse error</a>. Switch to <a>data state</a>. Emit
+            <dd>This is an <a>abrupt-doctype-identifier</a> <a>parse error</a>. Switch to <a>data state</a>.
+                Emit
                 current DOCTYPE token.
             </dd>
 
             <dt>EOF</dt>
-            <dd>This is a <a>eof-in-doctype</a> <a>parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE token.
+            <dd>This is a <a>eof-in-doctype</a> <a>parse error</a>. Switch to the <a>data state</a>. Emit
+                DOCTYPE token.
                 Emit the end-of-file token.
             </dd>
 
@@ -1634,12 +1912,14 @@ input. The <dfn>current input character</dfn> is the last character to have been
             <dd>Switch to the <a>after DOCTYPE public identifier state</a>.</dd>
 
             <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
-            <dd>This is an <a>abrupt-doctype-identifier</a> <a>parse error</a>. Switch to <a>data state</a>. Emit
+            <dd>This is an <a>abrupt-doctype-identifier</a> <a>parse error</a>. Switch to <a>data state</a>.
+                Emit
                 current DOCTYPE token.
             </dd>
 
             <dt>EOF</dt>
-            <dd>This is a <a>eof-in-doctype</a> <a>parse error</a>. Emit DOCTYPE token. Emit the end-of-file token.
+            <dd>This is a <a>eof-in-doctype</a> <a>parse error</a>. Emit DOCTYPE token. Emit the end-of-file
+                token.
             </dd>
 
             <dt>Anything else</dt>
@@ -1659,13 +1939,15 @@ input. The <dfn>current input character</dfn> is the last character to have been
             <dd>Switch to the <a>between DOCTYPE public and system identifiers state</a>.</dd>
 
             <dt>U+0027 APOSTROPHE(<code>'</code>)</dt>
-            <dd>This is a <a>missing-whitespace-between-doctype-public-and-system-identifier</a> <a>parse error</a>.
+            <dd>This is a <a>missing-whitespace-between-doctype-public-and-system-identifier</a> <a>parse
+                error</a>.
                 Set the DOCTYPE token's system identifier to the empty string (not missing) then
                 switch to the <a>DOCTYPE system identifier (single-quoted) state</a>.
             </dd>
 
             <dt>U+0022 QUOTATION MARK(<code>&quot;</code>)</dt>
-            <dd>This is a <a>missing-whitespace-between-doctype-public-and-system-identifier</a> <a>parse error</a>.
+            <dd>This is a <a>missing-whitespace-between-doctype-public-and-system-identifier</a> <a>parse
+                error</a>.
                 Set the DOCTYPE token's system identifier to the empty string (not missing) then
                 switch to the <a>DOCTYPE system identifier (double-quoted) state</a>.
             </dd>
@@ -1674,12 +1956,14 @@ input. The <dfn>current input character</dfn> is the last character to have been
             <dd>Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
 
             <dt>EOF</dt>
-            <dd>This is a <a>eof-in-doctype</a> <a>parse error</a>. Emit the current DOCTYPE token. Emit the end-of-file
+            <dd>This is a <a>eof-in-doctype</a> <a>parse error</a>. Emit the current DOCTYPE token. Emit the
+                end-of-file
                 token.
             </dd>
 
             <dt>Anything else</dt>
-            <dd>This is a <a>missing-quote-before-identifier</a> <a>parse error</a>. Reconsume in the <a>bogus DOCTYPE
+            <dd>This is a <a>missing-quote-before-identifier</a> <a>parse error</a>. Reconsume in the <a>bogus
+                DOCTYPE
                 state</a>.
             </dd>
         </dl>
@@ -1700,22 +1984,26 @@ input. The <dfn>current input character</dfn> is the last character to have been
             <dd>Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
 
             <dt>U+0027 APOSTROPHE(<code>'</code>)</dt>
-            <dd>Set the DOCTYPE token's system identifier to the empty string (not missing) then switch to the <a>DOCTYPE
-                system identifier (single-quoted) state</a>.
+            <dd>Set the DOCTYPE token's system identifier to the empty string (not missing) then switch to the
+                <a>DOCTYPE
+                    system identifier (single-quoted) state</a>.
             </dd>
 
             <dt>U+0022 QUOTATION MARK(<code>&quot;</code>)</dt>
-            <dd>Set the DOCTYPE token's system identifier to the empty string (not missing) then switch to the <a>DOCTYPE
-                system identifier (double-quoted) state</a>.
+            <dd>Set the DOCTYPE token's system identifier to the empty string (not missing) then switch to the
+                <a>DOCTYPE
+                    system identifier (double-quoted) state</a>.
             </dd>
 
             <dt>EOF</dt>
-            <dd>This is a <a>eof-in-doctype</a> <a>parse error</a>. Emit the current DOCTYPE token. Emit the end-of-file
+            <dd>This is a <a>eof-in-doctype</a> <a>parse error</a>. Emit the current DOCTYPE token. Emit the
+                end-of-file
                 token.
             </dd>
 
             <dt>Anything else</dt>
-            <dd>This is a <a>missing-quote-before-identifier</a> <a>parse error</a>. Reconsume in <a>Bogus DOCTYPE
+            <dd>This is a <a>missing-quote-before-identifier</a> <a>parse error</a>. Reconsume in <a>Bogus
+                DOCTYPE
                 state</a>.
             </dd>
         </dl>
@@ -1734,7 +2022,8 @@ input. The <dfn>current input character</dfn> is the last character to have been
             <dd><a>Parse error</a>. Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
 
             <dt>EOF</dt>
-            <dd>This is a <a>eof-in-doctype</a> <a>parse error</a>. Emit the current DOCTYPE token. Emit the end-of-file
+            <dd>This is a <a>eof-in-doctype</a> <a>parse error</a>. Emit the current DOCTYPE token. Emit the
+                end-of-file
                 token.
             </dd>
 
@@ -1756,7 +2045,8 @@ input. The <dfn>current input character</dfn> is the last character to have been
             <dd><a>Parse error</a>. Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
 
             <dt>EOF</dt>
-            <dd>This is a <a>eof-in-doctype</a> <a>parse error</a>. Emit the current DOCTYPE token. Emit the end-of-file
+            <dd>This is a <a>eof-in-doctype</a> <a>parse error</a>. Emit the current DOCTYPE token. Emit the
+                end-of-file
                 token.
             </dd>
 
@@ -1780,7 +2070,8 @@ input. The <dfn>current input character</dfn> is the last character to have been
             <dd>Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
 
             <dt>EOF</dt>
-            <dd>This is a <a>eof-in-doctype</a> <a>parse error</a>. Emit the current DOCTYPE token. Emit the end-of-file
+            <dd>This is a <a>eof-in-doctype</a> <a>parse error</a>. Emit the current DOCTYPE token. Emit the
+                end-of-file
                 token.
             </dd>
 
@@ -2023,18 +2314,24 @@ that it becomes the new <a>current element</a>.
     <span class="content">Common parser idioms</span>
 </h2>
 
-The <dfn>ASCII digits</dfn> are the characters in the range U+0030 DIGIT ZERO (<code>0</code>) to U+0039 DIGIT NINE (
+The <dfn>ASCII digits</dfn> are the characters in the range U+0030 DIGIT ZERO (<code>0</code>) to U+0039 DIGIT
+NINE (
 <code>9</code>).
 
-The <dfn>ASCII hex digits</dfn>  are the characters in the ranges U+0030 DIGIT ZERO (
+The <dfn>ASCII hex digits</dfn> are the characters in the ranges U+0030 DIGIT ZERO (
 <code>0</code>) to U+0039 DIGIT NINE (
-<code>9</code>), U+0041 LATIN CAPITAL LETTER A to U+0046 LATIN CAPITAL LETTER F, and U+0061 LATIN SMALL LETTER A to U+0066 LATIN SMALL LETTER F.
+<code>9</code>), U+0041 LATIN CAPITAL LETTER A to U+0046 LATIN CAPITAL LETTER F, and U+0061 LATIN SMALL LETTER A
+to U+0066 LATIN SMALL LETTER F.
 
 The <dfn>lowercase ASCII
-    letters</dfn> are characters in the range between  U+0061 LATIN SMALL LETTER A to U+007A LATIN SMALL LETTER Z.
+    letters</dfn> are characters in the range between U+0061 LATIN SMALL LETTER A to U+007A LATIN SMALL LETTER Z.
 
 The <dfn>uppercase ASCII
-    letters</dfn> are characters in the range between U+0041 LATIN CAPITAL LETTER A to U+005A LATIN CAPITAL LETTER Z.
+    letters</dfn> are characters in the range between U+0041 LATIN CAPITAL LETTER A to U+005A LATIN CAPITAL LETTER
+Z.
 
 Comparing two strings in an <dfn>ASCII
-    case-insensitive</dfn> manner means comparing them exactly, code point for code point, except that the characters in the range U+0041 to U+005A (i.e. LATIN CAPITAL LETTER A to LATIN CAPITAL LETTER Z) and the corresponding characters in the range U+0061 to U+007A (i.e. LATIN SMALL LETTER A to LATIN SMALL LETTER Z) are considered to also match.
+    case-insensitive</dfn> manner means comparing them exactly, code point for code point, except that the
+characters in the range U+0041 to U+005A (i.e. LATIN CAPITAL LETTER A to LATIN CAPITAL LETTER Z) and the
+corresponding characters in the range U+0061 to U+007A (i.e. LATIN SMALL LETTER A to LATIN SMALL LETTER Z) are
+considered to also match.
