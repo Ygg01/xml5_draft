@@ -121,13 +121,6 @@ which they do not wish to apply the rules described in this specification.
         </td>
     </tr>
     <tr>
-        <td><dfn>abrupt-doctype-identifier</dfn></td>
-        <td>
-            This error occurs if the parser encounters a U+003E (<code>&gt;</code>) code point in the DOCTYPE
-            public/system identifier (e.g., <code>&lt;!DOCTYPE html PUBLIC "foo&gt;</code>).
-        </td>
-    </tr>
-    <tr>
         <td><dfn>colon-before-attr</dfn></td>
         <td>This error occurs if the parser encounters a U+003A COLON (<code>:</code>) in tag after name but before
             attribute name (e.g. <code>&lt;tag :attr</code>). Attributes can have namespaces but U+003A COLON but
@@ -175,13 +168,6 @@ which they do not wish to apply the rules described in this specification.
             section.
     </tr>
     <tr>
-        <td><dfn>invalid-characters-after-doctype</dfn></td>
-        <td>This error occurs if the parser encounters any code point sequence other than "<code>PUBLIC</code>"
-            and "<code>SYSTEM</code>" keywords after a DOCTYPE name. In such a case, the parser ignores any following
-            public or system identifiers
-        </td>
-    </tr>
-    <tr>
         <td><dfn>invalid-xml-declaration</dfn></td>
         <td>This error occurs if the parser encounters any code point sequence other than "<code>PUBLIC</code>"
             and "<code>SYSTEM</code>" keywords after a DOCTYPE name. In such a case, the parser ignores any following
@@ -189,38 +175,9 @@ which they do not wish to apply the rules described in this specification.
         </td>
     </tr>
     <tr>
-        <td><dfn>missing-doctype-identifier</dfn></td>
-        <td>
-            This error occurs if the parser encounters a U+003E (>) code point where start of the DOCTYPE system/public
-            identifier is expected (e.g., <code>&lt;!DOCTYPE html SYSTEM &gt;</code>).
-        </td>
-    </tr>
-    <tr>
-        <td><dfn>missing-quote-before-identifier</dfn></td>
-        <td>
-            This error occurs if the parser encounters the <code>DOCTYPE</code> public/system identifier
-            that is not preceded by a quote (e.g., <code>&lt;!DOCTYPE html PUBLIC -//W3C//DTD HTML 4.01//EN"&gt;</code>).
-            In such a case, the parser ignores the identifier.
-        </td>
-    </tr>
-    <tr>
-        <td><dfn>missing-whitespace-after-doctype-keyword</dfn></td>
-        <td>
-            This error occurs if the parser encounters a DOCTYPE whose "<code>PUBLIC</code>"/"<code>SYSTEM</code>"
-            keyword and public identifier
-            are not separated by ASCII whitespace. In this case the parser behaves as if ASCII whitespace is present.
-        </td>
-    </tr>
-    <tr>
-        <td><dfn>missing-whitespace-before-doctype-name parse error</dfn></td>
+        <td><dfn>missing-whitespace-before-doctype-name</dfn></td>
         <td>This error occurs if the parser encounters a DOCTYPE keyword and name are not separated by ASCII whitespace.
             (e.g. <code>&lt;!DOCTYPE</code>) In this case the parser behaves as if ASCII whitespace is present.
-        </td>
-    </tr>
-    <tr>
-        <td><dfn>missing-whitespace-between-doctype-public-and-system-identifier</dfn></td>
-        <td>This error occurs if the parser encounters a DOCTYPE whose public and system identifiers are not separated
-            by ASCII whitespace. In this case the parser behaves as if ASCII whitespace is present.
         </td>
     </tr>
     <tr>
@@ -350,17 +307,16 @@ input. The <dfn>current input character</dfn> is the last character to have been
         Consume the <a>next input character</a>:
         <dl class="switch">
             <dt>U+003E GREATER-THAN SIGN (<code>&gt;</code>)</dt>
-
             <dd>Emit a short end tag token and then switch to the <a>data
                 state</a>.
             </dd>
+
             <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
             <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
             <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
             <dt>U+003C LESSER-THAN SIGN (<code>&lt;</code>)</dt>
             <dt>U+003A (<code>:</code>)</dt>
             <dt>EOF</dt>
-
             <dd><a>Parse error</a>. Emit a U+003C LESSER-THAN SIGN (<code>&lt;</code>) character
                 token and a U+002F SOLIDUS (<code>/</code>) character token. Reconsume the <a>current
                     input character</a> in the <a>data state</a>.
@@ -399,6 +355,7 @@ input. The <dfn>current input character</dfn> is the last character to have been
             <dd>Emit the end tag token and then switch to the <a>data
                 state</a>.
             </dd>
+
             <dt>Anything else</dt>
             <dd>Append the current input character to the tag name and stay in the
                 current state.
@@ -1073,10 +1030,9 @@ input. The <dfn>current input character</dfn> is the last character to have been
             <dt>Exact match for word "DOCTYPE"</dt>
             <dd>Consume those characters and switch to <a>Doctype state</a></dd>
 
-            <dt>Exact match for word "[CDATA[" with a (the five uppercase letters "CDATA" with a U+005B LEFT
-                SQUARE
-                BRACKET
-                character before and after)
+            <dt>Exact match for word "[CDATA[" with a (the five uppercase letters
+                "CDATA" with a U+005B LEFT
+                SQUARE BRACKET character before and after)
             </dt>
             <dd>Consume those characters and switch to <a>CDATA state</a></dd>
 
@@ -1586,7 +1542,7 @@ input. The <dfn>current input character</dfn> is the last character to have been
             Create new DOCTYPE token. Emit DOCTYPE token. Emit an end-of-file token.
 
             <dt>Anything else</dt>
-            <dd>Emit an <a>missing-whitespace-before-doctype-name parse error</a> <a>parse error</a>.
+            <dd>Emit an <a>missing-whitespace-before-doctype-name</a> <a>parse error</a> <a>parse error</a>.
                 Reconsume character in <a>before DOCTYPE name state</a>.
             </dd>
         </dl>
@@ -1605,7 +1561,8 @@ input. The <dfn>current input character</dfn> is the last character to have been
             <dd>Ignore the character.</dd>
 
             <dt><a>Uppercase ASCII letter</a></dt>
-            <dd>Create a new DOCTYPE token. Set the token name to lowercase version of the current input
+            <dd>Create a new DOCTYPE token. Set the token name to <a lt="lowercase ASCII letters">lowercase</a> version
+                of the current input
                 character.
                 Switch to the DOCTYPE name state.
             </dd>
@@ -1621,8 +1578,7 @@ input. The <dfn>current input character</dfn> is the last character to have been
 
             <dt>Anything else</dt>
             <dd>Create new DOCTYPE token. Set the token's name to current input character. Switch to <a>DOCTYPE
-                name
-                state</a>.
+                name state</a>.
             </dd>
         </dl>
     </dd>
@@ -1638,10 +1594,12 @@ input. The <dfn>current input character</dfn> is the last character to have been
             <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
             <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
             <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-            <dd>Switch to the <a>after DOCTYPE name state</a>.</dd>
+            <dd>Set doctype depth to 0. Switch to the <a>after DOCTYPE name state</a>.</dd>
 
             <dt><a>Uppercase ASCII letter</a></dt>
-            <dd>Append the lowercase version of current input character to current DOCTYPE token.</dd>
+            <dd>Append the <a lt="lowercase ASCII letters">lowercase</a> of current input character to current DOCTYPE
+                token.
+            </dd>
 
             <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
             <dd>Create a new DOCTYPE token. Emit token. Switch to <a>data state</a>.</dd>
@@ -1666,13 +1624,16 @@ input. The <dfn>current input character</dfn> is the last character to have been
         Consume the <a>next input character</a>:
 
         <dl class="switch">
-            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-            <dd>Ignore the character.</dd>
+            <dt>U+005B LEFT SQUARE BRACKET (<code>[</code>)</dt>
+            <dd>Increase doctype depth by 1. Remain in current state.</dd>
+
+            <dt>U+005D RIGHT SQUARE BRACKET (<code>]</code>)</dt>
+            <dd>If current doctype depth is 0 switch to <a>Bogus doctype state</a>,
+                otherwise decrease doctype depth by 1. Remain in current state.
+            </dd>
 
             <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
-            <dd> Switch to data state. Emit current DOCTYPE token.</dd>
+            <dd>If current doctype depth is 0, emit current doctype and switch to <a>data state</a>.</dd>
 
             <dt>EOF</dt>
             <dd>This is <a>eof-in-doctype</a> <a>parse error</a>. Switch to the <a>data state</a>. Emit DOCTYPE
@@ -1681,404 +1642,7 @@ input. The <dfn>current input character</dfn> is the last character to have been
             </dd>
 
             <dt>Anything else</dt>
-            <dd>If the six characters starting from the current input character are an <a>ASCII
-                case-insensitive</a>
-                match for word "PUBLIC", then consume those characters and switch to the <a>after DOCTYPE public
-                    keyword
-                    state</a>.
-
-                Otherwise, if the six characters starting from the current input character are an <a>ASCII
-                    case-insensitive</a> match for word "SYSTEM", then consume those charactes and switch to the
-                <a>after
-                    DOCTYPE system keyword state</a>.
-
-                Otherwise, this is a <a>invalid-characters-after-doctype</a> <a>parse error</a>. Switch to <a>bogus
-                    DOCTYPE state</a>.
-        </dl>
-    </dd>
-
-    <h4 class="heading" id="after_doctype_public_keyword_state">
-        <span class="content"><dfn>After DOCTYPE public keyword state</dfn></span>
-    </h4>
-    <dd>
-        Consume the <a>next input character</a>:
-        <dl class="switch">
-            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-            <dd>Switch to the <a>before DOCTYPE public identifier state</a>.</dd>
-
-            <dt>U+0022 QUOTATION MARK(<code>&quot;</code>)</dt>
-            <dd>This is a <a>missing-whitespace-after-doctype-keyword</a> <a>parse error</a>. Set the DOCTYPE
-                token's
-                public identifier current DOCTYPE token to the empty string
-                (not missing), then switch to the <a>DOCTYPE public identifier (double-quoted) state</a>.
-            </dd>
-
-            <dt>U+0027 APOSTROPHE(<code>'</code>)</dt>
-            <dd>This is a <a>missing-whitespace-after-doctype-keyword</a> <a>parse error</a>. Set the DOCTYPE
-                token's
-                public identifier current DOCTYPE token to the empty string
-                (not missing), then switch to the <a>DOCTYPE public identifier (single-quoted) state</a>.
-            </dd>
-
-            <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
-            <dd>This is a <a>missing-doctype-identifier</a> <a>parse error</a>. Set the DOCTYPE token's public
-                identifier
-                current DOCTYPE token to the empty string (not missing), then switch to the <a>DOCTYPE public
-                    identifier
-                    (single-quoted) state</a>.
-            </dd>
-
-            <dt>EOF</dt>
-            <dd>This is a <a>eof-in-doctype</a> <a>parse error</a>. Emit current DOCTYPE token. Emit an
-                end-of-file
-                token.
-            </dd>
-
-            <dt>Anything else</dt>
-            <dd>This is a <a>missing-quote-before-identifier</a> <a>parse error</a>. Reconsume in <a>bogus
-                DOCTYPE
-                state</a>.
-            </dd>
-        </dl>
-    </dd>
-
-    <h4 class="heading" id="after_doctype_system_keyword_state">
-        <span class="content"><dfn>After DOCTYPE system keyword state</dfn></span>
-    </h4>
-    <dd>
-        Consume the <a>next input character</a>:
-        <dl class="switch">
-            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-            <dd>Switch to the <a>before DOCTYPE system identifier state</a>.</dd>
-
-            <dt>U+0022 QUOTATION MARK(<code>&quot;</code>)</dt>
-            <dd>This is a <a>missing-whitespace-after-doctype-keyword</a> <a>parse error</a>. Set the DOCTYPE
-                token's
-                public identifier current DOCTYPE token to the empty string
-                (not missing), then switch to the <a>DOCTYPE system identifier (double-quoted) state</a>.
-            </dd>
-
-            <dt>U+0027 APOSTROPHE(<code>'</code>)</dt>
-            <dd>This is a <a>missing-whitespace-after-doctype-keyword</a> <a>parse error</a>. Set the DOCTYPE
-                token's
-                public identifier current DOCTYPE token to the empty string
-                (not missing), then switch to the <a>DOCTYPE system identifier (single-quoted) state</a>.
-            </dd>
-
-            <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
-            <dd>This is a <a>missing-doctype-identifier</a> <a>parse error</a>. Set the DOCTYPE token's public
-                identifier current DOCTYPE token to the empty string
-                (not missing), then switch to the <a>DOCTYPE system identifier (single-quoted) state</a>.
-            </dd>
-
-            <dt>EOF</dt>
-            <dd>This is a <a>eof-in-doctype</a> <a>parse error</a>. Emit current DOCTYPE token. Emit an
-                end-of-file
-                token.
-            </dd>
-
-            <dt>Anything else</dt>
-            <dd>This is a <a>missing-quote-before-identifier</a> <a>parse error</a>. Reconsume in <a>bogus
-                DOCTYPE
-                state</a>.
-            </dd>
-        </dl>
-    </dd>
-
-
-    <h4 class="heading" id="before_doctype_system_identifier_state">
-        <span class="content"><dfn>Before DOCTYPE system identifier state</dfn></span>
-    </h4>
-    <dd>
-        Consume the <a>next input character</a>:
-        <dl class="switch">
-            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-            <dd>Ignore the character.</dd>
-
-            <dt>U+0022 QUOTATION MARK(<code>&quot;</code>)</dt>
-            <dd>Set the DOCTYPE token's system identifier current DOCTYPE token to the empty string (not
-                missing), then
-                switch to the <a>DOCTYPE system identifier (double-quoted) state</a>.
-            </dd>
-
-            <dt>U+0027 APOSTROPHE(<code>'</code>)</dt>
-            <dd>Set the DOCTYPE token's system identifier current DOCTYPE token to the empty string (not
-                missing), then
-                switch to the <a>DOCTYPE system identifier (single-quoted) state</a>.
-            </dd>
-
-            <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
-            <dd>This is a <a>missing-doctype-identifier</a> <a>parse error</a>. Switch to <a>data state</a>.
-                Emit
-                current DOCTYPE token.
-            </dd>
-
-            <dt>EOF</dt>
-            <dd>This is a <a>eof-in-doctype</a> <a>parse error</a>. Switch to the <a>data state</a>. Emit
-                DOCTYPE token.
-                Emit the end-of-file token.
-            </dd>
-
-            <dt>Anything else</dt>
-            <dd>This is a <a>missing-quote-before-identifier</a> <a>parse error</a>. Reconsume in <a>bogus
-                DOCTYPE
-                state</a>.
-            </dd>
-        </dl>
-    </dd>
-
-    <h4 class="heading" id="before_doctype_public_identifier_state">
-        <span class="content"><dfn>Before DOCTYPE public identifier state</dfn></span>
-    </h4>
-    <dd>
-        Consume the <a>next input character</a>:
-        <dl class="switch">
-            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-            <dd>Ignore the character.</dd>
-
-            <dt>U+0022 QUOTATION MARK(<code>&quot;</code>)</dt>
-            <dd>Set the DOCTYPE token's public identifier current DOCTYPE token to the empty string
-                (not missing), then switch to the <a>DOCTYPE public identifier (double-quoted) state</a>.
-            </dd>
-
-            <dt>U+0027 APOSTROPHE(<code>'</code>)</dt>
-            <dd>Set the DOCTYPE token's public identifier current DOCTYPE token to the empty string
-                (not missing), then switch to the <a>DOCTYPE public identifier (single-quoted) state</a>.
-            </dd>
-
-            <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
-            <dd>This is a <a>missing-doctype-identifier</a> <a>parse error</a>. Switch to <a>data state</a>.
-                Emit
-                current DOCTYPE token.
-            </dd>
-
-            <dt>EOF</dt>
-            <dd>This is a <a>eof-in-doctype</a> <a>parse error</a>. Switch to the <a>data state</a>. Emit
-                DOCTYPE token.
-                Emit the end-of-file token.
-            </dd>
-
-            <dt>Anything else</dt>
-            <dd>This is a <a>missing-quote-before-identifier</a> <a>parse error</a>. Reconsume in <a>bogus
-                DOCTYPE
-                state</a>.
-            </dd>
-
-        </dl>
-    </dd>
-
-    <h4 class="heading" id="doctype_public_identifier_single_quoted_state">
-        <span class="content"><dfn>DOCTYPE public identifier (single-quoted) state</dfn></span>
-    </h4>
-    <dd>
-        Consume the <a>next input character</a>:
-        <dl class="switch">
-            <dt>U+0027 APOSTROPHE(<code>'</code>)</dt>
-            <dd>Switch to the <a>after DOCTYPE public identifier state</a>.</dd>
-
-            <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
-            <dd>This is an <a>abrupt-doctype-identifier</a> <a>parse error</a>. Switch to <a>data state</a>.
-                Emit
-                current DOCTYPE token.
-            </dd>
-
-            <dt>EOF</dt>
-            <dd>This is a <a>eof-in-doctype</a> <a>parse error</a>. Switch to the <a>data state</a>. Emit
-                DOCTYPE token.
-                Emit the end-of-file token.
-            </dd>
-
-            <dt>Anything else</dt>
-            <dd>Append the current input character to the current DOCTYPE token's public identifier.</dd>
-        </dl>
-    </dd>
-
-
-    <h4 class="heading" id="doctype_public_identifier_double_quoted_state">
-        <span class="content"><dfn>DOCTYPE public identifier (double-quoted) state</dfn></span>
-    </h4>
-    <dd>
-        Consume the <a>next input character</a>:
-        <dl class="switch">
-            <dt>U+0022 QUOTATION MARK(<code>&quot;</code>)</dt>
-            <dd>Switch to the <a>after DOCTYPE public identifier state</a>.</dd>
-
-            <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
-            <dd>This is an <a>abrupt-doctype-identifier</a> <a>parse error</a>. Switch to <a>data state</a>.
-                Emit
-                current DOCTYPE token.
-            </dd>
-
-            <dt>EOF</dt>
-            <dd>This is a <a>eof-in-doctype</a> <a>parse error</a>. Emit DOCTYPE token. Emit the end-of-file
-                token.
-            </dd>
-
-            <dt>Anything else</dt>
-            <dd>Append the current input character to the current DOCTYPE token's public identifier.</dd>
-        </dl>
-    </dd>
-
-    <h4 class="heading" id="after_doctype_public_identifier_state">
-        <span class="content"><dfn>After DOCTYPE public identifier state</dfn></span>
-    </h4>
-    <dd>
-        Consume the <a>next input character</a>:
-        <dl class="switch">
-            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-            <dd>Switch to the <a>between DOCTYPE public and system identifiers state</a>.</dd>
-
-            <dt>U+0027 APOSTROPHE(<code>'</code>)</dt>
-            <dd>This is a <a>missing-whitespace-between-doctype-public-and-system-identifier</a> <a>parse
-                error</a>.
-                Set the DOCTYPE token's system identifier to the empty string (not missing) then
-                switch to the <a>DOCTYPE system identifier (single-quoted) state</a>.
-            </dd>
-
-            <dt>U+0022 QUOTATION MARK(<code>&quot;</code>)</dt>
-            <dd>This is a <a>missing-whitespace-between-doctype-public-and-system-identifier</a> <a>parse
-                error</a>.
-                Set the DOCTYPE token's system identifier to the empty string (not missing) then
-                switch to the <a>DOCTYPE system identifier (double-quoted) state</a>.
-            </dd>
-
-            <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
-            <dd>Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
-
-            <dt>EOF</dt>
-            <dd>This is a <a>eof-in-doctype</a> <a>parse error</a>. Emit the current DOCTYPE token. Emit the
-                end-of-file
-                token.
-            </dd>
-
-            <dt>Anything else</dt>
-            <dd>This is a <a>missing-quote-before-identifier</a> <a>parse error</a>. Reconsume in the <a>bogus
-                DOCTYPE
-                state</a>.
-            </dd>
-        </dl>
-    </dd>
-
-    <h4 class="heading" id="between_doctype_public_and_system_identifier_state">
-        <span class="content"><dfn>Between DOCTYPE public and system identifiers state</dfn></span>
-    </h4>
-    <dd>
-        Consume the <a>next input character</a>:
-        <dl class="switch">
-            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-            <dd>Ignore the character.</dd>
-
-            <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
-            <dd>Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
-
-            <dt>U+0027 APOSTROPHE(<code>'</code>)</dt>
-            <dd>Set the DOCTYPE token's system identifier to the empty string (not missing) then switch to the
-                <a>DOCTYPE
-                    system identifier (single-quoted) state</a>.
-            </dd>
-
-            <dt>U+0022 QUOTATION MARK(<code>&quot;</code>)</dt>
-            <dd>Set the DOCTYPE token's system identifier to the empty string (not missing) then switch to the
-                <a>DOCTYPE
-                    system identifier (double-quoted) state</a>.
-            </dd>
-
-            <dt>EOF</dt>
-            <dd>This is a <a>eof-in-doctype</a> <a>parse error</a>. Emit the current DOCTYPE token. Emit the
-                end-of-file
-                token.
-            </dd>
-
-            <dt>Anything else</dt>
-            <dd>This is a <a>missing-quote-before-identifier</a> <a>parse error</a>. Reconsume in <a>Bogus
-                DOCTYPE
-                state</a>.
-            </dd>
-        </dl>
-    </dd>
-
-    <h4 class="heading" id="doctype_system_identifier_single_quote_state">
-        <span class="content"><dfn>DOCTYPE system identifier (single-quoted) state</dfn></span>
-    </h4>
-    <dd>
-        Consume the <a>next input character</a>:
-        <dl class="switch">
-            <dt>U+0027 APOSTROPHE(<code>'</code>)</dt>
-            <dd>Switch to the <a>after DOCTYPE system identifiers state</a>.</dd>
-
-            <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
-            <dd><a>Parse error</a>. Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
-
-            <dt>EOF</dt>
-            <dd>This is a <a>eof-in-doctype</a> <a>parse error</a>. Emit the current DOCTYPE token. Emit the
-                end-of-file
-                token.
-            </dd>
-
-            <dt>Anything else</dt>
-            <dd>Append the current input character to the current DOCTYPE token's system identifier.</dd>
-        </dl>
-    </dd>
-
-    <h4 class="heading" id="doctype_system_identifier_double_quote_state">
-        <span class="content"><dfn>DOCTYPE system identifier (double-quoted) state</dfn></span>
-    </h4>
-    <dd>
-        Consume the <a>next input character</a>:
-        <dl class="switch">
-            <dt>U+0022 QUOTATION MARK(<code>&quot;</code>)</dt>
-            <dd>Switch to the <a>after DOCTYPE system identifiers state</a>.</dd>
-
-            <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
-            <dd><a>Parse error</a>. Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
-
-            <dt>EOF</dt>
-            <dd>This is a <a>eof-in-doctype</a> <a>parse error</a>. Emit the current DOCTYPE token. Emit the
-                end-of-file
-                token.
-            </dd>
-
-            <dt>Anything else</dt>
-            <dd>Append the current input character to the current DOCTYPE token's system identifier.</dd>
-        </dl>
-    </dd>
-
-    <h4 class="heading" id="after_doctype_system_identifier_state">
-        <span class="content"><dfn>After DOCTYPE system identifiers state</dfn></span>
-    </h4>
-    <dd>
-        Consume the <a>next input character</a>:
-        <dl class="switch">
-            <dt>U+0009 CHARACTER TABULATION (<code class="non-print">Tab</code>)</dt>
-            <dt>U+000A LINE FEED (<code class="non-print">LF</code>)</dt>
-            <dt>U+0020 SPACE (<code class="non-print">Space</code>)</dt>
-            <dd>Ignore the character.</dd>
-
-            <dt>U+003E GREATER-THAN SIGN(<code>&gt;</code>)</dt>
-            <dd>Switch to <a>data state</a>. Emit current DOCTYPE token.</dd>
-
-            <dt>EOF</dt>
-            <dd>This is a <a>eof-in-doctype</a> <a>parse error</a>. Emit the current DOCTYPE token. Emit the
-                end-of-file
-                token.
-            </dd>
-
-            <dt>Anything else</dt>
-            <dd>This is a <a>missing-quote-before-identifier</a> <a>parse error</a>. Switch to <a>Bogus DOCTYPE
-                state</a>.
-            </dd>
+            <dd>Remain in current state</dd>
         </dl>
     </dd>
 
@@ -2330,8 +1894,7 @@ The <dfn>uppercase ASCII
     letters</dfn> are characters in the range between U+0041 LATIN CAPITAL LETTER A to U+005A LATIN CAPITAL LETTER
 Z.
 
-Comparing two strings in an <dfn>ASCII
-    case-insensitive</dfn> manner means comparing them exactly, code point for code point, except that the
-characters in the range U+0041 to U+005A (i.e. LATIN CAPITAL LETTER A to LATIN CAPITAL LETTER Z) and the
-corresponding characters in the range U+0061 to U+007A (i.e. LATIN SMALL LETTER A to LATIN SMALL LETTER Z) are
+Comparing two strings in an <dfn>ASCII case-insensitive</dfn> manner means comparing them exactly, code point for code
+point, except that the characters in the range U+0041 to U+005A (i.e. LATIN CAPITAL LETTER A to LATIN CAPITAL LETTER Z)
+and the corresponding characters in the range U+0061 to U+007A (i.e. LATIN SMALL LETTER A to LATIN SMALL LETTER Z) are
 considered to also match.
